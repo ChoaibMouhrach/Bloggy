@@ -1,11 +1,8 @@
-
 const authorize = () => {};
 
 const validate = () => {};
 
-export interface SendConfirmationRequest extends Request {
-
-}
+export interface SendConfirmationRequest extends Request {}
 
 const sendConfirmationRequest = {
   validate,

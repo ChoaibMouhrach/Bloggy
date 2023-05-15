@@ -5,4 +5,6 @@ import config from "./config";
 const app = makeApp();
 
 // start the server
-app.listen(config.PORT, () => console.log(`The server is running on port ${config.PORT}`));
+app.listen(config.PORT, () => {
+  console.log(`The server is running on port ${config.PORT}`);
+});

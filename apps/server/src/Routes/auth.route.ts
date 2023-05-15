@@ -28,7 +28,10 @@ authRouter.post("/forgot-password", authController.forgotPassword);
 authRouter.post("/reset-password/:token", authController.resetPassword);
 
 // send confirmation email
-authRouter.post("/send-confirmation-email", authController.sendConfirmationEmail);
+authRouter.post(
+  "/send-confirmation-email",
+  authController.sendConfirmationEmail
+);
 
 // confirm email
 authRouter.post("/confirm-email/:token", authController.confirmEmail);

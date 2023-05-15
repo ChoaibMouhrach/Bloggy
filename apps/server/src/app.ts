@@ -1,7 +1,7 @@
 import cors from "cors";
 import express from "express";
-import router from "./Routes";
 import { join } from "path";
+import router from "./Routes";
 
 /**
  * Creates a new express instance

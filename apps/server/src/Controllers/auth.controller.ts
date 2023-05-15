@@ -61,7 +61,10 @@ const resetPassword = async (_request: Request, _response: Response) => {};
  * @param request Http Request
  * @param response Http Response
  */
-const sendConfirmationEmail = async (_request: Request, _response: Response) => {};
+const sendConfirmationEmail = async (
+  _request: Request,
+  _response: Response
+) => {};
 
 /**
  * Confirm user email

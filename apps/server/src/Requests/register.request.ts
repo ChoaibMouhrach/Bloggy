@@ -2,9 +2,7 @@ const authorize = () => {};
 
 const validate = () => {};
 
-export interface RegisterRequest extends Request {
-
-}
+export interface RegisterRequest extends Request {}
 
 const registerRequest = {
   validate,
