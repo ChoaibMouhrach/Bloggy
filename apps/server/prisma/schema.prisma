@@ -58,7 +58,7 @@ model RefreshToken {
   updatedAt DateTime @default(now()) @updatedAt
 
   // relations
-  User   User @relation(fields: [userId], references: [id])
+  User   User @relation(fields: [userId], references: [id], onDelete:  Cascade)
   userId Int
 }
 
@@ -72,7 +72,7 @@ model ConfirmEmailToken {
   updatedAt DateTime @default(now()) @updatedAt
 
   // relations
-  User   User @relation(fields: [userId], references: [id])
+  User   User @relation(fields: [userId], references: [id], onDelete : Cascade)
   userId Int
 }
 
@@ -85,7 +85,7 @@ model ForgotPasswordToken {
   updatedAt DateTime @default(now()) @updatedAt
 
   // relations
-  User   User @relation(fields: [userId], references: [id])
+  User   User @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId Int
 }
 

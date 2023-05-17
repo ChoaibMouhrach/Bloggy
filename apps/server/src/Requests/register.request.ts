@@ -22,7 +22,7 @@ const parse: ValidateParse = (request: Request) => {
         .refine(
           async (email) =>
             !(await database.user.findUnique({ where: { email } })),
-          { message: "Email is already taken" }
+          { message: "Email address is already taken" }
         ),
       bio: z.string().max(255).optional(),
       password: z.string().min(1).min(8),

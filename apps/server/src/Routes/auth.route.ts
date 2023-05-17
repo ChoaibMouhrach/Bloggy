@@ -1,6 +1,7 @@
 import { authController } from "@src/Controllers";
 import { validate, authAccessMiddleware, authRefresh } from "@src/Middlewares";
 import changePasswordRequest from "@src/Requests/change-password.request";
+import forgotPasswordRequest from "@src/Requests/forgot-password.request";
 import loginRequest from "@src/Requests/login.request";
 import registerRequest from "@src/Requests/register.request";
 import resetPasswordRequest from "@src/Requests/reset-password.request";
@@ -42,7 +43,7 @@ authRouter.patch(
 // send forgot password email
 authRouter.post(
   "/forgot-password",
-  validate(changePasswordRequest),
+  validate(forgotPasswordRequest),
   authController.forgotPassword
 );
 

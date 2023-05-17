@@ -1,4 +1,4 @@
-import { Response, Request } from "express";
+import { Response } from "express";
 import jwt from "jsonwebtoken";
 import { User } from "@prisma/client";
 import { hashSync } from "bcrypt";
@@ -14,7 +14,6 @@ import { database, prepareUser } from "@src/lib/database";
 import {
   BadRequestException,
   NotFoundException,
-  UnauthorizedException,
 } from "@src/Exceptions";
 import config from "@src/lib/config";
 import { AuthRequest } from "@src/types";
@@ -40,12 +39,12 @@ const login = async (request: LoginRequest, response: Response) => {
   }
 
   // accessToken
-  const accessToken = jwt.sign({ id: user.id }, config.SECRET_ACCESS, {
+  const accessToken = jwt.sign({ id: user.id, jti: user.id }, config.SECRET_ACCESS, {
     expiresIn: config.DURATION_ACCESS,
   });
 
   // refreshToken
-  const refreshToken = jwt.sign({ id: user.id }, config.SECRET_REFRESH);
+  const refreshToken = jwt.sign({ id: user.id, jti: user.id }, config.SECRET_REFRESH);
 
   // create new refreshToken
   await database.refreshToken.create({
@@ -99,12 +98,12 @@ const register = async (request: RegisterRequest, response: Response) => {
   });
 
   // accessToken
-  const accessToken = jwt.sign({ id: user.id }, config.SECRET_ACCESS, {
+  const accessToken = jwt.sign({ id: user.id, jti: user.id }, config.SECRET_ACCESS, {
     expiresIn: config.DURATION_ACCESS,
   });
 
   // refresh token
-  const refreshToken = jwt.sign({ id: user.id }, config.SECRET_REFRESH);
+  const refreshToken = jwt.sign({ id: user.id, jti: user.id }, config.SECRET_REFRESH);
 
   // create new refresh token
   await database.refreshToken.create({
@@ -127,56 +126,24 @@ const register = async (request: RegisterRequest, response: Response) => {
  * @param request Http Request
  * @param response Http Response
  */
-const refresh = async (request: Request, response: Response) => {
-  // extract authorization
-  const { authorization } = request.headers;
+const refresh = async (request: AuthRequest, response: Response) => {
 
-  // check if authorization exists with the token
-  if (!authorization || !authorization.split(" ")[1]) {
-    throw new UnauthorizedException();
-  }
-
-  // extract token
-  const token = authorization.split(" ")[1];
-
-  // user id
-  let id: number;
-
-  try {
-    // decode token
-    const decoded = jwt.verify(token, config.SECRET_REFRESH) as { id: number };
-
-    // set user id
-    id = decoded.id;
-  } catch (err: any) {
-    throw new UnauthorizedException(err.message);
-  }
-
-  // retrieve user
-  const user = await database.user.findUnique({ where: { id } });
-
-  // check user existance
-  if (!user) {
-    throw new NotFoundException("User");
-  }
-
-  // retrieve refreshTokens
-  const tokens = await database.refreshToken.findMany({
-    where: { userId: user.id, token },
-  });
-
-  // check tokens length
-  if (!tokens.length) {
-    throw new UnauthorizedException();
-  }
+  // user
+  const { user, token } = request.auth!;
 
   // new accessToken
-  const accessToken = jwt.sign({ id: user.id }, config.SECRET_ACCESS, {
+  const accessToken = jwt.sign({
+    id: user.id,
+    jti: user.id
+  }, config.SECRET_ACCESS, {
     expiresIn: config.DURATION_ACCESS,
   });
 
   // new refreshToken
-  const refreshToken = jwt.sign({ id: user.id }, config.SECRET_REFRESH);
+  const refreshToken = jwt.sign({
+    id: user.id,
+    jti: user.id
+  }, config.SECRET_REFRESH);
 
   // store new refreshToken
   await database.refreshToken.create({
@@ -228,7 +195,7 @@ const updateProfile = async (
   const { username, url, bio } = request.body;
 
   // update user
-  user = await database.user.update({
+  await database.user.update({
     where: {
       id: user.id,
     },
@@ -240,7 +207,7 @@ const updateProfile = async (
   });
 
   // return updated user
-  return response.json(user);
+  return response.sendStatus(204);
 };
 
 /**
@@ -252,8 +219,9 @@ const changePassword = async (
   request: ChangePasswordRequest,
   response: Response
 ) => {
+
   // extract password
-  const { password } = request.body;
+  const { newPassword: password } = request.body;
 
   // extract auth user
   let { user } = request.auth!;
@@ -295,7 +263,7 @@ const forgotPassword = async (
   }
 
   // issue new forgotpasswordtoken
-  const token = jwt.sign({ id: user.id }, config.SECRET_FORGOT_PASSWORD, {
+  const token = jwt.sign({ id: user.id, jti: user.id }, config.SECRET_FORGOT_PASSWORD, {
     expiresIn: config.DURATION_FORGOT_PASSWORD,
   });
 
@@ -316,7 +284,10 @@ const forgotPassword = async (
   });
 
   // return 204
-  return response.sendStatus(204);
+  return response.status(200).json({
+    message:
+      "If the email is present in our database, a corresponding email will be sent to it.",
+  });
 };
 
 /**
@@ -329,13 +300,7 @@ const resetPassword = async (
   response: Response
 ) => {
   // extract token
-  const token =
-    typeof request.query.token === "string" ? request.query.token : undefined;
-
-  // token not valid
-  if (!token) {
-    throw new BadRequestException("Token is invalid");
-  }
+  const { token } = request.params
 
   // user id
   let id: number;
@@ -366,7 +331,7 @@ const resetPassword = async (
   });
 
   // the used token does not match the last issued token
-  if (tokens[0].token !== token) {
+  if (!tokens.length || tokens[0].token !== token) {
     throw new BadRequestException("Token is not valid");
   }
 
@@ -410,7 +375,7 @@ const sendConfirmationEmail = async (
   }
 
   // create token
-  const token = jwt.sign({ id: user.id }, config.SECRET_CONFIRM_EMAIL, {
+  const token = jwt.sign({ id: user.id, jti: user.id }, config.SECRET_CONFIRM_EMAIL, {
     expiresIn: config.DURATION_CONFIRM_EMAIL,
   });
 
@@ -436,12 +401,7 @@ const sendConfirmationEmail = async (
  */
 const confirmEmail = async (request: AuthRequest, response: Response) => {
   // extract token
-  const { token } = request.query;
-
-  // check if token exists
-  if (typeof token !== "string") {
-    throw new BadRequestException("Token is not valid");
-  }
+  const { token } = request.params;
 
   // user id
   let id: number;
@@ -464,6 +424,17 @@ const confirmEmail = async (request: AuthRequest, response: Response) => {
   // check user existance
   if (!user) {
     throw new NotFoundException("User");
+  }
+
+  const tokens = await database.confirmEmailToken.findMany({
+    where: {
+      token,
+      userId: user.id
+    }
+  });
+
+  if(!tokens.length){
+    throw new BadRequestException("Token is not valid")
   }
 
   // update user

@@ -11,7 +11,8 @@ const parse: ValidateParse = (request: Request) => {
       .max(60)
       .refine(
         async (username) =>
-          !(await database.user.findUnique({ where: { username } }))
+          !(await database.user.findUnique({ where: { username } })),
+        { message: "Username is already taken" }
       )
       .optional(),
     url: z.string().url().optional(),
