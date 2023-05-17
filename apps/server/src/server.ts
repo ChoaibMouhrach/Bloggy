@@ -1,5 +1,5 @@
 import makeApp from "./app";
-import config from "./config";
+import config from "./lib/config";
 
 // new express instance
 const app = makeApp();

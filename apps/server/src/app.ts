@@ -1,6 +1,8 @@
-import cors from "cors";
-import express from "express";
+import "express-async-errors";
 import { join } from "path";
+import express from "express";
+import cors from "cors";
+import { errorHandler } from "./Middlewares";
 import router from "./Routes";
 
 /**
@@ -18,6 +20,9 @@ const makeApp = () => {
 
   // routes
   app.use("/api", router);
+
+  // error handling
+  app.use(errorHandler);
 
   return app;
 };

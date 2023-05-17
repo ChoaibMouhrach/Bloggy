@@ -1,12 +1,23 @@
-const authorize = () => {};
+import { ValidateParse } from "@src/types";
+import { Request } from "express";
+import { z } from "zod";
 
-const validate = () => {};
+const parse: ValidateParse = (request: Request) => {
+  const schema = z.object({
+    email: z.string().email(),
+  });
 
-export interface ForgotPasswordRequest extends Request {}
+  return schema.safeParseAsync(request.body);
+};
+
+export interface ForgotPasswordRequest extends Request {
+  body: {
+    email: string;
+  };
+}
 
 const forgotPasswordRequest = {
-  validate,
-  authorize,
+  parse,
 };
 
 export default forgotPasswordRequest;

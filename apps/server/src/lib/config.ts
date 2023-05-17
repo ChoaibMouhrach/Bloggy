@@ -29,6 +29,14 @@ const configSchema = z.object({
   SECRET_FORGOT_PASSWORD: z.string().min(1),
   SECRET_CONFIRM_EMAIL: z.string().min(1),
 
+  // JWT DURATIONS
+  DURATION_ACCESS: z.string().min(2),
+  DURATION_FORGOT_PASSWORD: z.string().min(2),
+  DURATION_CONFIRM_EMAIL: z.string().min(2),
+
+  // SALT
+  SALT: numeric(),
+
   // SMTP
   SMTP_HOST: z.string().min(1),
   SMTP_PORT: numeric(),

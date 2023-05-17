@@ -1,12 +1,31 @@
-const authorize = () => {};
+import { ValidateParse } from "@src/types";
+import { Request } from "express";
+import z from "zod";
 
-const validate = () => {};
+const parse: ValidateParse = (request: Request) => {
+  const schema = z
+    .object({
+      password: z.string().min(8),
+      password_confirmation: z.string().min(8),
+    })
+    .refine(
+      ({ password, password_confirmation }) =>
+        password === password_confirmation,
+      { message: "Password and Password confirmation does not match." }
+    );
 
-export interface ResetPasswordRequest extends Request {}
+  return schema.safeParse(request.body);
+};
+
+export interface ResetPasswordRequest extends Request {
+  body: {
+    password: string;
+    password_confirmation: string;
+  };
+}
 
 const resetPasswordRequest = {
-  validate,
-  authorize,
+  parse,
 };
 
 export default resetPasswordRequest;
