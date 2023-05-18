@@ -34,7 +34,10 @@ export const authAccessMiddleware = async (
   }
 
   // retrieve user
-  const user = await database.user.findUnique({ where: { id }, include: { Role: true } });
+  const user = await database.user.findUnique({
+    where: { id },
+    include: { Role: true },
+  });
 
   // if user not found
   if (!user) {
