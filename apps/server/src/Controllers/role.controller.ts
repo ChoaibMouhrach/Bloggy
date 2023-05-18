@@ -41,7 +41,7 @@ const store = async (request: StoreRoleRequest, response: Response) => {
   });
 
   // return role
-  return response.json(role);
+  return response.status(201).json(role);
 };
 
 const update = async (request: UpdateRoleRequest, response: Response) => {

@@ -44,6 +44,9 @@ const configSchema = z.object({
   SMTP_PASS: z.string().min(1),
   SMTP_FROM_NAME: z.string().min(1),
   SMTP_FROM_ADDRESS: z.string().email(),
+
+  // DATABASE
+  DATABASE_URL: z.string().min(1),
 });
 
 // parse config

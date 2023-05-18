@@ -9,18 +9,10 @@ jest.mock("@src/lib/mail", () => ({
   sendMail: () => Promise.resolve(),
 }));
 
-beforeEach((done) => {
-  database.user.deleteMany().then(() => done());
-});
-
-afterEach(async () => {
-  await database.user.deleteMany();
-});
-
 describe("POST /login", () => {
   it("Should return 200 with user info, accessToken and refreshToken", async () => {
     const user = await database.user.create({
-      data: userPayload,
+      data: userPayload(),
     });
 
     const response = await request(makeApp())
@@ -31,6 +23,12 @@ describe("POST /login", () => {
     expect(response.body.user.email).toBe(user.email);
     expect(response.body.accessToken).toBeDefined();
     expect(response.body.refreshToken).toBeDefined();
+
+    await database.user.delete({
+      where: {
+        id: user.id,
+      },
+    });
   });
 
   it("Should return 400 with email and password are required", async () => {
@@ -50,7 +48,7 @@ describe("POST /login", () => {
 
   it("Should return 400 with email address or password does not exist within out database", async () => {
     const user = await database.user.create({
-      data: userPayload,
+      data: userPayload(),
     });
 
     const response = await request(makeApp())
@@ -63,21 +61,28 @@ describe("POST /login", () => {
       { path: ["email"], message: "Email address or password is not correct" },
     ]);
     expect(response.body.error).toBe("Bad Request");
+
+    await database.user.delete({
+      where: {
+        id: user.id,
+      },
+    });
   });
 });
 
 describe("POST /register", () => {
   it("Should return 200 with user info and tokens", async () => {
+    let payload = userPayload();
     const response = await request(makeApp())
       .post("/api/register")
       .send({
-        ...userPayload,
+        ...payload,
         password: "password",
         password_confirmation: "password",
       });
 
     expect(response.status).toBe(200);
-    expect(response.body.user.email).toBe(userPayload.email);
+    expect(response.body.user.email).toBe(payload.email);
     expect(response.body.accessToken).toBeDefined();
     expect(response.body.refreshToken).toBeDefined();
   });
@@ -105,12 +110,13 @@ describe("POST /register", () => {
   });
 
   it("Should return 400 wuth email is already taken", async () => {
-    await database.user.create({ data: userPayload });
+    const payload = userPayload();
+    await database.user.create({ data: payload });
 
     const response = await request(makeApp())
       .post("/api/register")
       .send({
-        ...userPayload,
+        ...payload,
         password: "password",
         password_confirmation: "password",
       });
@@ -137,7 +143,7 @@ describe("POST /register", () => {
 
 describe("POST /refresh", () => {
   it("Should return 200 with tokens", async () => {
-    const user = await database.user.create({ data: userPayload });
+    const user = await database.user.create({ data: userPayload() });
     const token = jwt.sign({ id: user.id }, config.SECRET_REFRESH);
 
     await database.refreshToken.create({
@@ -156,6 +162,12 @@ describe("POST /refresh", () => {
     expect(response.status).toBe(200);
     expect(response.body.accessToken).toBeDefined();
     expect(response.body.refreshToken).toBeDefined();
+
+    await database.user.delete({
+      where: {
+        id: user.id,
+      },
+    });
   });
 
   it("Should return 401 with unauthorized when token is not valid", async () => {
@@ -172,7 +184,7 @@ describe("POST /refresh", () => {
   });
 
   it("Should return 401 with unauthorized token expires", async () => {
-    const user = await database.user.create({ data: userPayload });
+    const user = await database.user.create({ data: userPayload() });
     const token = jwt.sign({ id: user.id }, config.SECRET_REFRESH, {
       expiresIn: 0,
     });
@@ -187,12 +199,18 @@ describe("POST /refresh", () => {
     expect(response.body.statusCode).toBe(401);
     expect(response.body.message).toBe("jwt expired");
     expect(response.body.error).toBe("Unauthorized");
+
+    await database.user.delete({
+      where: {
+        id: user.id,
+      },
+    });
   });
 });
 
 describe("POST /forgot-password", () => {
   it("Should return 200 with If the email is present in our database, a corresponding email will be sent to it. when email exists", async () => {
-    const user = await database.user.create({ data: userPayload });
+    const user = await database.user.create({ data: userPayload() });
 
     const response = await request(makeApp())
       .post("/api/forgot-password")
@@ -202,6 +220,12 @@ describe("POST /forgot-password", () => {
     expect(response.body.message).toBe(
       "If the email is present in our database, a corresponding email will be sent to it."
     );
+
+    await database.user.delete({
+      where: {
+        id: user.id,
+      },
+    });
   });
 
   it("Should return 200 with If the email is present in our database, a corresponding email will be sent to it. when does not exists", async () => {
@@ -235,7 +259,7 @@ describe("POST /forgot-password", () => {
 
 describe("POST /send-confirmation-email", () => {
   it("Should return 204", async () => {
-    const user = await database.user.create({ data: userPayload });
+    const user = await database.user.create({ data: userPayload() });
 
     const token = jwt.sign({ id: user.id }, config.SECRET_ACCESS);
 
@@ -246,12 +270,18 @@ describe("POST /send-confirmation-email", () => {
       });
 
     expect(response.status).toBe(204);
+
+    await database.user.delete({
+      where: {
+        id: user.id,
+      },
+    });
   });
 
   it("Should return 400 with user already verified", async () => {
     const user = await database.user.create({
       data: {
-        ...userPayload,
+        ...userPayload(),
         verifiedAt: new Date(),
       },
     });
@@ -269,12 +299,18 @@ describe("POST /send-confirmation-email", () => {
     expect(response.body.statusCode).toBe(400);
     expect(response.body.message).toBe("Already verified");
     expect(response.body.error).toBe("Bad Request");
+
+    await database.user.delete({
+      where: {
+        id: user.id,
+      },
+    });
   });
 });
 
 describe("POST /reset-password/:token", () => {
   it("Should return 204", async () => {
-    const user = await database.user.create({ data: userPayload });
+    const user = await database.user.create({ data: userPayload() });
 
     const token = jwt.sign({ id: user.id }, config.SECRET_FORGOT_PASSWORD);
 
@@ -293,10 +329,16 @@ describe("POST /reset-password/:token", () => {
       });
 
     expect(response.status).toBe(204);
+
+    await database.user.delete({
+      where: {
+        id: user.id,
+      },
+    });
   });
 
   it("Should return 400 with jwt expired", async () => {
-    const user = await database.user.create({ data: userPayload });
+    const user = await database.user.create({ data: userPayload() });
     const token = jwt.sign({ id: user.id }, config.SECRET_FORGOT_PASSWORD, {
       expiresIn: 0,
     });
@@ -312,11 +354,19 @@ describe("POST /reset-password/:token", () => {
     expect(response.body.statusCode).toBe(400);
     expect(response.body.message).toBe("jwt expired");
     expect(response.body.error).toBe("Bad Request");
+
+    await database.user.delete({
+      where: {
+        id: user.id,
+      },
+    });
   });
 
   it("Should return 404 with User does not exist", async () => {
+    let payload = userPayload();
+
     // user
-    const user = await database.user.create({ data: userPayload });
+    const user = await database.user.create({ data: payload });
 
     // token
     const token = jwt.sign({ id: user.id }, config.SECRET_FORGOT_PASSWORD);
@@ -339,7 +389,7 @@ describe("POST /reset-password/:token", () => {
 
   it("Should return 400 Token is not valid when token does not exists in database", async () => {
     // user
-    const user = await database.user.create({ data: userPayload });
+    const user = await database.user.create({ data: userPayload() });
 
     // token
     const token = jwt.sign({ id: user.id }, config.SECRET_FORGOT_PASSWORD);
@@ -355,12 +405,18 @@ describe("POST /reset-password/:token", () => {
     expect(response.body.statusCode).toBe(400);
     expect(response.body.message).toBe("Token is not valid");
     expect(response.body.error).toBe("Bad Request");
+
+    await database.user.delete({
+      where: {
+        id: user.id,
+      },
+    });
   });
 });
 
 describe("POST /confirm-email/:token", () => {
   it("Should return 204", async () => {
-    const user = await database.user.create({ data: userPayload });
+    const user = await database.user.create({ data: userPayload() });
 
     const token = jwt.sign({ id: user.id }, config.SECRET_CONFIRM_EMAIL);
     const accessToken = jwt.sign({ id: user.id }, config.SECRET_ACCESS);
@@ -377,10 +433,16 @@ describe("POST /confirm-email/:token", () => {
       .set("authorization", `Bearer ${accessToken}`);
 
     expect(response.status).toBe(204);
+
+    await database.user.delete({
+      where: {
+        id: user.id,
+      },
+    });
   });
 
   it("Should return 400 with jwt expired", async () => {
-    const user = await database.user.create({ data: userPayload });
+    const user = await database.user.create({ data: userPayload() });
     const token = jwt.sign({ id: user.id }, config.SECRET_CONFIRM_EMAIL, {
       expiresIn: 0,
     });
@@ -401,11 +463,16 @@ describe("POST /confirm-email/:token", () => {
     expect(response.body.statusCode).toBe(400);
     expect(response.body.message).toBe("jwt expired");
     expect(response.body.error).toBe("Bad Request");
+    await database.user.delete({
+      where: {
+        id: user.id,
+      },
+    });
   });
 
   it("Should return 404 with User does not exist", async () => {
     // user
-    const user = await database.user.create({ data: userPayload });
+    const user = await database.user.create({ data: userPayload() });
 
     // token
     const token = jwt.sign({ id: user.id }, config.SECRET_CONFIRM_EMAIL);
@@ -431,7 +498,7 @@ describe("POST /confirm-email/:token", () => {
 
   it("Should return 400 Token is not valid when token does not exists in database", async () => {
     // user
-    const user = await database.user.create({ data: userPayload });
+    const user = await database.user.create({ data: userPayload() });
 
     // token
     const token = jwt.sign({ id: user.id }, config.SECRET_CONFIRM_EMAIL);
@@ -447,13 +514,19 @@ describe("POST /confirm-email/:token", () => {
     expect(response.body.statusCode).toBe(400);
     expect(response.body.message).toBe("Token is not valid");
     expect(response.body.error).toBe("Bad Request");
+
+    await database.user.delete({
+      where: {
+        id: user.id,
+      },
+    });
   });
 });
 
 // get
 describe("GET /me", () => {
   it("Should return 200 with user", async () => {
-    const user = await database.user.create({ data: userPayload });
+    const user = await database.user.create({ data: userPayload() });
 
     const token = jwt.sign({ id: user.id }, config.SECRET_ACCESS);
 
@@ -465,13 +538,19 @@ describe("GET /me", () => {
 
     expect(response.status).toBe(200);
     expect(response.body.email).toBe(user.email);
+
+    await database.user.delete({
+      where: {
+        id: user.id,
+      },
+    });
   });
 });
 
 // patch
 describe("PATCH /me", () => {
   it("Should return 204", async () => {
-    const user = await database.user.create({ data: userPayload });
+    const user = await database.user.create({ data: userPayload() });
     const accessToken = jwt.sign(
       {
         id: user.id,
@@ -487,10 +566,18 @@ describe("PATCH /me", () => {
       });
 
     expect(response.status).toBe(204);
+
+    await database.user.delete({
+      where: {
+        id: user.id,
+      },
+    });
   });
 
   it("Should return 400 with username is already taken", async () => {
-    const user = await database.user.create({ data: userPayload });
+    const payload = userPayload();
+
+    const user = await database.user.create({ data: payload });
     const accessToken = jwt.sign(
       {
         id: user.id,
@@ -502,7 +589,7 @@ describe("PATCH /me", () => {
       .patch("/api/me")
       .set("authorization", `Bearer ${accessToken}`)
       .send({
-        username: userPayload.username,
+        username: payload.username,
       });
 
     expect(response.status).toBe(400);
@@ -516,11 +603,17 @@ describe("PATCH /me", () => {
       ])
     );
     expect(response.body.error).toBe("Bad Request");
+
+    await database.user.delete({
+      where: {
+        id: user.id,
+      },
+    });
   });
 });
 describe("PATCH /change-password", () => {
   it("Should return 204", async () => {
-    const user = await database.user.create({ data: userPayload });
+    const user = await database.user.create({ data: userPayload() });
     const accessToken = jwt.sign(
       {
         id: user.id,
@@ -538,10 +631,16 @@ describe("PATCH /change-password", () => {
       });
 
     expect(response.status).toBe(204);
+
+    await database.user.delete({
+      where: {
+        id: user.id,
+      },
+    });
   });
 
   it("Should return 400 with password is not correct", async () => {
-    const user = await database.user.create({ data: userPayload });
+    const user = await database.user.create({ data: userPayload() });
     const accessToken = jwt.sign(
       {
         id: user.id,
@@ -569,10 +668,16 @@ describe("PATCH /change-password", () => {
       ])
     );
     expect(response.body.error).toBe("Bad Request");
+
+    await database.user.delete({
+      where: {
+        id: user.id,
+      },
+    });
   });
 
   it("Should return 400 with New password and password confirmation does not match", async () => {
-    const user = await database.user.create({ data: userPayload });
+    const user = await database.user.create({ data: userPayload() });
     const accessToken = jwt.sign(
       {
         id: user.id,
@@ -600,5 +705,11 @@ describe("PATCH /change-password", () => {
       ])
     );
     expect(response.body.error).toBe("Bad Request");
+
+    await database.user.delete({
+      where: {
+        id: user.id,
+      },
+    });
   });
 });
