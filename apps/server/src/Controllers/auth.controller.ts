@@ -10,11 +10,8 @@ import {
   ResetPasswordRequest,
   UpdateProfileRequest,
 } from "@src/Requests";
-import { database, prepareUser } from "@src/lib/database";
-import {
-  BadRequestException,
-  NotFoundException,
-} from "@src/Exceptions";
+import { database, defaultRoles, prepareUser } from "@src/lib/database";
+import { BadRequestException, NotFoundException } from "@src/Exceptions";
 import config from "@src/lib/config";
 import { AuthRequest } from "@src/types";
 import mail from "@src/lib/mail";
@@ -39,12 +36,19 @@ const login = async (request: LoginRequest, response: Response) => {
   }
 
   // accessToken
-  const accessToken = jwt.sign({ id: user.id, jti: user.id }, config.SECRET_ACCESS, {
-    expiresIn: config.DURATION_ACCESS,
-  });
+  const accessToken = jwt.sign(
+    { id: user.id, jti: user.id },
+    config.SECRET_ACCESS,
+    {
+      expiresIn: config.DURATION_ACCESS,
+    }
+  );
 
   // refreshToken
-  const refreshToken = jwt.sign({ id: user.id, jti: user.id }, config.SECRET_REFRESH);
+  const refreshToken = jwt.sign(
+    { id: user.id, jti: user.id },
+    config.SECRET_REFRESH
+  );
 
   // create new refreshToken
   await database.refreshToken.create({
@@ -73,18 +77,6 @@ const login = async (request: LoginRequest, response: Response) => {
 const register = async (request: RegisterRequest, response: Response) => {
   const { username, email, password, bio, url } = request.body;
 
-  // retrieve role
-  let role = await database.role.findUnique({ where: { name: "member" } });
-
-  // if member role does not exists create it
-  if (!role) {
-    role = await database.role.create({
-      data: {
-        name: "member",
-      },
-    });
-  }
-
   // user
   const user = await database.user.create({
     data: {
@@ -93,17 +85,24 @@ const register = async (request: RegisterRequest, response: Response) => {
       bio,
       url,
       password: hashSync(password, Number(config.SALT)),
-      roleId: role.id,
+      roleId: defaultRoles.MEMBER,
     },
   });
 
   // accessToken
-  const accessToken = jwt.sign({ id: user.id, jti: user.id }, config.SECRET_ACCESS, {
-    expiresIn: config.DURATION_ACCESS,
-  });
+  const accessToken = jwt.sign(
+    { id: user.id, jti: user.id },
+    config.SECRET_ACCESS,
+    {
+      expiresIn: config.DURATION_ACCESS,
+    }
+  );
 
   // refresh token
-  const refreshToken = jwt.sign({ id: user.id, jti: user.id }, config.SECRET_REFRESH);
+  const refreshToken = jwt.sign(
+    { id: user.id, jti: user.id },
+    config.SECRET_REFRESH
+  );
 
   // create new refresh token
   await database.refreshToken.create({
@@ -127,23 +126,29 @@ const register = async (request: RegisterRequest, response: Response) => {
  * @param response Http Response
  */
 const refresh = async (request: AuthRequest, response: Response) => {
-
   // user
   const { user, token } = request.auth!;
 
   // new accessToken
-  const accessToken = jwt.sign({
-    id: user.id,
-    jti: user.id
-  }, config.SECRET_ACCESS, {
-    expiresIn: config.DURATION_ACCESS,
-  });
+  const accessToken = jwt.sign(
+    {
+      id: user.id,
+      jti: user.id,
+    },
+    config.SECRET_ACCESS,
+    {
+      expiresIn: config.DURATION_ACCESS,
+    }
+  );
 
   // new refreshToken
-  const refreshToken = jwt.sign({
-    id: user.id,
-    jti: user.id
-  }, config.SECRET_REFRESH);
+  const refreshToken = jwt.sign(
+    {
+      id: user.id,
+      jti: user.id,
+    },
+    config.SECRET_REFRESH
+  );
 
   // store new refreshToken
   await database.refreshToken.create({
@@ -189,7 +194,7 @@ const updateProfile = async (
   response: Response
 ) => {
   // authenticated user
-  let { user } = request.auth!;
+  const { user } = request.auth!;
 
   // update items
   const { username, url, bio } = request.body;
@@ -219,7 +224,6 @@ const changePassword = async (
   request: ChangePasswordRequest,
   response: Response
 ) => {
-
   // extract password
   const { newPassword: password } = request.body;
 
@@ -263,9 +267,13 @@ const forgotPassword = async (
   }
 
   // issue new forgotpasswordtoken
-  const token = jwt.sign({ id: user.id, jti: user.id }, config.SECRET_FORGOT_PASSWORD, {
-    expiresIn: config.DURATION_FORGOT_PASSWORD,
-  });
+  const token = jwt.sign(
+    { id: user.id, jti: user.id },
+    config.SECRET_FORGOT_PASSWORD,
+    {
+      expiresIn: config.DURATION_FORGOT_PASSWORD,
+    }
+  );
 
   // store token
   await database.forgotPasswordToken.create({
@@ -300,7 +308,7 @@ const resetPassword = async (
   response: Response
 ) => {
   // extract token
-  const { token } = request.params
+  const { token } = request.params;
 
   // user id
   let id: number;
@@ -375,9 +383,13 @@ const sendConfirmationEmail = async (
   }
 
   // create token
-  const token = jwt.sign({ id: user.id, jti: user.id }, config.SECRET_CONFIRM_EMAIL, {
-    expiresIn: config.DURATION_CONFIRM_EMAIL,
-  });
+  const token = jwt.sign(
+    { id: user.id, jti: user.id },
+    config.SECRET_CONFIRM_EMAIL,
+    {
+      expiresIn: config.DURATION_CONFIRM_EMAIL,
+    }
+  );
 
   // store token
   await database.confirmEmailToken.create({ data: { token, userId: user.id } });
@@ -429,12 +441,12 @@ const confirmEmail = async (request: AuthRequest, response: Response) => {
   const tokens = await database.confirmEmailToken.findMany({
     where: {
       token,
-      userId: user.id
-    }
+      userId: user.id,
+    },
   });
 
-  if(!tokens.length){
-    throw new BadRequestException("Token is not valid")
+  if (!tokens.length) {
+    throw new BadRequestException("Token is not valid");
   }
 
   // update user

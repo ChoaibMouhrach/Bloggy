@@ -6,14 +6,19 @@ const parse: ValidateParse = (request: AuthRequest) => {
   const schema = z
     .object({
       // old password
-      password: z.string().min(8).refine(async (password) => {
+      password: z
+        .string()
+        .min(8)
+        .refine(
+          async (password) => {
+            // retrieve user from request
+            const { user } = request.auth!;
 
-        // retrieve user from request
-        const { user } = request.auth!;
-
-        // compare passwords
-        return compareSync(password, user.password)
-      }, { message: "Password is not correct" }),
+            // compare passwords
+            return compareSync(password, user.password);
+          },
+          { message: "Password is not correct" }
+        ),
 
       // new password
       newPassword: z.string().min(8),
@@ -22,7 +27,8 @@ const parse: ValidateParse = (request: AuthRequest) => {
       password_confirmation: z.string().min(8),
     })
     .refine((data) => data.newPassword === data.password_confirmation, {
-      message: "New Password and Password confirmation does not match", path: ["password_confirmation"]
+      message: "New Password and Password confirmation does not match",
+      path: ["password_confirmation"],
     });
 
   return schema.safeParseAsync(request.body);
