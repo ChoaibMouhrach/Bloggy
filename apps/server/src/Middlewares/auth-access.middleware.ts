@@ -1,4 +1,4 @@
-import { UnauthorizedException, NotFoundException } from "@src/Exceptions";
+import { UnauthorizedException } from "@src/Exceptions";
 import config from "@src/lib/config";
 import { database } from "@src/lib/database";
 import { AuthRequest } from "@src/types";
@@ -41,7 +41,7 @@ export const authAccessMiddleware = async (
 
   // if user not found
   if (!user) {
-    throw new NotFoundException("User");
+    throw new UnauthorizedException("User does not exists");
   }
 
   request.auth = {

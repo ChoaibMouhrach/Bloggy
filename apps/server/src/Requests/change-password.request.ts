@@ -42,8 +42,6 @@ export interface ChangePasswordRequest extends AuthRequest {
   };
 }
 
-const changePasswordRequest = {
+export const changePasswordRequest = {
   parse,
 };
-
-export default changePasswordRequest;

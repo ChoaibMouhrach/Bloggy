@@ -31,6 +31,7 @@
     "no-console": "off",
     "import/export": "off",
     "import/no-extraneous-dependencies": "off",
-    "import/extensions": "off"
+    "import/extensions": "off",
+    "@typescript-eslint/return-await": "off"
   }
 }

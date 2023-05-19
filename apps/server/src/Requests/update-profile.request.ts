@@ -30,8 +30,6 @@ export interface UpdateProfileRequest extends AuthRequest {
   };
 }
 
-const updateProfileRequest = {
+export const updateProfileRequest = {
   parse,
 };
-
-export default updateProfileRequest;

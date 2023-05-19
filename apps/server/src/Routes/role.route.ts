@@ -1,8 +1,10 @@
 import { roleController } from "@src/Controllers";
 import { authAccessMiddleware, validate } from "@src/Middlewares";
-import destroyRoleRequest from "@src/Requests/destroy-role.request";
-import storeRoleRequest from "@src/Requests/store-role.request";
-import updateRoleRequest from "@src/Requests/update-role.request";
+import {
+  updateRoleRequest,
+  storeRoleRequest,
+  destroyRoleRequest,
+} from "@src/Requests";
 import { Router } from "express";
 
 export const roleRouter = Router();
