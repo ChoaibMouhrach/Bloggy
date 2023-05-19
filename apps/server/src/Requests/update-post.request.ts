@@ -41,7 +41,7 @@ const parse: ValidateParse = (request: AuthRequest) => {
       removeTags: rule,
     })
     .refine((data) => Object.keys(data).length, {
-      message: "Chnage Something else",
+      message: "Chnage Something first",
       path: ["root"],
     });
 
