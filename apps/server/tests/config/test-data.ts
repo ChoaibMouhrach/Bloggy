@@ -1,5 +1,11 @@
 import { defaultRoles } from "@src/lib/database";
 
+export const postPayload = () => ({
+  title: "post",
+  content: "content",
+  isDraft: false,
+});
+
 export const rolePayload = () => ({
   name: `supplier${Math.random()}`,
 });

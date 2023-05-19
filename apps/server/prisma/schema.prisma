@@ -93,7 +93,7 @@ model Post {
   id       Int     @id @default(autoincrement())
   title    String
   content  String
-  is_draft Boolean @default(true)
+  isDraft Boolean @default(true)
 
   // timestamps
   deletedAt DateTime?
