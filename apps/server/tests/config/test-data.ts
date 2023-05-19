@@ -4,6 +4,10 @@ export const rolePayload = () => ({
   name: `supplier${Math.random()}`,
 });
 
+export const tagPaylaod = () => ({
+  name: `tag${Math.random()}`,
+});
+
 export const adminPayload = () => ({
   username: `admin${Math.random()}`,
   bio: "bio",
