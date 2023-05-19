@@ -7,8 +7,8 @@ export * from "./reset-password.request";
 export * from "./store-role.request";
 export * from "./update-role.request";
 export * from "./destroy-role.request";
-export * from "./index-user.request"
-export * from "./show-user.request"
-export * from "./store-user.request"
-export * from "./update-user.request"
-export * from "./destroy-user.request"
+export * from "./index-user.request";
+export * from "./show-user.request";
+export * from "./store-user.request";
+export * from "./update-user.request";
+export * from "./destroy-user.request";

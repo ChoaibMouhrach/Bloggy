@@ -72,7 +72,7 @@ describe("POST /login", () => {
 
 describe("POST /register", () => {
   it("Should return 200 with user info and tokens", async () => {
-    let payload = userPayload();
+    const payload = userPayload();
     const response = await request(makeApp())
       .post("/api/register")
       .send({
@@ -362,8 +362,8 @@ describe("POST /reset-password/:token", () => {
     });
   });
 
-  it("Should return 404 with User does not exist", async () => {
-    let payload = userPayload();
+  it("Should return 401 with User does not exist", async () => {
+    const payload = userPayload();
 
     // user
     const user = await database.user.create({ data: payload });
@@ -490,10 +490,10 @@ describe("POST /confirm-email/:token", () => {
       .post(`/api/confirm-email/${token}`)
       .set("authorization", `Bearer ${accessToken}`);
 
-    expect(response.status).toBe(404);
-    expect(response.body.statusCode).toBe(404);
-    expect(response.body.message).toBe("User does not exist");
-    expect(response.body.error).toBe("Not Found");
+    expect(response.status).toBe(401);
+    expect(response.body.statusCode).toBe(401);
+    expect(response.body.message).toBe("User does not exists");
+    expect(response.body.error).toBe("Unauthorized");
   });
 
   it("Should return 400 Token is not valid when token does not exists in database", async () => {

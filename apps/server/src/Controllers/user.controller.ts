@@ -17,7 +17,7 @@ const index = async (request: Request, response: Response) => {
   const skip = 8 * (page - 1);
 
   // retrieve users
-  let users = await database.user.findMany({
+  const users = await database.user.findMany({
     where: {
       OR: [
         {
@@ -43,47 +43,38 @@ const index = async (request: Request, response: Response) => {
     data: users.map((user) => prepareUser(user)),
     limit: take,
     skip,
+    page,
     count: await database.user.count(),
   });
 };
 
 const show = async (request: Request, response: Response) => {
-
   // extract id
   const { id } = request.params;
 
   // check id valid
-  if (!Boolean(Number(id))) {
-    throw new BadRequestException("Invalid id")
+  if (!Number(id)) {
+    throw new BadRequestException("Invalid id");
   }
 
   // retrieve user
   const user = await database.user.findUnique({
     where: {
-      id: Number(id)
-    }
-  })
+      id: Math.floor(Number(id)),
+    },
+  });
 
   // check user existance
   if (!user) {
-    throw new NotFoundException("User")
+    throw new NotFoundException("User");
   }
 
-  return response.json(prepareUser(user))
-
+  return response.json(prepareUser(user));
 };
 
 const store = async (request: StoreUserRequest, response: Response) => {
-
   // extract user
-  const {
-    username,
-    email,
-    password,
-    bio,
-    url,
-    roleId
-  } = request.body;
+  const { username, email, password, bio, url, roleId } = request.body;
 
   // save user
   const user = await database.user.create({
@@ -93,91 +84,91 @@ const store = async (request: StoreUserRequest, response: Response) => {
       password: hashSync(password, Number(config.SALT)),
       bio,
       url,
-      roleId
-    }
-  })
+      roleId,
+    },
+  });
 
   // send user
-  return response.status(201).json(prepareUser(user))
-
+  return response.status(201).json(prepareUser(user));
 };
 
 const update = async (request: UpdateUserRequest, response: Response) => {
-
-  const { id } = request.params
+  const { id } = request.params;
 
   // check if id is a number
-  if (!Boolean(Number(id))) {
-    throw new BadRequestException("Invalid id")
+  if (!Number(id)) {
+    throw new BadRequestException("Invalid id");
   }
 
   // if request got body then hashSync it
   if (request.body.password) {
-    request.body.password = hashSync(request.body.password, Number(config.SALT));
+    request.body.password = hashSync(
+      request.body.password,
+      Number(config.SALT)
+    );
   }
 
   const user = await database.user.findUnique({
     where: {
-      id: Number(id)
-    }
-  })
+      id: Math.floor(Number(id)),
+    },
+  });
 
   if (!user) {
-    throw new NotFoundException("User")
+    throw new NotFoundException("User");
   }
 
   // update user info
   await database.user.update({
     where: { id: user.id },
-    data: request.body
-  })
+    data: request.body,
+  });
 
   // send status
-  return response.sendStatus(204)
+  return response.sendStatus(204);
 };
 
 const destroy = async (request: Request, response: Response) => {
-
   // retrieve id
-  const { id } = request.params
+  const { id } = request.params;
 
   // check if id is a number
-  if (!Boolean(Number(id))) {
-    throw new BadRequestException("Invalid id")
+  if (!Number(id)) {
+    throw new BadRequestException("Invalid id");
   }
 
   // get user
   const user = await database.user.findUnique({
     where: {
-      id: Number(id)
-    }
-  })
+      id: Number(id),
+    },
+  });
 
   // check existance
   if (!user) {
-    throw new NotFoundException("User")
+    throw new NotFoundException("User");
   }
 
   // if user is soft deleted just delete it otherways soft delete it
   if (user.deletedAt) {
     await database.user.delete({
       where: {
-        id: user.id
-      }
-    })
+        id: user.id,
+      },
+    });
   } else {
     await database.user.update({
       where: {
-        id: user.id
+        id: user.id,
       },
       data: {
-        deletedAt: new Date()
-      }
-    })
+        deletedAt: new Date(),
+      },
+    });
   }
 
   // 204 success
-  return response.sendStatus(204)
+  return response.sendStatus(204);
 };
 
 export const userController = {

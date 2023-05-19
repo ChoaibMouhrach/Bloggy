@@ -1,9 +1,9 @@
 import makeApp from "@src/app";
 import { database, defaultRoles } from "@src/lib/database";
 import request from "supertest";
-import { adminPayload, rolePayload } from "../config/test-data";
 import config from "@src/lib/config";
 import jwt from "jsonwebtoken";
+import { adminPayload, rolePayload } from "../config/test-data";
 
 beforeEach((done) => {
   database.role
@@ -57,8 +57,8 @@ describe("GET /roles", () => {
 
 describe("POST /roles", () => {
   it("Should return 201 with role", async () => {
-    let adminPayloadClone = adminPayload();
-    let payload = rolePayload();
+    const adminPayloadClone = adminPayload();
+    const payload = rolePayload();
 
     const admin = await database.user.create({ data: adminPayloadClone });
     const token = jwt.sign({ id: admin.id }, config.SECRET_ACCESS);
@@ -81,7 +81,7 @@ describe("POST /roles", () => {
   });
 
   it("Should return 400 with role already exists", async () => {
-    let adminPayloadClone = adminPayload();
+    const adminPayloadClone = adminPayload();
 
     const admin = await database.user.create({ data: adminPayloadClone });
 
@@ -108,8 +108,8 @@ describe("POST /roles", () => {
 
 describe("PATCH /roles/:id", () => {
   it("Should return 204", async () => {
-    let adminPayloadClone = adminPayload();
-    let payload = rolePayload();
+    const adminPayloadClone = adminPayload();
+    const payload = rolePayload();
 
     const admin = await database.user.create({ data: adminPayloadClone });
     const role = await database.role.create({ data: payload });
@@ -119,7 +119,7 @@ describe("PATCH /roles/:id", () => {
     const response = await request(makeApp())
       .patch(`/api/roles/${role.id}`)
       .set("authorization", `Bearer ${token}`)
-      .send({ name: "admin" + Math.random() });
+      .send({ name: `admin${Math.random()}` });
 
     expect(response.status).toBe(204);
 
@@ -128,8 +128,8 @@ describe("PATCH /roles/:id", () => {
   });
 
   it("Should return 400 with role already exists", async () => {
-    let adminPayloadClone = adminPayload();
-    let payload = rolePayload();
+    const adminPayloadClone = adminPayload();
+    const payload = rolePayload();
 
     const admin = await database.user.create({ data: adminPayloadClone });
     const role = await database.role.create({ data: payload });
@@ -158,7 +158,7 @@ describe("PATCH /roles/:id", () => {
   });
 
   it("Should return 400 with id is invalid", async () => {
-    let adminPayloadClone = adminPayload();
+    const adminPayloadClone = adminPayload();
 
     const admin = await database.user.create({ data: adminPayloadClone });
 
@@ -167,7 +167,7 @@ describe("PATCH /roles/:id", () => {
     const response = await request(makeApp())
       .patch(`/api/roles/zefz`)
       .set("authorization", `Bearer ${token}`)
-      .send({ name: "admin" + Math.random() });
+      .send({ name: `admin${Math.random()}` });
 
     expect(response.status).toBe(400);
     expect(response.body.statusCode).toBe(400);
@@ -180,8 +180,8 @@ describe("PATCH /roles/:id", () => {
 
 describe("DELETE /roles/:id", () => {
   it("Should return 204", async () => {
-    let adminPayloadClone = adminPayload();
-    let payload = rolePayload();
+    const adminPayloadClone = adminPayload();
+    const payload = rolePayload();
 
     const admin = await database.user.create({ data: adminPayloadClone });
     const role = await database.role.create({ data: payload });
@@ -198,7 +198,7 @@ describe("DELETE /roles/:id", () => {
   });
 
   it("Should return 401 with unatuthorized", async () => {
-    let adminPayloadClone = adminPayload();
+    const adminPayloadClone = adminPayload();
 
     const admin = await database.user.create({ data: adminPayloadClone });
 
@@ -214,7 +214,7 @@ describe("DELETE /roles/:id", () => {
   });
 
   it("Should return 400 with id is invalid", async () => {
-    let adminPayloadClone = adminPayload();
+    const adminPayloadClone = adminPayload();
 
     const admin = await database.user.create({ data: adminPayloadClone });
 

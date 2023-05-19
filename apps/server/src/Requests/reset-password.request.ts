@@ -27,4 +27,3 @@ export interface ResetPasswordRequest extends Request {
 export const resetPasswordRequest = {
   parse,
 };
-

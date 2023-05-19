@@ -1,6 +1,13 @@
 import { authController } from "@src/Controllers";
 import { validate, authAccessMiddleware, authRefresh } from "@src/Middlewares";
-import { resetPasswordRequest, registerRequest, loginRequest, forgotPasswordRequest, changePasswordRequest, updateProfileRequest } from "@src/Requests";
+import {
+  resetPasswordRequest,
+  registerRequest,
+  loginRequest,
+  forgotPasswordRequest,
+  changePasswordRequest,
+  updateProfileRequest,
+} from "@src/Requests";
 import { Router } from "express";
 
 export const authRouter = Router();
