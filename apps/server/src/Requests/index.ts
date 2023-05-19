@@ -15,3 +15,6 @@ export * from "./destroy-user.request";
 export * from "./destroy-tag.request";
 export * from "./store-tag.request";
 export * from "./update-tag.request";
+export * from "./store-post.request";
+export * from "./update-post.request";
+export * from "./destroy-post.request";
