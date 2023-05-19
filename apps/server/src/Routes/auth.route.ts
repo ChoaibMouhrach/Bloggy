@@ -1,11 +1,6 @@
 import { authController } from "@src/Controllers";
 import { validate, authAccessMiddleware, authRefresh } from "@src/Middlewares";
-import changePasswordRequest from "@src/Requests/change-password.request";
-import forgotPasswordRequest from "@src/Requests/forgot-password.request";
-import loginRequest from "@src/Requests/login.request";
-import registerRequest from "@src/Requests/register.request";
-import resetPasswordRequest from "@src/Requests/reset-password.request";
-import updateProfileRequest from "@src/Requests/update-profile.request";
+import { resetPasswordRequest, registerRequest, loginRequest, forgotPasswordRequest, changePasswordRequest, updateProfileRequest } from "@src/Requests";
 import { Router } from "express";
 
 export const authRouter = Router();

@@ -16,7 +16,7 @@ model User {
   username String @unique
   email    String @unique
   bio      String?
-  url      String
+  url      String?
   password String
   verifiedAt DateTime?
 

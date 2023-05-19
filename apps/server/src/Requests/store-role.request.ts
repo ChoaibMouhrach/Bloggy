@@ -28,9 +28,7 @@ export interface StoreRoleRequest extends AuthRequest {
   };
 }
 
-const storeRoleRequest = {
+export const storeRoleRequest = {
   parse,
   authorize,
 };
-
-export default storeRoleRequest;

@@ -12,8 +12,6 @@ const authorize: ValidateAuthorize = (request: AuthRequest) => {
   );
 };
 
-const destroyRoleRequest = {
+export const destroyRoleRequest = {
   authorize,
 };
-
-export default destroyRoleRequest;

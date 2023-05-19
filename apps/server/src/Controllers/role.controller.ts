@@ -51,7 +51,7 @@ const update = async (request: UpdateRoleRequest, response: Response) => {
   // body
   const { name } = request.body;
 
-  if (!Number(id)) {
+  if (!Boolean(Number(id))) {
     throw new BadRequestException("Invalid id");
   }
 
@@ -70,7 +70,7 @@ const update = async (request: UpdateRoleRequest, response: Response) => {
 const destroy = async (request: Request, response: Response) => {
   const { id } = request.params;
 
-  if (!Number(id)) {
+  if (!Boolean(Number(id))) {
     throw new BadRequestException("Invalid id");
   }
 

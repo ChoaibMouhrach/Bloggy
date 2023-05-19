@@ -39,8 +39,6 @@ export interface LoginRequest extends Request {
   };
 }
 
-const loginRequest = {
+export const loginRequest = {
   parse,
 };
-
-export default loginRequest;

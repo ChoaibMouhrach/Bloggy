@@ -52,8 +52,6 @@ export interface RegisterRequest extends Request {
   };
 }
 
-const registerRequest = {
+export const registerRequest = {
   parse,
 };
-
-export default registerRequest;

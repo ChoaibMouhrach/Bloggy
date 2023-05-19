@@ -31,9 +31,7 @@ export interface UpdateRoleRequest extends AuthRequest {
   };
 }
 
-const updateRoleRequest = {
+export const updateRoleRequest = {
   parse,
   authorize,
 };
-
-export default updateRoleRequest;

@@ -16,8 +16,6 @@ export interface ForgotPasswordRequest extends Request {
   };
 }
 
-const forgotPasswordRequest = {
+export const forgotPasswordRequest = {
   parse,
 };
-
-export default forgotPasswordRequest;
