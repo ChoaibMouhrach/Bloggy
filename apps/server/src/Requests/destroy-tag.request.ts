@@ -16,13 +16,16 @@ const parse: ValidateParse = (request: AuthRequest) => {
       .regex(/^\d+$/gi)
       .transform((id) => Number(id))
       .pipe(
-        z.number().refine(async (id) => {
-          return await database.tag.findUnique({
-            where: {
-              id,
-            },
-          });
-        })
+        z.number().refine(
+          async (id) => {
+            return await database.tag.findUnique({
+              where: {
+                id,
+              },
+            });
+          },
+          { message: "Tag does not exist" }
+        )
       ),
   });
 

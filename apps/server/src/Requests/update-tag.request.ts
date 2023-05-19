@@ -21,7 +21,8 @@ const parse: ValidateParse = async (request: AuthRequest) => {
               where: {
                 id,
               },
-            })
+            }),
+          { message: "Tag does not exists" }
         )
       ),
     name: z
