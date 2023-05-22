@@ -87,6 +87,9 @@ const register = async (request: RegisterRequest, response: Response) => {
       password: hashSync(password, Number(config.SALT)),
       roleId: defaultRoles.MEMBER,
     },
+    include: {
+      Role: true
+    }
   });
 
   // accessToken
@@ -113,7 +116,7 @@ const register = async (request: RegisterRequest, response: Response) => {
   });
 
   // response
-  return response.json({
+  return response.status(201).json({
     user: prepareUser(user),
     accessToken,
     refreshToken,
