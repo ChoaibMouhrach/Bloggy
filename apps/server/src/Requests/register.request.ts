@@ -15,7 +15,7 @@ const parse: ValidateParse = (request: Request) => {
             !(await database.user.findUnique({ where: { username } })),
           { message: "Username is already taken" }
         ),
-      url: z.string().url(),
+      url: z.string().url().optional(),
       email: z
         .string()
         .email()
@@ -24,8 +24,8 @@ const parse: ValidateParse = (request: Request) => {
             !(await database.user.findUnique({ where: { email } })),
           { message: "Email address is already taken" }
         ),
-      bio: z.string().max(255).optional(),
-      password: z.string().min(1).min(8),
+      bio: z.string().min(1).max(255).optional(),
+      password: z.string().min(8),
       password_confirmation: z.string().min(8),
     })
     .refine(
