@@ -8,7 +8,8 @@ import { useRegisterMutation } from "@/features/apis/authApi";
 import { useDispatch } from "react-redux";
 import { setUser } from "@/features/slices/userSlice";
 import Link from "next/link";
-import { handleResponseError } from "@/helpers/response.helper";
+import { handleResponseError } from "@/helpers";
+import { withGuest } from "@/middlewares";
 
 const schema = z.object({
   username: z.string().min(3).max(60),
@@ -19,7 +20,7 @@ const schema = z.object({
   password_confirmation: z.string().min(8),
 });
 
-const Register = () => {
+const Register = withGuest(() => {
   const dispatch = useDispatch();
   const [registerUser, { isLoading }] = useRegisterMutation();
 
@@ -119,6 +120,6 @@ const Register = () => {
       </form>
     </main>
   );
-};
+});
 
 export default Register;

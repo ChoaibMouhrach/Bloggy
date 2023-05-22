@@ -1,5 +1,5 @@
 import { useGetProfileQuery } from "@/features/apis/authApi";
-import withAuth from "@/middlewares/withAuth";
+import { withAuth } from "@/middlewares";
 import { useRouter } from "next/router";
 import { Button } from "ui";
 

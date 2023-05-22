@@ -1,16 +1,42 @@
 import { Path } from "react-hook-form";
 
-export type ErrorTypes = "Bad Request" | "Unauthorized" | "Not Found" | "Internal Server Error";
-
-type ResponseErrorMessage<TPath> = string | {
-  path: [Path<T>];
-  message: string
-}[];
-
+// errors related
+export type ErrorTypes =
+  | "Bad Request"
+  | "Unauthorized"
+  | "Not Found"
+  | "Internal Server Error";
+type ResponseErrorMessage<TPath> =
+  | string
+  | {
+      path: [Path<T>];
+      message: string;
+    }[];
 export interface IResponseError<TPath> {
   statusCode: number;
   message: ResponseErrorMessage<TPath>;
   error: ErrorTypes;
+}
+
+export interface IUpdateUser {
+  username?: string;
+  url?: string;
+  bio?: string;
+  email?: string;
+  password?: string;
+  password_confirmation?: string;
+}
+
+export interface IForgotPassword {
+  email: string;
+}
+
+export interface IResetPassword {
+  token: string;
+  data: {
+    password: string;
+    password_confirmation: string;
+  };
 }
 
 export interface IStoreUser {

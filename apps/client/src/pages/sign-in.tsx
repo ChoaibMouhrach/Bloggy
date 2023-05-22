@@ -8,9 +8,9 @@ import { useDispatch } from "react-redux";
 import { useLoginMutation } from "@/features/apis/authApi";
 import { setUser } from "@/features/slices/userSlice";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
-import { handleResponseError } from "@/helpers/response.helper";
-import { withGuest } from "@/middlewares/withGuest";
 import { useRouter } from "next/router";
+import { withGuest } from "@/middlewares";
+import { handleResponseError } from "@/helpers";
 
 const schema = z.object({
   email: z.string().email(),
