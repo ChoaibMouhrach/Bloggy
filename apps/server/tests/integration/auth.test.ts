@@ -9,14 +9,14 @@ jest.mock("@src/lib/mail", () => ({
   sendMail: () => Promise.resolve(),
 }));
 
-describe("POST /login", () => {
+describe("POST /sign-in", () => {
   it("Should return 200 with user info, accessToken and refreshToken", async () => {
     const user = await database.user.create({
       data: userPayload(),
     });
 
     const response = await request(makeApp())
-      .post("/api/login")
+      .post("/api/sign-in")
       .send({ email: user.email, password: "password" });
 
     expect(response.status).toBe(200);
@@ -32,7 +32,7 @@ describe("POST /login", () => {
   });
 
   it("Should return 400 with email and password are required", async () => {
-    const response = await request(makeApp()).post("/api/login");
+    const response = await request(makeApp()).post("/api/sign-in");
     expect(response.status).toBe(400);
     expect(response.body.message).toMatchObject([
       {
@@ -52,7 +52,7 @@ describe("POST /login", () => {
     });
 
     const response = await request(makeApp())
-      .post("/api/login")
+      .post("/api/sign-in")
       .send({ email: user.email, password: "password10" });
 
     expect(response.status).toBe(400);
@@ -70,25 +70,25 @@ describe("POST /login", () => {
   });
 });
 
-describe("POST /register", () => {
+describe("POST /sign-up", () => {
   it("Should return 200 with user info and tokens", async () => {
     const payload = userPayload();
     const response = await request(makeApp())
-      .post("/api/register")
+      .post("/api/sign-up")
       .send({
         ...payload,
         password: "password",
         password_confirmation: "password",
       });
 
-    expect(response.status).toBe(200);
+    expect(response.status).toBe(201);
     expect(response.body.user.email).toBe(payload.email);
     expect(response.body.accessToken).toBeDefined();
     expect(response.body.refreshToken).toBeDefined();
   });
 
   it("Should return 400 with every field is required", async () => {
-    const response = await request(makeApp()).post("/api/register");
+    const response = await request(makeApp()).post("/api/sign-up");
 
     expect(response.status).toBe(400);
     expect(response.body.statusCode).toBe(400);
@@ -109,12 +109,12 @@ describe("POST /register", () => {
     expect(response.body.error).toBe("Bad Request");
   });
 
-  it("Should return 400 wuth email is already taken", async () => {
+  it("Should return 400 with email is already taken", async () => {
     const payload = userPayload();
     await database.user.create({ data: payload });
 
     const response = await request(makeApp())
-      .post("/api/register")
+      .post("/api/sign-up")
       .send({
         ...payload,
         password: "password",
@@ -705,6 +705,35 @@ describe("PATCH /change-password", () => {
       ])
     );
     expect(response.body.error).toBe("Bad Request");
+
+    await database.user.delete({
+      where: {
+        id: user.id,
+      },
+    });
+  });
+});
+
+describe("POST /sign-out", () => {
+  it("Should return 204", async () => {
+    const payload = userPayload();
+
+    const user = await database.user.create({ data: payload });
+
+    const token = jwt.sign({ id: user.id }, config.SECRET_REFRESH);
+
+    await database.refreshToken.create({
+      data: {
+        token,
+        userId: user.id,
+      },
+    });
+
+    const response = await request(makeApp())
+      .post("/api/sign-out")
+      .set("authorization", `Bearer ${token}`);
+
+    expect(response.status).toBe(204);
 
     await database.user.delete({
       where: {

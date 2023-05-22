@@ -21,7 +21,7 @@ import mail from "@src/lib/mail";
  * @param request Http Request
  * @param response Http Response
  */
-const login = async (request: LoginRequest, response: Response) => {
+const signIn = async (request: LoginRequest, response: Response) => {
   // user email
   const { email } = request.body;
 
@@ -69,12 +69,24 @@ const login = async (request: LoginRequest, response: Response) => {
   });
 };
 
+const signOut = async (request: AuthRequest, response: Response) => {
+  const { token } = request.auth!;
+
+  await database.refreshToken.delete({
+    where: {
+      token,
+    },
+  });
+
+  return response.sendStatus(204);
+};
+
 /**
  * Register users
  * @param request Http Request
  * @param response Http Response
  */
-const register = async (request: RegisterRequest, response: Response) => {
+const signUp = async (request: RegisterRequest, response: Response) => {
   const { username, email, password, bio, url } = request.body;
 
   // user
@@ -88,8 +100,8 @@ const register = async (request: RegisterRequest, response: Response) => {
       roleId: defaultRoles.MEMBER,
     },
     include: {
-      Role: true
-    }
+      Role: true,
+    },
   });
 
   // accessToken
@@ -472,8 +484,9 @@ const confirmEmail = async (request: AuthRequest, response: Response) => {
 };
 
 export const authController = {
-  login,
-  register,
+  signIn,
+  signUp,
+  signOut,
   profile,
   changePassword,
   updateProfile,

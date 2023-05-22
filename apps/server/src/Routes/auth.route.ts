@@ -1,5 +1,9 @@
 import { authController } from "@src/Controllers";
-import { validate, authAccessMiddleware, authRefresh } from "@src/Middlewares";
+import {
+  validate,
+  authAccessMiddleware,
+  authRefreshMiddleware,
+} from "@src/Middlewares";
 import {
   resetPasswordRequest,
   registerRequest,
@@ -13,17 +17,16 @@ import { Router } from "express";
 export const authRouter = Router();
 
 // login user
-authRouter.post("/login", [validate(loginRequest)], authController.login);
+authRouter.post("/sign-in", [validate(loginRequest)], authController.signIn);
+
+// login user
+authRouter.post("/sign-out", authRefreshMiddleware, authController.signOut);
 
 // register user
-authRouter.post(
-  "/register",
-  validate(registerRequest),
-  authController.register
-);
+authRouter.post("/sign-up", validate(registerRequest), authController.signUp);
 
 // refresh user access token
-authRouter.post("/refresh", authRefresh, authController.refresh);
+authRouter.post("/refresh", authRefreshMiddleware, authController.refresh);
 
 // get user profile
 authRouter.get("/me", authAccessMiddleware, authController.profile);

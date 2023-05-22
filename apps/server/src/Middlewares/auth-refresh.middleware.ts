@@ -5,7 +5,7 @@ import { AuthRequest } from "@src/types";
 import { NextFunction, Response } from "express";
 import jwt from "jsonwebtoken";
 
-export const authRefresh = async (
+export const authRefreshMiddleware = async (
   request: AuthRequest,
   _response: Response,
   next: NextFunction
