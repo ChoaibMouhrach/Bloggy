@@ -9,9 +9,9 @@ export type ErrorTypes =
 type ResponseErrorMessage<TPath> =
   | string
   | {
-      path: [Path<T>];
-      message: string;
-    }[];
+    path: [Path<T>];
+    message: string;
+  }[];
 export interface IResponseError<TPath> {
   statusCode: number;
   message: ResponseErrorMessage<TPath>;
@@ -80,7 +80,6 @@ export interface IPost extends ITimeStamps {
   title: string;
   content: string;
   isDraft: boolean;
-  deletedAt: string | null;
 }
 
 export interface IPaginate<T> {
@@ -88,4 +87,9 @@ export interface IPaginate<T> {
   count: number;
   limit: number;
   skip: number;
+}
+
+export interface ITag extends ITimeStamps {
+  id: number;
+  name: string;
 }

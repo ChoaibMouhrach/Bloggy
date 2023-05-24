@@ -1,3 +1,4 @@
+import PageTitle from "@/Components/PageTitle";
 import { useDeletePostMutation, useGetPostsQuery } from "@/features/apis/postApit";
 import { debounce } from "@/helpers";
 import useToast from "@/hooks/useToast";
@@ -70,13 +71,8 @@ const Posts = withAuth(() => {
   }
 
   return (
-    <div className="flex flex-col gap-4">
-      <div className="flex flex-col gap-2">
-        <h1 className="text-3xl font-semibold tracking-wide">Posts list</h1>
-        <p className="text-stone-500 tracking-wide">
-          You can see and manage your posts from here
-        </p>
-      </div>
+    <>
+      <PageTitle title="Posts list" description="You can see and manage your posts from here" />
       <Table<IPost>
         handleSearch={handleSearch}
         columns={columns}
@@ -88,7 +84,7 @@ const Posts = withAuth(() => {
         handleDelete={handleDelete}
         handleEdit={(id: number) => router.push(`/dashboard/posts/edit/${id}`)}
       />
-    </div>
+    </>
   );
 });
 

@@ -17,7 +17,7 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
       <Nav />
       <section className="container mx-auto grid grid-cols-6">
         <SideNav sideNavElements={SIDE_NAV_ELEMENTS} />
-        <article className="overflow-scroll h-[calc(100vh_-_80px)] col-start-1 lg:col-start-2 col-end-7 p-4">
+        <article className="overflow-scroll h-[calc(100vh_-_80px)] flex flex-col gap-8 col-start-1 lg:col-start-2 col-end-7 p-4">
           {children}
         </article>
       </section>
