@@ -9,7 +9,7 @@ import { Router } from "express";
 
 export const tagRouter = Router();
 
-tagRouter.get("/", [authAccessMiddleware], tagController.index);
+tagRouter.get("/", tagController.index);
 
 tagRouter.post(
   "/",
