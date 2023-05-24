@@ -1,4 +1,4 @@
-import { IPaginate, IRole } from "@/index";
+import { IPaginate, IRole, IStoreRole } from "@/index";
 import api from "./api";
 
 const roleApi = api.injectEndpoints({
@@ -15,6 +15,16 @@ const roleApi = api.injectEndpoints({
         };
       },
     }),
+    storeRole: build.mutation<IRole, IStoreRole>({
+      query: (data) => ({
+        url: `/roles`,
+        method: "POST",
+        body: data,
+        headers: {
+          "authorization": `Bearer ${localStorage.getItem("accessToken")}`
+        }
+      }),
+    }),
     deleteRole: build.mutation<void, number>({
       query: (id) => ({
         url: `/roles/${id}`,
@@ -27,4 +37,4 @@ const roleApi = api.injectEndpoints({
   }),
 });
 
-export const { useGetRolesQuery, useDeleteRoleMutation } = roleApi;
+export const { useGetRolesQuery, useStoreRoleMutation, useDeleteRoleMutation } = roleApi;

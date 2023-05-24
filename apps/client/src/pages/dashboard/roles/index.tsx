@@ -36,10 +36,10 @@ const Index = withAuth(() => {
   })
 
   const [deleteRole] = useDeleteRoleMutation();
-  const { data: roles, isLoading } = useGetRolesQuery({
+  const { data: roles, refetch, isLoading } = useGetRolesQuery({
     page: pagination.pageIndex + 1,
     search
-  });
+  }, { refetchOnMountOrArgChange: true });
 
   const changeSearch = debounce((v: string) => setSearch(v))
 
@@ -51,10 +51,11 @@ const Index = withAuth(() => {
     const response = await deleteRole(id)
 
     if ("data" in response) {
+      refetch()
       t([{
         state: "success",
         title: "Role deleted successfully"
-      }]) 
+      }])
       return
     }
 

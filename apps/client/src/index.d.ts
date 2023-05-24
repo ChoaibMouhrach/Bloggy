@@ -98,3 +98,7 @@ export interface IRole extends ITimeStamps {
   id: number;
   name: string;
 }
+
+export interface IStoreRole {
+  name: string;
+}
