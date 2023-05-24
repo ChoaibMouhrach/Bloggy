@@ -118,6 +118,9 @@ export const Table = <T extends {}>({
               ))}
             </thead>
             <tbody>
+              {
+                (!data.length && !isLoading) ? (<tr><td colSpan={columns.length + 1} className="p-3 text-center" >Not found</td></tr>) : null
+              }
               {!isLoading &&
                 table.getRowModel().rows.map((row) => (
                   <tr className="odd:bg-stone-100" key={row.id}>
@@ -153,7 +156,7 @@ export const Table = <T extends {}>({
                 ))}
             </tbody>
           </table>
-          {!isLoading && (
+          {(!isLoading && data.length) ? (
             <div className="p-3 flex items-center justify-between gap-2">
               <span className="flex items-center gap-1">
                 <div>Page</div>
@@ -199,7 +202,7 @@ export const Table = <T extends {}>({
                 </Button>
               </div>
             </div>
-          )}
+          ) : null}
         </div>
       </div>
     </div>

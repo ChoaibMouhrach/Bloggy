@@ -72,7 +72,7 @@ export interface IUser extends ITimeStamps {
   email: string;
   roleId: number;
   verfiedAt: string | null;
-  role?: Role;
+  Role?: Role;
 }
 
 export interface IPost extends ITimeStamps {
@@ -90,6 +90,11 @@ export interface IPaginate<T> {
 }
 
 export interface ITag extends ITimeStamps {
+  id: number;
+  name: string;
+}
+
+export interface IRole extends ITimeStamps {
   id: number;
   name: string;
 }
