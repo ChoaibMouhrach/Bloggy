@@ -1,9 +1,6 @@
+import PublicLayout from "@/Components/Layouts/PublicLayout";
 import Link from "next/link";
 
 export default function Home() {
-  return (
-    <div>
-      <Link href="/sign-in">Sign In</Link>
-    </div>
-  );
+  return <PublicLayout>Home</PublicLayout>;
 }

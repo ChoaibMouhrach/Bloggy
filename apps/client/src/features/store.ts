@@ -1,13 +1,16 @@
-import { configureStore } from "@reduxjs/toolkit"
-import api from "./apis/api"
-import userSlice from "./slices/userSlice"
+import { configureStore } from "@reduxjs/toolkit";
+import api from "./apis/api";
+import userSlice from "./slices/userSlice";
+import toastSlice from "./slices/toastSlice";
 
 const store = configureStore({
   reducer: {
     user: userSlice,
-    [api.reducerPath]: api.reducer
+    toast: toastSlice,
+    [api.reducerPath]: api.reducer,
   },
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(api.middleware),
-})
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(api.middleware),
+});
 
-export default store
+export default store;
