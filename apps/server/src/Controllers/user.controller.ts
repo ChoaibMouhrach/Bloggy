@@ -6,9 +6,10 @@ import { hashSync } from "bcrypt";
 import { Request, Response } from "express";
 
 const index = async (request: Request, response: Response) => {
+
   // search query
-  const search =
-    typeof request.query.search === "string" ? request.query.search : undefined;
+  const search = typeof request.query.search === "string" ? request.query.search : undefined;
+
   // page query
   const page = Number(request.query.page) ? Number(request.query.page) : 1;
 

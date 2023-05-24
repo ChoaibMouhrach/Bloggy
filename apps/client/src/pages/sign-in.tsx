@@ -35,7 +35,7 @@ const SignIn = withGuest(() => {
     const response = await signInUser(data);
     if ("data" in response) {
       dispatch(setUser(response.data));
-      router.push("/dashboard/profile");
+      router.push("/dashboard");
     }
     handleResponseError(setError, response);
   };

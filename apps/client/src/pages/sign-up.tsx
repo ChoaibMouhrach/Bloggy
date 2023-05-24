@@ -50,7 +50,7 @@ const Register = withGuest(() => {
 
     if ("data" in response) {
       dispatch(setUser(response.data));
-      router.push("/dashboard/profile");
+      router.push("/dashboard");
     }
 
     handleResponseError(setError, response);

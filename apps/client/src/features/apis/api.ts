@@ -68,7 +68,9 @@ const baseQueryWithAuth = async (
       // remove tokens
       localStorage.removeItem("accessToken");
       localStorage.removeItem("refreshToken");
+
     }
+
   }
 
   return response;

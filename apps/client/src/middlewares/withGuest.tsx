@@ -19,7 +19,7 @@ export const withGuest = (CB: ComponentType) => {
     }, []);
 
     if (state === "success") {
-      router.push("/dashboard/profile");
+      router.push("/dashboard");
     }
 
     if (state === "failed") {
