@@ -12,10 +12,6 @@ export interface NavItem {
   href: string;
 }
 
-interface NavProps {
-  navItems: NavItem[];
-}
-
 export const Nav = () => {
   const [signOut, { isLoading }] = useSignOutMutation();
   const user = useSelector(getUser);
