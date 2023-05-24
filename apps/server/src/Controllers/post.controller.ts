@@ -17,19 +17,27 @@ const index = async (request: Request, response: Response) => {
   // retrieve posts
   const posts = await database.post.findMany({
     where: {
-      title: {
-        contains: search ?? "",
-      },
-      content: {
-        contains: search ?? "",
-      },
-      tags: {
-        some: {
-          name: {
+      OR: [
+        {
+          title: {
             contains: search ?? "",
           },
         },
-      },
+        {
+          content: {
+            contains: search ?? "",
+          },
+        },
+        {
+          tags: {
+            some: {
+              name: {
+                contains: search ?? "",
+              },
+            },
+          },
+        }
+      ]
     },
     include: {
       tags: true,
