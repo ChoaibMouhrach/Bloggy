@@ -1,32 +1,33 @@
-"use-client"
-import { useRouter } from "next/router"
-import { ComponentType, useEffect, useState } from "react"
-import { Loading } from "ui"
+"use-client";
+import { useRouter } from "next/router";
+import { ComponentType, useEffect, useState } from "react";
+import { Loading } from "ui";
 
 export const withGuest = (CB: ComponentType) => {
-
-  return () => {
-    const [state, setState] = useState<"loading" | "success" | "failed">("loading");
-    const router = useRouter()
-
+  const Component = () => {
+    const [state, setState] = useState<"loading" | "success" | "failed">(
+      "loading"
+    );
+    const router = useRouter();
 
     useEffect(() => {
       if (localStorage.getItem("accessToken")) {
-        setState("success")
+        setState("success");
       } else {
-        setState("failed")
+        setState("failed");
       }
-    }, [])
+    }, []);
 
     if (state === "success") {
-      router.push("/dashboard/profile")
+      router.push("/dashboard/profile");
     }
 
     if (state === "failed") {
-      return <CB />
+      return <CB />;
     }
 
-    return <Loading />
-  }
+    return <Loading />;
+  };
 
-}
+  return Component;
+};

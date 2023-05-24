@@ -1,8 +1,8 @@
 import {
   IForgotPassword,
-  ILoginUser,
+  ISignInUser,
   IResetPassword,
-  IStoreUser,
+  ISignUpUser,
   IUpdateUser,
   IUser,
 } from "@/index";
@@ -16,9 +16,10 @@ interface IUserResponse {
 
 const authApi = api.injectEndpoints({
   endpoints: (build) => ({
-    logout: build.mutation<void, void>({
+    signOut: build.mutation<void, void>({
       query: () => ({
         url: "/sign-out",
+        method: "POST",
         headers: {
           authorization: `Bearer ${localStorage.getItem("refreshToken")}`,
         },
@@ -33,18 +34,18 @@ const authApi = api.injectEndpoints({
         },
       }),
     }),
-    login: build.mutation<IUserResponse, ILoginUser>({
-      query: (data: ILoginUser) => {
+    signIn: build.mutation<IUserResponse, ISignInUser>({
+      query: (data) => {
         return {
-          url: "/login",
+          url: "/sign-in",
           method: "POST",
           body: data,
         };
       },
     }),
-    register: build.mutation<IUserResponse, IStoreUser>({
-      query: (user: IStoreUser) => ({
-        url: "/register",
+    signUp: build.mutation<IUserResponse, ISignUpUser>({
+      query: (user) => ({
+        url: "/sign-up",
         method: "POST",
         body: user,
       }),
@@ -99,9 +100,9 @@ export const {
   useSendConfirmationEmailMutation,
   useForgotPasswordMutation,
   useResetPasswordMutation,
-  useLogoutMutation,
+  useSignOutMutation,
   useUpdateUserMutation,
   useGetProfileQuery,
-  useLoginMutation,
-  useRegisterMutation,
+  useSignInMutation,
+  useSignUpMutation,
 } = authApi;

@@ -12,12 +12,12 @@ datasource db {
 
 model User {
   // fields
-  id       Int    @id @default(autoincrement())
-  username String @unique
-  email    String @unique
-  bio      String?
-  url      String?
-  password String
+  id         Int       @id @default(autoincrement())
+  username   String    @unique
+  email      String    @unique
+  bio        String?
+  url        String?
+  password   String
   verifiedAt DateTime?
 
   // timestamps
@@ -58,7 +58,7 @@ model RefreshToken {
   updatedAt DateTime @default(now()) @updatedAt
 
   // relations
-  User   User @relation(fields: [userId], references: [id], onDelete:  Cascade)
+  User   User @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId Int
 }
 
@@ -72,7 +72,7 @@ model ConfirmEmailToken {
   updatedAt DateTime @default(now()) @updatedAt
 
   // relations
-  User   User @relation(fields: [userId], references: [id], onDelete : Cascade)
+  User   User @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId Int
 }
 
@@ -90,9 +90,9 @@ model ForgotPasswordToken {
 }
 
 model Post {
-  id       Int     @id @default(autoincrement())
-  title    String
-  content  String
+  id      Int     @id @default(autoincrement())
+  title   String
+  content String
   isDraft Boolean @default(true)
 
   // timestamps

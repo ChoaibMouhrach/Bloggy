@@ -1,5 +1,7 @@
 import { cva } from "class-variance-authority";
-import { Ref, forwardRef } from "react";
+import NLink from "next/link";
+import React, { Ref, forwardRef } from "react";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 // variant classes
 const variant = {
@@ -38,9 +40,10 @@ const color = {
 const button = cva(
   [
     "flex",
+    "gap-2",
     "items-center",
     "justify-center",
-    "py-3",
+    "py-2",
     "px-3",
     "text-white",
     "rounded-md",
@@ -130,11 +133,51 @@ const button = cva(
 );
 
 // props interface
-interface ButtonProps extends React.ComponentProps<"button"> {
+interface ButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement | HTMLAnchorElement> {
   variant?: keyof typeof variant;
   color?: keyof typeof color;
+  href?: string;
+  isLoading?: boolean;
+  children: React.ReactNode;
 }
 
-export const Button = forwardRef(({ variant, color, className, ...rest }: ButtonProps, ref: Ref<HTMLButtonElement>) => {
-  return <button ref={ref} className={button({ variant, color, className })} {...rest} />;
-})
+export const Button = forwardRef(
+  (
+    {
+      children,
+      isLoading,
+      variant,
+      href,
+      color,
+      className,
+      ...rest
+    }: ButtonProps,
+    ref: Ref<HTMLButtonElement> & Ref<HTMLAnchorElement>
+  ) => {
+    if (href) {
+      return (
+        <NLink
+          className={button({ variant, color, className })}
+          {...rest}
+          href={href}
+          ref={ref}
+        >
+          {children}
+        </NLink>
+      );
+    }
+
+    return (
+      <button
+        disabled={isLoading}
+        ref={ref}
+        className={button({ variant, color, className })}
+        {...rest}
+      >
+        {children}
+        {isLoading && <AiOutlineLoading3Quarters className="animate-spin" />}
+      </button>
+    );
+  }
+);

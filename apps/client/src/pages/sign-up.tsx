@@ -2,14 +2,16 @@ import { Button, Input, TextArea } from "ui";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
-import { IStoreUser, IResponseError } from "@/index";
+import { ISignUpUser, IResponseError } from "@/index";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
-import { useRegisterMutation } from "@/features/apis/authApi";
+import { useSignUpMutation } from "@/features/apis/authApi";
 import { useDispatch } from "react-redux";
 import { setUser } from "@/features/slices/userSlice";
 import Link from "next/link";
 import { handleResponseError } from "@/helpers";
 import { withGuest } from "@/middlewares";
+import { Router, useRouter } from "next/router";
+import { AuthLayout } from "@/Components/Layouts/AuthLayout";
 
 const schema = z.object({
   username: z.string().min(3).max(60),
@@ -21,20 +23,21 @@ const schema = z.object({
 });
 
 const Register = withGuest(() => {
+  const router = useRouter();
   const dispatch = useDispatch();
-  const [registerUser, { isLoading }] = useRegisterMutation();
+  const [signUpUser, { isLoading }] = useSignUpMutation();
 
   const {
     register,
     handleSubmit,
     setError,
     formState: { errors },
-  } = useForm<IStoreUser>({
+  } = useForm<ISignUpUser>({
     mode: "onChange",
     resolver: zodResolver(schema),
   });
 
-  const onSubmit = async (data: IStoreUser) => {
+  const onSubmit = async (data: ISignUpUser) => {
     if (data.bio == "") {
       delete data.bio;
     }
@@ -43,17 +46,18 @@ const Register = withGuest(() => {
       delete data.url;
     }
 
-    const response = await registerUser(data);
+    const response = await signUpUser(data);
 
     if ("data" in response) {
       dispatch(setUser(response.data));
+      router.push("/dashboard/profile");
     }
 
     handleResponseError(setError, response);
   };
 
   return (
-    <main className="min-h-screen flex items-center justify-center">
+    <AuthLayout>
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="w-full mx-4 lg:mx-0 flex flex-col gap-4 sm:max-w-lg"
@@ -118,7 +122,7 @@ const Register = withGuest(() => {
           <Link href="/sign-in">Sign In</Link>
         </div>
       </form>
-    </main>
+    </AuthLayout>
   );
 });
 

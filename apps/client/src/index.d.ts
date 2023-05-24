@@ -39,7 +39,7 @@ export interface IResetPassword {
   };
 }
 
-export interface IStoreUser {
+export interface ISignUpUser {
   username: string;
   url?: string;
   bio?: string;
@@ -48,7 +48,7 @@ export interface IStoreUser {
   password_confirmation: string;
 }
 
-export interface ILoginUser {
+export interface ISignInUser {
   email: string;
   password: string;
 }
@@ -73,4 +73,19 @@ export interface IUser extends ITimeStamps {
   roleId: number;
   verfiedAt: string | null;
   role?: Role;
+}
+
+export interface IPost extends ITimeStamps {
+  id: number;
+  title: string;
+  content: string;
+  isDraft: boolean;
+  deletedAt: string | null;
+}
+
+export interface IPaginate<T> {
+  data: T[];
+  count: number;
+  limit: number;
+  skip: number;
 }

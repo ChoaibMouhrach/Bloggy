@@ -1,42 +1,48 @@
-import { Button, Input } from "ui";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import Link from "next/link";
-import { ISignInUser } from "@/index";
-import { useDispatch } from "react-redux";
-import { useSignInMutation } from "@/features/apis/authApi";
-import { setUser } from "@/features/slices/userSlice";
-import { AiOutlineLoading3Quarters } from "react-icons/ai";
-import { useRouter } from "next/router";
 import { withGuest } from "@/middlewares";
+import { useForm } from "react-hook-form";
+import { Button, Input } from "ui";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { useForgotPasswordMutation } from "@/features/apis/authApi";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import Link from "next/link";
+import { IForgotPassword } from "..";
 import { handleResponseError } from "@/helpers";
+import { useRouter } from "next/router";
+import useToast from "@/hooks/useToast";
 import { AuthLayout } from "@/Components/Layouts/AuthLayout";
 
 const schema = z.object({
   email: z.string().email(),
-  password: z.string().min(8),
 });
 
-const SignIn = withGuest(() => {
+const ForgotPassword = withGuest(() => {
   const router = useRouter();
-  const dispatch = useDispatch();
-  const [signInUser, { isLoading }] = useSignInMutation();
+  const [forgotPassword, { isLoading }] = useForgotPasswordMutation();
+  const { t } = useToast();
+
   const {
     register,
+    formState: { errors },
     handleSubmit,
     setError,
-    formState: { errors },
-  } = useForm<ISignInUser>({
+  } = useForm<IForgotPassword>({
     resolver: zodResolver(schema),
   });
 
-  const onSubmit = async (data: ISignInUser) => {
-    const response = await signInUser(data);
+  const onSubmit = async (data: IForgotPassword) => {
+    const response = await forgotPassword(data);
+
     if ("data" in response) {
-      dispatch(setUser(response.data));
-      router.push("/dashboard/profile");
+      t([
+        {
+          state: "success",
+          title: "Check your inbox",
+        },
+      ]);
+      router.push("/sign-in");
     }
+
     handleResponseError(setError, response);
   };
 
@@ -49,36 +55,27 @@ const SignIn = withGuest(() => {
         <div className="flex flex-col items-center">
           <h2 className="text-2xl font-bold tracking-wide">ChoaibMouhrach</h2>
           <p className="font-medium text-stone-500">
-            Enter your email to sign in to your account
+            Enter your email to reset your password
           </p>
         </div>
 
         <Input
-          error={errors.email?.message}
           {...register("email")}
+          error={errors.email?.message}
           type="email"
           name="email"
           placeholder="Email Address..."
         />
 
-        <div className="flex flex-col gap-2">
-          <Link href="/forgot-password" className="text-sm">
-            Forgot password ?
-          </Link>
-          <Input
-            error={errors.password?.message}
-            {...register("password")}
-            type="password"
-            name="password"
-            placeholder="Password..."
-          />
-        </div>
-
         <Button disabled={isLoading} type="submit">
-          Sign In{" "}
+          Reset Password {"  "}{" "}
           {isLoading && <AiOutlineLoading3Quarters className="animate-spin" />}
         </Button>
 
+        <div className="text-center">
+          <span className="text-stone-500">You have an account ? </span>
+          <Link href="/sign-in">Sign In</Link>
+        </div>
         <div className="text-center">
           <span className="text-stone-500">Don't have an account ? </span>
           <Link href="/sign-up">Sign Up</Link>
@@ -88,4 +85,4 @@ const SignIn = withGuest(() => {
   );
 });
 
-export default SignIn;
+export default ForgotPassword;
