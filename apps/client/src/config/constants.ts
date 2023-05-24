@@ -4,9 +4,11 @@ import {
   MdOutlineAdd,
   MdOutlineDashboard,
   MdOutlineLibraryBooks,
+  MdOutlineLock,
   MdOutlineModeEditOutline,
   MdOutlinePeopleAlt,
   MdOutlinePerson,
+  MdOutlineTag,
 } from "react-icons/md";
 
 export const SIDE_NAV_ELEMENTS: IElement[] = [
@@ -29,17 +31,53 @@ export const SIDE_NAV_ELEMENTS: IElement[] = [
         Icon: MdOutlineAdd,
         href: "/dashboard/posts/create",
       },
+    ],
+  },
+  {
+    name: "Tags",
+    Icon: MdOutlineTag,
+    elements: [
       {
-        name: "Edit",
-        Icon: MdOutlineModeEditOutline,
-        href: "/dashboard/posts/edit",
+        name: "Tags",
+        Icon: MdOutlineTag,
+        href: "/dashboard/tags",
+      },
+      {
+        name: "Create",
+        Icon: MdOutlineAdd,
+        href: "/dashboard/tags/create",
       },
     ],
   },
   {
+    name: "Roles",
+    Icon: MdOutlineLock,
+    elements: [
+      {
+        name: "Roles",
+        Icon: MdOutlineLock,
+        href: "/dashboard/roles",
+      },
+      {
+        name: "Create",
+        Icon: MdOutlineAdd,
+        href: "/dashboard/roles/create",
+      },]
+  },
+  {
     name: "Users",
     Icon: MdOutlinePeopleAlt,
-    href: "/dashboard/users",
+    elements: [
+      {
+        name: "Users",
+        Icon: MdOutlinePeopleAlt,
+        href: "/dashboard/users",
+      },
+      {
+        name: "Create",
+        Icon: MdOutlineAdd,
+        href: "/dashboard/users/create",
+      },]
   },
   {
     name: "Profile",
