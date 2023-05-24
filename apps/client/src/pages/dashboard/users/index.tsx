@@ -90,7 +90,7 @@ const Index = withAuth(() => {
 
   return (
     <>
-      <PageTitle title="Roles list" description="You can see and manage your roles from here" />
+      <PageTitle title="Users list" description="You can see and manage your users from here" />
       <Table<IUser>
         handleSearch={handleSearch}
         columns={columns}
