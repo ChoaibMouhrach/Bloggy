@@ -25,7 +25,9 @@ interface TableProps<T> {
   pagination: PaginationState;
   setPagination: React.Dispatch<React.SetStateAction<PaginationState>>;
   handleSearch: (e: ChangeEvent<HTMLInputElement>) => void | Promise<void>;
-  isLoading: boolean
+  isLoading: boolean;
+  handleEdit?: (id: number) => any;
+  handleDelete?: (id: number) => any;
 }
 
 export type Column<T> = ColumnDef<T>;
@@ -37,7 +39,9 @@ export const Table = <T extends {}>({
   columns,
   pagination,
   setPagination,
-  isLoading
+  isLoading,
+  handleEdit,
+  handleDelete
 }: TableProps<T>) => {
   const [sorting, setSorting] = useState<SortingState>([]);
 
@@ -102,6 +106,13 @@ export const Table = <T extends {}>({
                     </th>
                   );
                 })}
+                {
+                  (handleEdit || handleDelete) && (
+                    <th
+                      className="text-start p-3 font-semibold tracking-wide"
+                    >Actions</th>
+                  )
+                }
               </tr>
             ))}
           </thead>
@@ -115,6 +126,13 @@ export const Table = <T extends {}>({
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </td>
                   ))}
+                  {
+                    (handleEdit || handleDelete) && (
+                      <td className="p-3 tracking-wide" >
+                        <Actions handleDelete={handleDelete} handleEdit={handleEdit} id={row.getValue("id")} />
+                      </td>
+                    )
+                  }
                 </tr>
               ))
             }
@@ -181,3 +199,40 @@ export const Table = <T extends {}>({
     </div>
   );
 };
+
+interface ActionsProps {
+  id: number;
+  handleDelete?: (id: number) => void | Promise<void>;
+  handleEdit?: (id: number) => void | Promise<void>;
+}
+
+const Actions = ({ id, handleDelete, handleEdit }: ActionsProps) => {
+
+  const [isDeletingLoading, setIsDeletingLoading] = useState(false)
+
+  const handleDeleteWrapper = async () => {
+    setIsDeletingLoading(true)
+    if (handleDelete) await handleDelete(id)
+    setIsDeletingLoading(false)
+  }
+
+  return (
+    <div className="flex items-center gap-2" >
+      {
+        handleEdit && (
+          <Button onClick={() => handleEdit(id)} color="success" >
+            Edit
+          </Button>
+        )
+      }
+      {
+        handleDelete && (
+          <Button isLoading={isDeletingLoading} onClick={() => handleDeleteWrapper()} color="danger" >
+            Delete
+          </Button>
+        )
+      }
+    </div>
+
+  )
+}

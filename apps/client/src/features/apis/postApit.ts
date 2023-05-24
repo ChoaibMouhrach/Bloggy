@@ -15,7 +15,16 @@ const postApi = api.injectEndpoints({
         };
       },
     }),
+    deletePost: build.mutation<void, number>({
+      query: (id) => ({
+        url: `/posts/${id}`,
+        method: "DELETE",
+        headers: {
+          "authorization": `Bearer ${localStorage.getItem("accessToken")}`
+        }
+      }),
+    }),
   }),
 });
 
-export const { useGetPostsQuery } = postApi;
+export const { useGetPostsQuery, useDeletePostMutation } = postApi;
