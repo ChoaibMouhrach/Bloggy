@@ -1,5 +1,3 @@
-import { IElement } from "@/Components/Layouts/Dashboard/SideNav";
-import { NavItem } from "@/Components/Nav";
 import {
   MdOutlineAdd,
   MdOutlineDashboard,
@@ -10,6 +8,8 @@ import {
   MdOutlinePerson,
   MdOutlineTag,
 } from "react-icons/md";
+import { IElement } from "@/Components/Layouts/Dashboard/SideNav";
+import { NavItem } from "@/Components/Nav";
 
 export const SIDE_NAV_ELEMENTS: IElement[] = [
   {
@@ -62,7 +62,8 @@ export const SIDE_NAV_ELEMENTS: IElement[] = [
         name: "Create",
         Icon: MdOutlineAdd,
         href: "/dashboard/roles/create",
-      },]
+      },
+    ],
   },
   {
     name: "Users",
@@ -77,7 +78,8 @@ export const SIDE_NAV_ELEMENTS: IElement[] = [
         name: "Create",
         Icon: MdOutlineAdd,
         href: "/dashboard/users/create",
-      },]
+      },
+    ],
   },
   {
     name: "Profile",

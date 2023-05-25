@@ -3,26 +3,28 @@ import api from "./api";
 
 const roleApi = api.injectEndpoints({
   endpoints: (build) => ({
-    getRoles: build.query<IPaginate<IRole>, { page?: number, search?: string }>({
-      query: ({ page, search }) => {
-        const params = [];
+    getRoles: build.query<IPaginate<IRole>, { page?: number; search?: string }>(
+      {
+        query: ({ page, search }) => {
+          const params = [];
 
-        if (page) params.push(`page=${page}`)
-        if (search) params.push(`search=${search}`)
+          if (page) params.push(`page=${page}`);
+          if (search) params.push(`search=${search}`);
 
-        return {
-          url: `/roles?${params.join("&")}`,
-        };
-      },
-    }),
+          return {
+            url: `/roles?${params.join("&")}`,
+          };
+        },
+      }
+    ),
     storeRole: build.mutation<IRole, IStoreRole>({
       query: (data) => ({
         url: `/roles`,
         method: "POST",
         body: data,
         headers: {
-          "authorization": `Bearer ${localStorage.getItem("accessToken")}`
-        }
+          authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
       }),
     }),
     deleteRole: build.mutation<void, number>({
@@ -30,11 +32,12 @@ const roleApi = api.injectEndpoints({
         url: `/roles/${id}`,
         method: "DELETE",
         headers: {
-          "authorization": `Bearer ${localStorage.getItem("accessToken")}`
-        }
+          authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
       }),
     }),
   }),
 });
 
-export const { useGetRolesQuery, useStoreRoleMutation, useDeleteRoleMutation } = roleApi;
+export const { useGetRolesQuery, useStoreRoleMutation, useDeleteRoleMutation } =
+  roleApi;

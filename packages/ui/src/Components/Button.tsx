@@ -4,7 +4,7 @@ import React, { Ref, forwardRef } from "react";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 // variant classes
-const variant = {
+const buttonVariant = {
   default: [
     // default classes
   ],
@@ -15,7 +15,7 @@ const variant = {
 };
 
 // color classes
-const color = {
+const buttonColor = {
   primary: [
     "bg-stone-900",
     "hover:bg-stone-700",
@@ -47,16 +47,16 @@ const button = cva(
     "px-3",
     "text-white",
     "rounded-md",
-    "font-semibold",
-    "tracking-wide",
+    "font-medium",
+    "tracking-wider",
     "transition",
     "duration-300",
   ],
   {
     variants: {
-      variant,
+      variant: buttonVariant,
 
-      color,
+      color: buttonColor,
     },
 
     compoundVariants: [
@@ -133,14 +133,14 @@ const button = cva(
 );
 
 // props interface
-interface ButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement | HTMLAnchorElement> {
-  variant?: keyof typeof variant;
-  color?: keyof typeof color;
+type ButtonProps = {
+  children: React.ReactNode;
+  variant?: keyof typeof buttonVariant;
+  color?: keyof typeof buttonColor;
   href?: string;
   isLoading?: boolean;
-  children: React.ReactNode;
-}
+  className?: string;
+} & React.ButtonHTMLAttributes<HTMLButtonElement | HTMLAnchorElement>;
 
 export const Button = forwardRef(
   (
@@ -170,6 +170,7 @@ export const Button = forwardRef(
 
     return (
       <button
+        type="submit"
         disabled={isLoading}
         ref={ref}
         className={button({ variant, color, className })}

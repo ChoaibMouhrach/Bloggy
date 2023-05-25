@@ -1,13 +1,34 @@
 import * as T from "@radix-ui/react-toast";
-import { useEffect, useState } from "react";
-import { IAlert } from ".";
+import { cva } from "class-variance-authority";
+import React, { useEffect, useState } from "react";
 import { MdClose } from "react-icons/md";
+
+const state = {
+  success: ["bg-green-600"],
+  danger: ["bg-red-600"],
+  default: ["bg-stone-800"],
+};
+
+const alertCVA = cva(["tracking-wide", "flex", "rounded-md", "py-3", "px-4"], {
+  variants: {
+    state,
+  },
+  defaultVariants: {
+    state: "default",
+  },
+});
+
+export interface IAlert {
+  state: keyof typeof state;
+  title: string;
+  description?: string;
+}
 
 interface IToastAlertProps {
   alert: IAlert;
 }
 
-export const ToastAlert = ({ alert }: IToastAlertProps) => {
+export function ToastAlert({ alert }: IToastAlertProps) {
   const [open, setOpen] = useState(true);
 
   useEffect(() => {
@@ -17,16 +38,7 @@ export const ToastAlert = ({ alert }: IToastAlertProps) => {
   }, []);
 
   return (
-    <T.Root
-      className={`${
-        alert.state === "success"
-          ? "bg-green-600"
-          : alert.state === "danger"
-          ? "bg-red-600"
-          : "bg-stone-800"
-      } tracking-wide flex rounded-md py-3 px-4`}
-      open={open}
-    >
+    <T.Root className={alertCVA({ state: alert.state })} open={open}>
       <div className="w-full">
         <T.Title className="text-white font-semibold">{alert.title}</T.Title>
         <T.Description className="text-white">
@@ -35,6 +47,7 @@ export const ToastAlert = ({ alert }: IToastAlertProps) => {
       </div>
       <T.Action altText="Unfod" asChild className="text-white text-xl ">
         <button
+          type="button"
           onClick={() => setOpen(false)}
           className="p-0 flex items-center h-fit my-auto"
         >
@@ -43,4 +56,4 @@ export const ToastAlert = ({ alert }: IToastAlertProps) => {
       </T.Action>
     </T.Root>
   );
-};
+}

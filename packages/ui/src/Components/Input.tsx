@@ -1,4 +1,4 @@
-import { Ref, forwardRef } from "react";
+import React, { Ref, forwardRef } from "react";
 
 interface InputProps extends React.ComponentProps<"input"> {
   error?: string;

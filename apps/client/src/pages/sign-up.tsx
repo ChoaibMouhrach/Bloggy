@@ -1,25 +1,39 @@
+import React from "react";
 import { Button, Input, TextArea } from "ui";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
-import { ISignUpUser, IResponseError } from "@/index";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
-import { useSignUpMutation } from "@/features/apis/authApi";
 import { useDispatch } from "react-redux";
-import { setUser } from "@/features/slices/userSlice";
 import Link from "next/link";
+import { useRouter } from "next/router";
+import { ISignUpUser } from "@/index";
+import { useSignUpMutation } from "@/features/apis/authApi";
+import { setUser } from "@/features/slices/userSlice";
 import { handleResponseError } from "@/helpers";
 import { withGuest } from "@/middlewares";
-import { Router, useRouter } from "next/router";
 import { AuthLayout } from "@/Components/Layouts/AuthLayout";
 
 const schema = z.object({
   username: z.string().min(3).max(60),
-  url: z.string().optional(),
   bio: z.string().max(255).optional(),
   email: z.string().email(),
   password: z.string().min(8),
   password_confirmation: z.string().min(8),
+  url: z
+    .string()
+    .optional()
+    .pipe(
+      z.string().refine(
+        (url) => {
+          if (url && !z.string().url().safeParse(url).success) {
+            return false;
+          }
+          return true;
+        },
+        { message: "Url invalid" }
+      )
+    ),
 });
 
 const Register = withGuest(() => {
@@ -38,15 +52,17 @@ const Register = withGuest(() => {
   });
 
   const onSubmit = async (data: ISignUpUser) => {
-    if (data.bio == "") {
-      delete data.bio;
+    const payload = { ...data };
+
+    if (payload.bio === "") {
+      delete payload.bio;
     }
 
-    if (data.url == "") {
-      delete data.url;
+    if (payload.url === "") {
+      delete payload.url;
     }
 
-    const response = await signUpUser(data);
+    const response = await signUpUser(payload);
 
     if ("data" in response) {
       dispatch(setUser(response.data));
@@ -110,7 +126,7 @@ const Register = withGuest(() => {
           error={errors.bio?.message}
           {...register("bio")}
           placeholder="Bio..."
-        ></TextArea>
+        />
 
         <Button disabled={isLoading} type="submit">
           Sign Up{" "}

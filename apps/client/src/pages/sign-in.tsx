@@ -1,14 +1,15 @@
+import React from "react";
 import { Button, Input } from "ui";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
-import { ISignInUser } from "@/index";
 import { useDispatch } from "react-redux";
-import { useSignInMutation } from "@/features/apis/authApi";
-import { setUser } from "@/features/slices/userSlice";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { useRouter } from "next/router";
+import { ISignInUser } from "@/index";
+import { useSignInMutation } from "@/features/apis/authApi";
+import { setUser } from "@/features/slices/userSlice";
 import { withGuest } from "@/middlewares";
 import { handleResponseError } from "@/helpers";
 import { AuthLayout } from "@/Components/Layouts/AuthLayout";
@@ -80,7 +81,7 @@ const SignIn = withGuest(() => {
         </Button>
 
         <div className="text-center">
-          <span className="text-stone-500">Don't have an account ? </span>
+          <span className="text-stone-500">You do not have an account ? </span>
           <Link href="/sign-up">Sign Up</Link>
         </div>
       </form>

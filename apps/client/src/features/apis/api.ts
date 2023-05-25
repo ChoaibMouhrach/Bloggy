@@ -1,10 +1,10 @@
-import { IResponseError } from "@/index";
 import {
   BaseQueryApi,
   FetchArgs,
   createApi,
   fetchBaseQuery,
 } from "@reduxjs/toolkit/query/react";
+import { IResponseError } from "@/index";
 
 const baseQuery = fetchBaseQuery({
   baseUrl: process.env.API_URL,
@@ -15,7 +15,9 @@ const baseQueryWithAuth = async (
   api: BaseQueryApi,
   extraOptions: {}
 ) => {
-  let response = await baseQuery(args, api, extraOptions);
+  let customArgs = args;
+
+  let response = await baseQuery(customArgs, api, extraOptions);
 
   if (response.error) {
     const error = response.error.data as IResponseError<{}>;
@@ -36,9 +38,9 @@ const baseQueryWithAuth = async (
 
       // refreshing ok
       if (refreshResponse.data) {
-        if (typeof args === "string") {
-          args = {
-            url: args,
+        if (typeof customArgs === "string") {
+          customArgs = {
+            url: customArgs,
           };
         }
 
@@ -49,7 +51,7 @@ const baseQueryWithAuth = async (
 
         response = await baseQuery(
           {
-            ...args,
+            ...customArgs,
             headers: {
               authorization: `Bearer ${data.accessToken}`,
             },
@@ -68,9 +70,7 @@ const baseQueryWithAuth = async (
       // remove tokens
       localStorage.removeItem("accessToken");
       localStorage.removeItem("refreshToken");
-
     }
-
   }
 
   return response;

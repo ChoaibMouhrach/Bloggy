@@ -1,18 +1,19 @@
-import { NAV_ITEMS } from "@/config/constants";
-import { useSignOutMutation } from "@/features/apis/authApi";
-import { getUser, removeUser } from "@/features/slices/userSlice";
-import useToast from "@/hooks/useToast";
+import React from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import { Button } from "ui";
+import { NAV_ITEMS } from "@/config/constants";
+import { useSignOutMutation } from "@/features/apis/authApi";
+import { getUser, removeUser } from "@/features/slices/userSlice";
+import useToast from "@/hooks/useToast";
 
 export interface NavItem {
   name: string;
   href: string;
 }
 
-export const Nav = () => {
+export function Nav() {
   const [signOut, { isLoading }] = useSignOutMutation();
   const user = useSelector(getUser);
   const router = useRouter();
@@ -50,12 +51,12 @@ export const Nav = () => {
           ChoaibMouhrach
         </Link>
         <div className="flex items-center gap-4 font-semibold text-gray-600">
-          {NAV_ITEMS.map(({ href, name }, index) => (
-            <Link key={index} href={href}>
+          {NAV_ITEMS.map(({ href, name }) => (
+            <Link key={href} href={href}>
               {name}
             </Link>
           ))}
-          {user && <Link href={"/dashboard"}>Dashboard</Link>}
+          {user && <Link href="/dashboard">Dashboard</Link>}
           {user ? (
             <Button isLoading={isLoading} onClick={handleSignOut}>
               Logout
@@ -67,4 +68,4 @@ export const Nav = () => {
       </div>
     </nav>
   );
-};
+}

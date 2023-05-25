@@ -1,9 +1,4 @@
-import { AuthLayout } from "@/Components/Layouts/AuthLayout";
-import { useResetPasswordMutation } from "@/features/apis/authApi";
-import { handleResponseError } from "@/helpers";
-import useToast from "@/hooks/useToast";
-import { IResetPassword } from "@/index";
-import { withGuest } from "@/middlewares";
+import React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -11,6 +6,12 @@ import { useForm } from "react-hook-form";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { Button, Input } from "ui";
 import { z } from "zod";
+import { withGuest } from "@/middlewares";
+import { IResetPassword } from "@/index";
+import useToast from "@/hooks/useToast";
+import { handleResponseError } from "@/helpers";
+import { useResetPasswordMutation } from "@/features/apis/authApi";
+import { AuthLayout } from "@/Components/Layouts/AuthLayout";
 
 const schema = z
   .object({

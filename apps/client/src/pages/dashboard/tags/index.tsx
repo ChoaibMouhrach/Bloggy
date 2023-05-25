@@ -1,12 +1,12 @@
+import { useRouter } from "next/router";
+import React, { ChangeEvent, useState } from "react";
+import { Column, Table } from "ui";
 import PageTitle from "@/Components/PageTitle";
 import { useDeleteTagMutation, useGetTagsQuery } from "@/features/apis/tagApi";
 import { debounce } from "@/helpers";
 import useToast from "@/hooks/useToast";
 import { ITag } from "@/index";
 import { withAuth } from "@/middlewares";
-import { useRouter } from "next/router";
-import { ChangeEvent, useState } from "react";
-import { Column, Table } from "ui";
 
 const columns: Column<ITag>[] = [
   {
@@ -15,64 +15,78 @@ const columns: Column<ITag>[] = [
   },
   {
     header: "Name",
-    accessorKey: "name"
+    accessorKey: "name",
   },
   {
     header: "Created At",
-    accessorKey: "createdAt"
-  }
+    accessorKey: "createdAt",
+  },
 ];
 
 const Index = withAuth(() => {
-
-  const { t } = useToast()
+  const { t } = useToast();
   const router = useRouter();
 
   // state
-  const [search, setSearch] = useState<string>("")
+  const [search, setSearch] = useState<string>("");
   const [pagination, setPagination] = useState({
     pageIndex: 0,
-    pageSize: 8
-  })
-
-  const [deleteTag] = useDeleteTagMutation();
-  const { data: tags, isLoading } = useGetTagsQuery({
-    page: pagination.pageIndex + 1,
-    search
+    pageSize: 8,
   });
 
-  const changeSearch = debounce((v: string) => setSearch(v))
+  const [deleteTag] = useDeleteTagMutation();
+  const {
+    data: tags,
+    refetch,
+    isLoading,
+  } = useGetTagsQuery(
+    {
+      page: pagination.pageIndex + 1,
+      search,
+    },
+    { refetchOnMountOrArgChange: true }
+  );
+
+  const changeSearch = debounce((v: string) => setSearch(v));
 
   const handleSearch = (element: ChangeEvent<HTMLInputElement>) => {
-    changeSearch(element.target.value)
-  }
+    changeSearch(element.target.value);
+  };
 
   const handleDelete = async (id: number) => {
-    const response = await deleteTag(id)
+    const response = await deleteTag(id);
 
     if ("data" in response) {
-      t([{
-        state: "success",
-        title: "Tag deleted successfully"
-      }])
-      return
+      await refetch();
+      t([
+        {
+          state: "success",
+          title: "Tag deleted successfully",
+        },
+      ]);
+      return;
     }
 
     if ("error" in response) {
-      t([{
-        state: "danger",
-        title: "We clound't delete your tag"
-      }])
+      t([
+        {
+          state: "danger",
+          title: "We clound't delete your tag",
+        },
+      ]);
     }
-  }
+  };
 
   const handleEdit = (id: number) => {
-    router.push(`/dashboard/posts/edit/${id}`)
-  }
+    router.push(`/dashboard/posts/edit/${id}`);
+  };
 
   return (
     <>
-      <PageTitle title="Tags list" description="You can see and manage your tags from here" />
+      <PageTitle
+        title="Tags list"
+        description="You can see and manage your tags from here"
+      />
       <Table<ITag>
         handleSearch={handleSearch}
         columns={columns}
@@ -85,7 +99,7 @@ const Index = withAuth(() => {
         handleEdit={handleEdit}
       />
     </>
-  )
-})
+  );
+});
 
-export default Index
+export default Index;
