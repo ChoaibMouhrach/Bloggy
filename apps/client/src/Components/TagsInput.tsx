@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useRef, useState } from "react";
 import { MdOutlineClose } from "react-icons/md";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { ITag } from "..";
@@ -17,6 +17,7 @@ function TagInput({ error, help, onChange }: TagInputProps) {
   const [dropDownHovered, setDropDownHovered] = useState<boolean>(false);
   const [search, setSearch] = useState<string>("");
   const [selectedTags, setSelectedTags] = useState<ITag[]>([]);
+  const inputRef = useRef<null | HTMLInputElement>(null);
 
   // RTK
   const {
@@ -36,6 +37,10 @@ function TagInput({ error, help, onChange }: TagInputProps) {
 
   const handleAddingTag = (tag: ITag) => {
     if (!selectedTags.find((selectedTag) => tag.id === selectedTag.id)) {
+      if (inputRef.current) {
+        inputRef.current.value = "";
+        setSearch("")
+      }
       alterTag([...selectedTags, tag]);
     }
   };
@@ -67,6 +72,7 @@ function TagInput({ error, help, onChange }: TagInputProps) {
           </button>
         ))}
         <input
+          ref={inputRef}
           className="outline-none p-1 flex-1"
           onChange={handleSearch}
           onFocus={() => setInputFocused(true)}
