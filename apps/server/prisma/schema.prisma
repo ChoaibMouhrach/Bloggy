@@ -92,7 +92,7 @@ model ForgotPasswordToken {
 model Post {
   id      Int     @id @default(autoincrement())
   title   String
-  content String
+  content String  @db.Text
   isDraft Boolean @default(true)
 
   // timestamps

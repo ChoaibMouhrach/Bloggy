@@ -72,7 +72,7 @@ const Create = withAuth(() => {
               setValue("content", v);
             }}
           />
-          
+
         </FormBody>
         <FormFooter>
           <Button isLoading={isLoading}>Create Post</Button>
