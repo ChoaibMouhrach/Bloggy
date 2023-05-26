@@ -29,12 +29,14 @@ interface TipTapProps {
   onChange: (value: string) => void | Promise<void>;
   error?: string;
   help?: string;
+  defaultValue?: string;
 }
 
 type Level = 1 | 2 | 3 | 4 | 5 | 6;
 
-const TipTap = ({ help, error, onChange }: TipTapProps) => {
+const TipTap = ({ help, error, defaultValue, onChange }: TipTapProps) => {
   const editor = useEditor({
+    content: defaultValue,
     onUpdate: ({ editor }) => {
       onChange(editor.getHTML());
     },
@@ -192,9 +194,8 @@ const TipTap = ({ help, error, onChange }: TipTapProps) => {
       <EditorContent editor={editor} />
       {(error || help) && (
         <p
-          className={`p-2 tracking-wide text-sm ${
-            error ? "text-red-600" : "text-gray-500"
-          }`}
+          className={`p-2 tracking-wide text-sm ${error ? "text-red-600" : "text-gray-500"
+            }`}
         >
           {error ?? help}
         </p>

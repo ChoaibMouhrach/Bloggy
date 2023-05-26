@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect, useRef, useState } from "react";
+import React, { ChangeEvent, useRef, useState } from "react";
 import { MdOutlineClose } from "react-icons/md";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { ITag } from "..";
@@ -9,14 +9,15 @@ interface TagInputProps {
   onChange?: (values: number[]) => void | Promise<void>;
   error?: string;
   help?: string;
+  defaultValue?: ITag[];
 }
 
-function TagInput({ error, help, onChange }: TagInputProps) {
+function TagInput({ error, defaultValue, help, onChange }: TagInputProps) {
   // STATE
   const [inputFocused, setInputFocused] = useState<boolean>(false);
   const [dropDownHovered, setDropDownHovered] = useState<boolean>(false);
   const [search, setSearch] = useState<string>("");
-  const [selectedTags, setSelectedTags] = useState<ITag[]>([]);
+  const [selectedTags, setSelectedTags] = useState<ITag[]>(defaultValue ?? []);
   const inputRef = useRef<null | HTMLInputElement>(null);
 
   // RTK
@@ -91,23 +92,23 @@ function TagInput({ error, help, onChange }: TagInputProps) {
               {tags &&
                 (tags.data.length
                   ? tags.data.map((tag) => (
-                      <li key={tag.id}>
-                        <button
-                          onClick={() => handleAddingTag(tag)}
-                          className="p-3 hover:bg-gray-50 w-full rounded-md text-start"
-                          type="button"
-                        >
-                          {tag.name}
-                        </button>
-                      </li>
-                    ))
+                    <li key={tag.id}>
+                      <button
+                        onClick={() => handleAddingTag(tag)}
+                        className="p-3 hover:bg-gray-50 w-full rounded-md text-start"
+                        type="button"
+                      >
+                        {tag.name}
+                      </button>
+                    </li>
+                  ))
                   : !isFetching && (
-                      <li>
-                        <div className="p-3 hover:bg-gray-50 w-full rounded-md text-start flex justify-center">
-                          No results
-                        </div>
-                      </li>
-                    ))}
+                    <li>
+                      <div className="p-3 hover:bg-gray-50 w-full rounded-md text-start flex justify-center">
+                        No results
+                      </div>
+                    </li>
+                  ))}
               {(isLoading || isFetching) && (
                 <li>
                   <div className="p-3 hover:bg-gray-50 w-full rounded-md text-start flex justify-center">
@@ -121,9 +122,8 @@ function TagInput({ error, help, onChange }: TagInputProps) {
       </div>
       {(error || help) && (
         <p
-          className={`px-1 tracking-wide text-sm ${
-            error ? "text-red-600" : "text-gray-500"
-          }`}
+          className={`px-1 tracking-wide text-sm ${error ? "text-red-600" : "text-gray-500"
+            }`}
         >
           {error ?? help}
         </p>

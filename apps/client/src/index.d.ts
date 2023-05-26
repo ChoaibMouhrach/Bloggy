@@ -81,6 +81,7 @@ export interface IPost extends ITimeStamps {
   title: string;
   content: string;
   isDraft: boolean;
+  tags: ITag[]
 }
 
 export interface IPaginate<T> {
@@ -122,6 +123,12 @@ export interface IStorePost {
   title: string;
   tags: number[];
   content: string;
+}
+
+export interface IUpdatePost {
+  title?: string;
+  tags?: number[];
+  content?: string;
 }
 
 export interface IUpdateRole {
