@@ -78,7 +78,7 @@ const Index = withAuth(() => {
   };
 
   const handleEdit = (id: number) => {
-    router.push(`/dashboard/posts/edit/${id}`);
+    router.push(`/dashboard/tags/edit/${id}`);
   };
 
   return (

@@ -126,3 +126,7 @@ export interface IStorePost {
 export interface IUpdateRole {
   name: string
 }
+
+export interface IUpdateTag {
+  name: string;
+}
