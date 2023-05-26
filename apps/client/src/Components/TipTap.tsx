@@ -27,11 +27,13 @@ import Paragraph from "@tiptap/extension-paragraph";
 
 interface TipTapProps {
   onChange: (value: string) => void | Promise<void>;
+  error?: string;
+  help?: string;
 }
 
 type Level = 1 | 2 | 3 | 4 | 5 | 6;
 
-const TipTap = ({ onChange }: TipTapProps) => {
+const TipTap = ({ help, error, onChange }: TipTapProps) => {
   const editor = useEditor({
     onUpdate: ({ editor }) => {
       onChange(editor.getHTML());
@@ -188,6 +190,14 @@ const TipTap = ({ onChange }: TipTapProps) => {
         </Button>
       </div>
       <EditorContent editor={editor} />
+      {(error || help) && (
+        <p
+          className={`p-2 tracking-wide text-sm ${error ? "text-red-600" : "text-gray-500"
+            }`}
+        >
+          {error ?? help}
+        </p>
+      )}
     </div>
   );
 };

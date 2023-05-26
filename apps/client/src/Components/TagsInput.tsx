@@ -7,9 +7,11 @@ import { debounce } from "@/helpers";
 
 interface TagInputProps {
   onChange?: (values: number[]) => void | Promise<void>;
+  error?: string;
+  help?: string;
 }
 
-function TagInput({ onChange }: TagInputProps) {
+function TagInput({ error, help, onChange }: TagInputProps) {
   // STATE
   const [inputFocused, setInputFocused] = useState<boolean>(false);
   const [dropDownHovered, setDropDownHovered] = useState<boolean>(false);
@@ -83,23 +85,23 @@ function TagInput({ onChange }: TagInputProps) {
               {tags &&
                 (tags.data.length
                   ? tags.data.map((tag) => (
-                      <li key={tag.id}>
-                        <button
-                          onClick={() => handleAddingTag(tag)}
-                          className="p-3 hover:bg-gray-50 w-full rounded-md text-start"
-                          type="button"
-                        >
-                          {tag.name}
-                        </button>
-                      </li>
-                    ))
+                    <li key={tag.id}>
+                      <button
+                        onClick={() => handleAddingTag(tag)}
+                        className="p-3 hover:bg-gray-50 w-full rounded-md text-start"
+                        type="button"
+                      >
+                        {tag.name}
+                      </button>
+                    </li>
+                  ))
                   : !isFetching && (
-                      <li>
-                        <div className="p-3 hover:bg-gray-50 w-full rounded-md text-start flex justify-center">
-                          No results
-                        </div>
-                      </li>
-                    ))}
+                    <li>
+                      <div className="p-3 hover:bg-gray-50 w-full rounded-md text-start flex justify-center">
+                        No results
+                      </div>
+                    </li>
+                  ))}
               {(isLoading || isFetching) && (
                 <li>
                   <div className="p-3 hover:bg-gray-50 w-full rounded-md text-start flex justify-center">
@@ -111,6 +113,14 @@ function TagInput({ onChange }: TagInputProps) {
           </div>
         ) : null}
       </div>
+      {(error || help) && (
+        <p
+          className={`px-1 tracking-wide text-sm ${error ? "text-red-600" : "text-gray-500"
+            }`}
+        >
+          {error ?? help}
+        </p>
+      )}
     </div>
   );
 }

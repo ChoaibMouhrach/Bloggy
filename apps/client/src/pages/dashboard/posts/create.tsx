@@ -65,12 +65,14 @@ const Create = withAuth(() => {
             error={errors.title?.message}
             placeholder="Title..."
           />
-          <TagInput onChange={(tags: number[]) => setValue("tags", tags)} />
+          <TagInput error={errors.tags?.message} onChange={(tags: number[]) => setValue("tags", tags)} />
           <TipTap
+            error={errors.content?.message}
             onChange={(v: string) => {
               setValue("content", v);
             }}
           />
+          
         </FormBody>
         <FormFooter>
           <Button isLoading={isLoading}>Create Post</Button>
