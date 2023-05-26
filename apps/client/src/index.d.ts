@@ -116,3 +116,9 @@ export interface IStoreUser {
   bio?: string;
   url?: string;
 }
+
+export interface IStorePost {
+  title: string;
+  tags: number[];
+  content: string;
+}

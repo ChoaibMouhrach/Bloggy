@@ -5,12 +5,7 @@ interface FormProps extends React.ComponentProps<"form"> {
 }
 
 function Form(props: FormProps) {
-  return (
-    <form
-      {...props}
-      className="rounded-md border border-stone-300 overflow-hidden"
-    />
-  );
+  return <form {...props} className="rounded-md border border-stone-300" />;
 }
 
 export default Form;

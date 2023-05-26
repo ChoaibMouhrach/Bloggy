@@ -52,7 +52,7 @@ function NavDropDown({ element }: { element: IElement }) {
       {open && (
         <ul className="flex flex-col gap-4 p-4">
           {element.elements?.map((subElement, index) => (
-            <li key={subElement.href}>
+            <li key={(element.href ?? "") + Math.random()}>
               <Link
                 href={subElement.href ?? ""}
                 className={`flex items-center gap-4 p-4 rounded-md hover:bg-stone-700 font-semibold tracking-wide ${
@@ -84,9 +84,15 @@ function SideNav({ sideNavElements }: { sideNavElements: IElement[] }) {
       <ul className="flex flex-col gap-4">
         {sideNavElements.map((element) =>
           !element.elements ? (
-            <NavLink element={element} key={element.href} />
+            <NavLink
+              element={element}
+              key={(element.href ?? "") + Math.random()}
+            />
           ) : (
-            <NavDropDown element={element} key={element.href} />
+            <NavDropDown
+              element={element}
+              key={(element.href ?? "") + Math.random()}
+            />
           )
         )}
       </ul>

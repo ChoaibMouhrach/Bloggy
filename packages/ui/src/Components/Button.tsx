@@ -65,7 +65,7 @@ const button = cva(
         color: "primary",
         class: [
           "bg-transparent",
-          "text-stone-800",
+          "!text-stone-800",
           "hover:!bg-stone-100",
           "active:!bg-stone-200",
         ],
