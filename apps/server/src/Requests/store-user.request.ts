@@ -12,7 +12,7 @@ const parse: ValidateParse = (request: AuthRequest) => {
     .object({
       username: z
         .string()
-        .min(1)
+        .min(3)
         .refine(
           async (username) =>
             !(await database.user.findUnique({ where: { username } })),

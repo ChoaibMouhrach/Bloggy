@@ -1,12 +1,15 @@
+import { useRouter } from "next/router";
+import React, { ChangeEvent, useState } from "react";
+import { Column, Table } from "ui";
 import PageTitle from "@/Components/PageTitle";
-import { useDeleteUserMutation, useGetUsersQuery } from "@/features/apis/userApi";
+import {
+  useDeleteUserMutation,
+  useGetUsersQuery,
+} from "@/features/apis/userApi";
 import { debounce } from "@/helpers";
 import useToast from "@/hooks/useToast";
 import { IRole, IUser } from "@/index";
 import { withAuth } from "@/middlewares";
-import { useRouter } from "next/router";
-import { ChangeEvent, useState } from "react";
-import { Column, Table } from "ui";
 
 const columns: Column<IUser>[] = [
   {
@@ -15,11 +18,11 @@ const columns: Column<IUser>[] = [
   },
   {
     header: "UserName",
-    accessorKey: "username"
+    accessorKey: "username",
   },
   {
     header: "Email Address",
-    accessorKey: "email"
+    accessorKey: "email",
   },
   {
     header: "Role",
@@ -29,68 +32,87 @@ const columns: Column<IUser>[] = [
 
       return (
         <div>
-          <div className={`text-${role === "admin" ? "red" : "green"}-700 p-2 rounded-md w-fit text-center font-semibold`} >{getValue<IRole>().name}</div>
+          <div
+            className={`bg-${
+              role === "admin" ? "red" : "green"
+            }-700 p-2 text-white tracking-wide rounded-md w-fit text-center font-medium capitalize`}
+          >
+            {getValue<IRole>().name}
+          </div>
         </div>
-      )
-
-    }
+      );
+    },
   },
   {
     header: "Created At",
-    accessorKey: "createdAt"
-  }
+    accessorKey: "createdAt",
+  },
 ];
 
 const Index = withAuth(() => {
-
-  const { t } = useToast()
+  const { t } = useToast();
   const router = useRouter();
 
   // state
-  const [search, setSearch] = useState<string>("")
+  const [search, setSearch] = useState<string>("");
   const [pagination, setPagination] = useState({
     pageIndex: 0,
-    pageSize: 8
-  })
-
-  const [deleteUser] = useDeleteUserMutation();
-  const { data: users, isLoading } = useGetUsersQuery({
-    page: pagination.pageIndex + 1,
-    search
+    pageSize: 8,
   });
 
-  const changeSearch = debounce((v: string) => setSearch(v))
+  const [deleteUser] = useDeleteUserMutation();
+  const {
+    data: users,
+    isLoading,
+    refetch,
+  } = useGetUsersQuery(
+    {
+      page: pagination.pageIndex + 1,
+      search,
+    },
+    { refetchOnMountOrArgChange: true }
+  );
+
+  const changeSearch = debounce((v: string) => setSearch(v));
 
   const handleSearch = (element: ChangeEvent<HTMLInputElement>) => {
-    changeSearch(element.target.value)
-  }
+    changeSearch(element.target.value);
+  };
 
   const handleDelete = async (id: number) => {
-    const response = await deleteUser(id)
+    const response = await deleteUser(id);
 
     if ("data" in response) {
-      t([{
-        state: "success",
-        title: "User deleted successfully"
-      }])
-      return
+      refetch();
+      t([
+        {
+          state: "success",
+          title: "User deleted successfully",
+        },
+      ]);
+      return;
     }
 
     if ("error" in response) {
-      t([{
-        state: "danger",
-        title: "We clound't delete this user"
-      }])
+      t([
+        {
+          state: "danger",
+          title: "We clound't delete this user",
+        },
+      ]);
     }
-  }
+  };
 
   const handleEdit = (id: number) => {
-    router.push(`/dashboard/posts/edit/${id}`)
-  }
+    router.push(`/dashboard/posts/edit/${id}`);
+  };
 
   return (
     <>
-      <PageTitle title="Roles list" description="You can see and manage your roles from here" />
+      <PageTitle
+        title="Users list"
+        description="You can see and manage your users from here"
+      />
       <Table<IUser>
         handleSearch={handleSearch}
         columns={columns}
@@ -103,7 +125,7 @@ const Index = withAuth(() => {
         handleEdit={handleEdit}
       />
     </>
-  )
-})
+  );
+});
 
-export default Index
+export default Index;

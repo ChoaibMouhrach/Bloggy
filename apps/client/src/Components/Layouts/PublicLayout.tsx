@@ -1,10 +1,11 @@
+import React from "react";
 import { Nav } from "../Nav";
 
 interface PublicProps {
   children: React.ReactNode;
 }
 
-const PublicLayout = ({ children }: PublicProps) => {
+function PublicLayout({ children }: PublicProps) {
   return (
     <main className="h-screen flex flex-col gap-4">
       <Nav />
@@ -13,6 +14,6 @@ const PublicLayout = ({ children }: PublicProps) => {
       </section>
     </main>
   );
-};
+}
 
 export default PublicLayout;

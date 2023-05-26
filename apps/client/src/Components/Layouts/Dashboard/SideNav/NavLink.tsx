@@ -1,8 +1,15 @@
+import React from "react";
 import { useRouter } from "next/router";
-import { IElement } from ".";
 import Link from "next/link";
+import { IconType } from "react-icons";
 
-const NavLink = ({ element }: { element: IElement }) => {
+export interface IElement {
+  name: string;
+  Icon: IconType;
+  href?: string;
+  elements?: IElement[];
+}
+function NavLink({ element }: { element: IElement }) {
   const active = useRouter().pathname === element.href;
 
   return (
@@ -20,6 +27,6 @@ const NavLink = ({ element }: { element: IElement }) => {
       </Link>
     </li>
   );
-};
+}
 
 export default NavLink;

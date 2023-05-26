@@ -1,14 +1,15 @@
-import { withGuest } from "@/middlewares";
+import React from "react";
 import { useForm } from "react-hook-form";
 import { Button, Input } from "ui";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useForgotPasswordMutation } from "@/features/apis/authApi";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import Link from "next/link";
+import { useRouter } from "next/router";
+import { useForgotPasswordMutation } from "@/features/apis/authApi";
 import { IForgotPassword } from "..";
 import { handleResponseError } from "@/helpers";
-import { useRouter } from "next/router";
+import { withGuest } from "@/middlewares";
 import useToast from "@/hooks/useToast";
 import { AuthLayout } from "@/Components/Layouts/AuthLayout";
 
@@ -77,7 +78,7 @@ const ForgotPassword = withGuest(() => {
           <Link href="/sign-in">Sign In</Link>
         </div>
         <div className="text-center">
-          <span className="text-stone-500">Don't have an account ? </span>
+          <span className="text-stone-500">You do not have an account ? </span>
           <Link href="/sign-up">Sign Up</Link>
         </div>
       </form>

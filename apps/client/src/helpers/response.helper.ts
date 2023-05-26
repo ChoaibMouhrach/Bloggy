@@ -15,11 +15,13 @@ export const handleResponseError = <T extends FieldValues>(
         message: data.message,
       });
     } else {
-      for (let error of data.message) {
+      const errors = data.message;
+
+      errors.forEach((error) => {
         setError(error.path[0], {
           message: error.message,
         });
-      }
+      });
     }
   }
 };

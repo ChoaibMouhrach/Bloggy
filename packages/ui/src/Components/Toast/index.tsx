@@ -1,25 +1,22 @@
+import React from "react";
 import * as T from "@radix-ui/react-toast";
-import { ToastAlert } from "./Alert";
+import { ToastAlert, IAlert } from "./Alert";
 
-export interface IAlert {
-  state: "success" | "danger" | "info";
-  title: string;
-  description?: string;
-}
+export type { IAlert } from "./Alert";
 
 interface IToastProps {
   alerts: IAlert[];
 }
 
-export const Toast = ({
+export function Toast({
   alerts = [{ state: "success", title: "title", description: "description" }],
-}: IToastProps) => {
+}: IToastProps) {
   return (
     <T.Provider>
-      {alerts.map((alert, index) => (
-        <ToastAlert alert={alert} key={index} />
+      {alerts.map((alert) => (
+        <ToastAlert alert={alert} key={Math.random()} />
       ))}
       <T.Viewport className="fixed right-0 bottom-0 p-4 w-full max-w-md gap-4 flex flex-col" />
     </T.Provider>
   );
-};
+}

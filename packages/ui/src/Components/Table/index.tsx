@@ -7,7 +7,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useState } from "react";
 import {
   MdOutlineChevronLeft,
   MdOutlineKeyboardArrowLeft,
@@ -17,6 +17,41 @@ import {
 } from "react-icons/md";
 import { Button } from "../Button";
 import { Input } from "../Input";
+
+interface ActionsProps {
+  id: number;
+  handleDelete?: (id: number) => void | Promise<void>;
+  handleEdit?: (id: number) => void | Promise<void>;
+}
+
+function Actions({ id, handleDelete, handleEdit }: ActionsProps) {
+  const [isDeletingLoading, setIsDeletingLoading] = useState(false);
+
+  const handleDeleteWrapper = async () => {
+    setIsDeletingLoading(true);
+    if (handleDelete) await handleDelete(id);
+    setIsDeletingLoading(false);
+  };
+
+  return (
+    <div className="flex items-center gap-2">
+      {handleEdit && (
+        <Button onClick={() => handleEdit(id)} color="success">
+          Edit
+        </Button>
+      )}
+      {handleDelete && (
+        <Button
+          isLoading={isDeletingLoading}
+          onClick={() => handleDeleteWrapper()}
+          color="danger"
+        >
+          Delete
+        </Button>
+      )}
+    </div>
+  );
+}
 
 interface TableProps<T> {
   data: T[];
@@ -32,7 +67,7 @@ interface TableProps<T> {
 
 export type Column<T> = ColumnDef<T>;
 
-export const Table = <T extends {}>({
+export function Table<T extends {}>({
   data,
   pageCount,
   handleSearch,
@@ -42,7 +77,7 @@ export const Table = <T extends {}>({
   isLoading,
   handleEdit,
   handleDelete,
-}: TableProps<T>) => {
+}: TableProps<T>) {
   const [sorting, setSorting] = useState<SortingState>([]);
 
   const table = useReactTable({
@@ -84,13 +119,14 @@ export const Table = <T extends {}>({
                         colSpan={header.colSpan}
                       >
                         {header.isPlaceholder ? null : (
-                          <div
-                            {...{
-                              className: header.column.getCanSort()
-                                ? "cursor-pointer select-none flex items-center gap-2 "
-                                : "",
-                              onClick: header.column.getToggleSortingHandler(),
-                            }}
+                          <button
+                            type="button"
+                            className={
+                              header.column.getCanSort()
+                                ? "cursor-pointer select-none flex items-center gap-2"
+                                : ""
+                            }
+                            onClick={header.column.getToggleSortingHandler()}
                           >
                             {flexRender(
                               header.column.columnDef.header,
@@ -104,7 +140,7 @@ export const Table = <T extends {}>({
                                 <MdOutlineChevronLeft className="-rotate-90" />
                               ),
                             }[header.column.getIsSorted() as string] ?? null}
-                          </div>
+                          </button>
                         )}
                       </th>
                     );
@@ -118,9 +154,13 @@ export const Table = <T extends {}>({
               ))}
             </thead>
             <tbody>
-              {
-                (!data.length && !isLoading) ? (<tr><td colSpan={columns.length + 1} className="p-3 text-center" >Not found</td></tr>) : null
-              }
+              {!data.length && !isLoading ? (
+                <tr>
+                  <td colSpan={columns.length + 1} className="p-3 text-center">
+                    Not found
+                  </td>
+                </tr>
+              ) : null}
               {!isLoading &&
                 table.getRowModel().rows.map((row) => (
                   <tr className="odd:bg-stone-100" key={row.id}>
@@ -147,8 +187,8 @@ export const Table = <T extends {}>({
                 [1, 2, 3, 4, 5, 6, 7, 8].map((index) => (
                   <tr key={index} className="border-b-2 border-white">
                     <td
-                      className={`p-3 bg-stone-200 animate-pulse`}
-                      colSpan={columns.length}
+                      className="p-3 bg-stone-200 animate-pulse"
+                      colSpan={columns.length + 1}
                     >
                       &nbsp;
                     </td>
@@ -156,7 +196,7 @@ export const Table = <T extends {}>({
                 ))}
             </tbody>
           </table>
-          {(!isLoading && data.length) ? (
+          {!isLoading && data.length ? (
             <div className="p-3 flex items-center justify-between gap-2">
               <span className="flex items-center gap-1">
                 <div>Page</div>
@@ -207,39 +247,4 @@ export const Table = <T extends {}>({
       </div>
     </div>
   );
-};
-
-interface ActionsProps {
-  id: number;
-  handleDelete?: (id: number) => void | Promise<void>;
-  handleEdit?: (id: number) => void | Promise<void>;
 }
-
-const Actions = ({ id, handleDelete, handleEdit }: ActionsProps) => {
-  const [isDeletingLoading, setIsDeletingLoading] = useState(false);
-
-  const handleDeleteWrapper = async () => {
-    setIsDeletingLoading(true);
-    if (handleDelete) await handleDelete(id);
-    setIsDeletingLoading(false);
-  };
-
-  return (
-    <div className="flex items-center gap-2">
-      {handleEdit && (
-        <Button onClick={() => handleEdit(id)} color="success">
-          Edit
-        </Button>
-      )}
-      {handleDelete && (
-        <Button
-          isLoading={isDeletingLoading}
-          onClick={() => handleDeleteWrapper()}
-          color="danger"
-        >
-          Delete
-        </Button>
-      )}
-    </div>
-  );
-};

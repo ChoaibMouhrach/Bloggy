@@ -1,10 +1,9 @@
-"use-client";
+import React, { ComponentType, useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { ComponentType, useEffect, useState } from "react";
 import { Loading } from "ui";
 
 export const withGuest = (CB: ComponentType) => {
-  const Component = () => {
+  function Component() {
     const [state, setState] = useState<"loading" | "success" | "failed">(
       "loading"
     );
@@ -19,7 +18,7 @@ export const withGuest = (CB: ComponentType) => {
     }, []);
 
     if (state === "success") {
-      router.push("/dashboard/profile");
+      router.push("/dashboard");
     }
 
     if (state === "failed") {
@@ -27,7 +26,7 @@ export const withGuest = (CB: ComponentType) => {
     }
 
     return <Loading />;
-  };
+  }
 
   return Component;
 };

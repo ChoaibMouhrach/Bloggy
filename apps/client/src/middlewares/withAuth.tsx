@@ -1,13 +1,13 @@
-import { DashboardLayout } from "@/Components/Layouts/Dashboard";
-import { useGetProfileQuery } from "@/features/apis/authApi";
-import { getUser, setUser } from "@/features/slices/userSlice";
 import { useRouter } from "next/router";
-import { ComponentType, useEffect } from "react";
+import React, { ComponentType, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Loading } from "ui";
+import { getUser, setUser } from "@/features/slices/userSlice";
+import { useGetProfileQuery } from "@/features/apis/authApi";
+import { DashboardLayout } from "@/Components/Layouts/Dashboard";
 
 export const withAuth = (CB: ComponentType) => {
-  const Component = () => {
+  function Component() {
     const router = useRouter();
     const userState = useSelector(getUser);
     const dispatch = useDispatch();
@@ -39,7 +39,7 @@ export const withAuth = (CB: ComponentType) => {
     }
 
     return <Loading />;
-  };
+  }
 
   return Component;
 };

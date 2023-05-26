@@ -1,4 +1,5 @@
 // imports
+import React from "react";
 import SideNav from "./SideNav";
 import { Nav } from "../../Nav";
 import { SIDE_NAV_ELEMENTS } from "@/config/constants";
@@ -9,7 +10,7 @@ interface DashboardLayoutProps {
 }
 
 // layout
-export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
+export function DashboardLayout({ children }: DashboardLayoutProps) {
   // JSX
   return (
     <main className="h-screen w-screen flex flex-col gap-4">
@@ -23,4 +24,4 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
       </section>
     </main>
   );
-};
+}

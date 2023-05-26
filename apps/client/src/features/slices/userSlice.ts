@@ -1,5 +1,5 @@
-import { IUser } from "@/index";
 import { createSlice } from "@reduxjs/toolkit";
+import { IUser } from "@/index";
 
 interface InitialState {
   value: {
@@ -21,11 +21,13 @@ const userSlice = createSlice({
       state,
       { payload }: { payload: NonNullable<typeof initialState.value> }
     ) => {
+      // eslint-disable-next-line no-param-reassign
       state.value = payload;
-      localStorage["accessToken"] = payload.accessToken;
-      localStorage["refreshToken"] = payload.refreshToken;
+      localStorage.accessToken = payload.accessToken;
+      localStorage.refreshToken = payload.refreshToken;
     },
     removeUser: (state) => {
+      // eslint-disable-next-line no-param-reassign
       state.value = null;
       localStorage.removeItem("accessToken");
       localStorage.removeItem("refreshToken");

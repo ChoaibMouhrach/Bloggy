@@ -1,4 +1,4 @@
-import { Ref, forwardRef } from "react";
+import React, { Ref, forwardRef } from "react";
 
 interface TextAreaProps extends React.ComponentProps<"textarea"> {
   error?: string;
@@ -19,7 +19,7 @@ export const TextArea = forwardRef(
             ref={ref}
             className={`border-2 border-stone-300 p-2 translate duration-300 rounded-md w-full outline-none disabled:bg-stone-100 focus:border-stone-900 ${className}`}
             {...rest}
-          ></textarea>
+          />
 
           {(error || help) && (
             <p

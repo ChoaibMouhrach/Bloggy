@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { IconType } from "react-icons";
 import Link from "next/link";
-import { useState } from "react";
+import React, { useState } from "react";
 
 export interface IElement {
   name: string;
@@ -10,7 +10,7 @@ export interface IElement {
   elements?: IElement[];
 }
 
-const NavLink = ({ element }: { element: IElement }) => {
+function NavLink({ element }: { element: IElement }) {
   const active = useRouter().pathname === element.href;
 
   return (
@@ -28,9 +28,9 @@ const NavLink = ({ element }: { element: IElement }) => {
       </Link>
     </li>
   );
-};
+}
 
-const NavDropDown = ({ element }: { element: IElement }) => {
+function NavDropDown({ element }: { element: IElement }) {
   const path = useRouter().pathname;
   const [open, setOpen] = useState(
     Boolean(element.elements?.find((e) => e.href === path))
@@ -39,6 +39,7 @@ const NavDropDown = ({ element }: { element: IElement }) => {
   return (
     <li className={`rounded-md ${open ? "bg-stone-800" : ""}`}>
       <button
+        type="button"
         onClick={() => setOpen(!open)}
         className={`flex items-center w-full gap-4 p-4 rounded-md hover:bg-stone-100 font-semibold tracking-wide ${
           open ? "text-white hover:!bg-stone-700" : ""
@@ -50,24 +51,24 @@ const NavDropDown = ({ element }: { element: IElement }) => {
 
       {open && (
         <ul className="flex flex-col gap-4 p-4">
-          {element.elements?.map((element, index) => (
-            <li key={index}>
+          {element.elements?.map((subElement, index) => (
+            <li key={(element.href ?? "") + Math.random()}>
               <Link
-                href={element.href ?? ""}
+                href={subElement.href ?? ""}
                 className={`flex items-center gap-4 p-4 rounded-md hover:bg-stone-700 font-semibold tracking-wide ${
                   open ? "text-white" : ""
                 } ${
-                  element.href === path
+                  subElement.href === path
                     ? "bg-white !text-stone-800 hover:!bg-stone-100"
                     : ""
                 }`}
               >
-                <element.Icon
+                <subElement.Icon
                   className={`text-xl ${open ? "fill-white" : ""} ${
-                    element.href === path ? "!fill-stone-800" : ""
+                    subElement.href === path ? "!fill-stone-800" : ""
                   }`}
                 />{" "}
-                {element.name}
+                {subElement.name}
               </Link>
             </li>
           ))}
@@ -75,22 +76,28 @@ const NavDropDown = ({ element }: { element: IElement }) => {
       )}
     </li>
   );
-};
+}
 
-const SideNav = ({ sideNavElements }: { sideNavElements: IElement[] }) => {
+function SideNav({ sideNavElements }: { sideNavElements: IElement[] }) {
   return (
     <aside className="h-[calc(100vh_-_80px)] fixed w-screen hidden lg:static lg:w-auto lg:block left-0 w-84">
       <ul className="flex flex-col gap-4">
-        {sideNavElements.map((element, index) =>
+        {sideNavElements.map((element) =>
           !element.elements ? (
-            <NavLink element={element} key={index} />
+            <NavLink
+              element={element}
+              key={(element.href ?? "") + Math.random()}
+            />
           ) : (
-            <NavDropDown element={element} key={index} />
+            <NavDropDown
+              element={element}
+              key={(element.href ?? "") + Math.random()}
+            />
           )
         )}
       </ul>
     </aside>
   );
-};
+}
 
 export default SideNav;

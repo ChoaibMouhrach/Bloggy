@@ -5,13 +5,17 @@ import { Request, Response } from "express";
 
 const index = async (request: Request, response: Response) => {
   // search query
-  const search = typeof request.query.search === "string" ? request.query.search : undefined;
+  const search =
+    typeof request.query.search === "string" ? request.query.search : undefined;
 
   // page query
   const page = Number(request.query.page) ? Number(request.query.page) : 1;
 
   // trash query
-  const trash = typeof request.query.trash === "string" ? (request.query.trash === "true") : undefined
+  const trash =
+    typeof request.query.trash === "string"
+      ? request.query.trash === "true"
+      : undefined;
 
   // pagination related
   const take = 8;
@@ -39,11 +43,13 @@ const index = async (request: Request, response: Response) => {
               },
             },
           },
-        }
+        },
       ],
-      deletedAt: trash ? {
-        not: null
-      } : null
+      deletedAt: trash
+        ? {
+            not: null,
+          }
+        : null,
     },
     include: {
       tags: true,

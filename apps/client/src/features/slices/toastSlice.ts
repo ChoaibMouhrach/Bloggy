@@ -10,6 +10,7 @@ const toastSlice = createSlice({
   initialState,
   reducers: {
     addAlerts: (state, { payload }: { payload: IAlert[] }) => {
+      // eslint-disable-next-line no-param-reassign
       state.value = [...state.value, ...payload];
     },
   },

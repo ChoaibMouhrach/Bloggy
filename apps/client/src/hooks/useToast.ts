@@ -1,6 +1,6 @@
-import { addAlerts } from "@/features/slices/toastSlice";
 import { useDispatch } from "react-redux";
 import { IAlert } from "ui";
+import { addAlerts } from "@/features/slices/toastSlice";
 
 const useToast = () => {
   const dispatch = useDispatch();

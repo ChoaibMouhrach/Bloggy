@@ -9,6 +9,7 @@ const parse: ValidateParse = (request: Request) => {
     name: z
       .string()
       .min(1)
+      .max(60)
       .refine(
         async (name) => !(await database.role.findUnique({ where: { name } })),
         { message: "Role already exists" }
