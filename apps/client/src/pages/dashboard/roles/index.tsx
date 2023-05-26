@@ -81,7 +81,7 @@ const Index = withAuth(() => {
   };
 
   const handleEdit = (id: number) => {
-    router.push(`/dashboard/posts/edit/${id}`);
+    router.push(`/dashboard/roles/edit/${id}`);
   };
 
   return (

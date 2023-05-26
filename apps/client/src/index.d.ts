@@ -9,9 +9,9 @@ export type ErrorTypes =
 type ResponseErrorMessage<TPath> =
   | string
   | {
-      path: [Path<T>];
-      message: string;
-    }[];
+    path: [Path<T>];
+    message: string;
+  }[];
 export interface IResponseError<TPath> {
   statusCode: number;
   message: ResponseErrorMessage<TPath>;
@@ -121,4 +121,8 @@ export interface IStorePost {
   title: string;
   tags: number[];
   content: string;
+}
+
+export interface IUpdateRole {
+  name: string
 }
