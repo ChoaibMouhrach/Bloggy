@@ -47,8 +47,8 @@ const index = async (request: Request, response: Response) => {
       ],
       deletedAt: trash
         ? {
-          not: null,
-        }
+            not: null,
+          }
         : null,
     },
     include: {
@@ -79,8 +79,8 @@ const show = async (request: Request, response: Response) => {
       id: Number(id),
     },
     include: {
-      tags: true
-    }
+      tags: true,
+    },
   });
 
   if (!post) {

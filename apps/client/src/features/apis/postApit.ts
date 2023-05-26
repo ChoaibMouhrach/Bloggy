@@ -26,7 +26,7 @@ const postApi = api.injectEndpoints({
         },
       }),
     }),
-    updatePost: build.mutation<void, { id: number, data: IUpdatePost }>({
+    updatePost: build.mutation<void, { id: number; data: IUpdatePost }>({
       query: ({ id, data }) => ({
         url: `/posts/${id}`,
         method: "PATCH",
@@ -63,6 +63,5 @@ export const {
   useUpdatePostMutation,
   useStorePostMutation,
   useDeletePostMutation,
-  useGetPostQuery
-} =
-  postApi;
+  useGetPostQuery,
+} = postApi;

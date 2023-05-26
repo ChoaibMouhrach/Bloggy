@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import React, { useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/router";
@@ -13,7 +14,10 @@ import { handleResponseError } from "@/helpers";
 import useToast from "@/hooks/useToast";
 import { IUpdateUser } from "@/index";
 import { withAuth } from "@/middlewares";
-import { useGetUserQuery, useUpdateUserMutation } from "@/features/apis/userApi";
+import {
+  useGetUserQuery,
+  useUpdateUserMutation,
+} from "@/features/apis/userApi";
 
 const schema = z
   .object({
@@ -51,12 +55,18 @@ const schema = z
       message: "Password and Password confirmation does not match",
     }
   )
-  .refine((data) => {
-    return Boolean(Object.entries(data).filter(([key, value]) => value !== undefined).length)
-  }, {
-    message: "Change something first",
-    path: ["username"]
-  });
+  .refine(
+    (data) => {
+      return Boolean(
+        Object.entries(data).filter(([key, value]) => value !== undefined)
+          .length
+      );
+    },
+    {
+      message: "Change something first",
+      path: ["username"],
+    }
+  );
 
 const Edit = withAuth(() => {
   const router = useRouter();
@@ -79,12 +89,11 @@ const Edit = withAuth(() => {
   });
 
   const onSubmit = async (data: IUpdateUser) => {
-
-    if (data.username === user?.username) delete data.username
-    if (data.email === user?.email) delete data.email
-    if (data.roleId === user?.roleId) delete data.roleId
-    if (data.url === user?.url) delete data.url
-    if (data.bio === user?.bio) delete data.bio
+    if (data.username === user?.username) delete data.username;
+    if (data.email === user?.email) delete data.email;
+    if (data.roleId === user?.roleId) delete data.roleId;
+    if (data.url === user?.url) delete data.url;
+    if (data.bio === user?.bio) delete data.bio;
 
     const response = await updateUser({ id, data });
 
@@ -113,23 +122,21 @@ const Edit = withAuth(() => {
             {...register("username")}
             placeholder="Username..."
           />
-          {
-            user && (
-              <Select
-                onValueChange={(v: string) => setValue("roleId", Number(v))}
-                error={errors.roleId?.message}
-                isLoading={isRolesLoading || isUserLoading}
-                placeholder="Select role"
-                options={
-                  roles?.data.map((role) => ({
-                    value: String(role.id),
-                    name: role.name,
-                  })) ?? []
-                }
-                defaultValue={ String(user.roleId)}
-              />
-            )
-          }
+          {user && (
+            <Select
+              onValueChange={(v: string) => setValue("roleId", Number(v))}
+              error={errors.roleId?.message}
+              isLoading={isRolesLoading || isUserLoading}
+              placeholder="Select role"
+              options={
+                roles?.data.map((role) => ({
+                  value: String(role.id),
+                  name: role.name,
+                })) ?? []
+              }
+              defaultValue={String(user.roleId)}
+            />
+          )}
           <Input
             defaultValue={user ? user.email : ""}
             error={errors.email?.message}
