@@ -27,8 +27,8 @@ const roleApi = api.injectEndpoints({
         },
       }),
     }),
-    updateRole: build.mutation<void, { id : number, data : IUpdateRole }>({
-      query: ({ data , id }) => ({
+    updateRole: build.mutation<void, { id: number; data: IUpdateRole }>({
+      query: ({ data, id }) => ({
         url: `/roles/${id}`,
         method: "PATCH",
         body: data,
@@ -50,5 +50,9 @@ const roleApi = api.injectEndpoints({
   }),
 });
 
-export const { useGetRolesQuery, useUpdateRoleMutation, useStoreRoleMutation, useDeleteRoleMutation } =
-  roleApi;
+export const {
+  useGetRolesQuery,
+  useUpdateRoleMutation,
+  useStoreRoleMutation,
+  useDeleteRoleMutation,
+} = roleApi;

@@ -1,4 +1,4 @@
-import { IPaginate, IStoreUser, IUser } from "@/index";
+import { IPaginate, IStoreUser, IUpdateUser, IUser } from "@/index";
 import api from "./api";
 
 const userApi = api.injectEndpoints({
@@ -20,10 +20,29 @@ const userApi = api.injectEndpoints({
         },
       }
     ),
+    getUser: build.query<IUser, number>({
+      query: (id) => ({
+        url: `/users/${id}`,
+        method: "GET",
+        headers: {
+          authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+      }),
+    }),
     storeUser: build.mutation<IUser, IStoreUser>({
       query: (data) => ({
         url: `/users`,
         method: "POST",
+        body: data,
+        headers: {
+          authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+      }),
+    }),
+    updateUser: build.mutation<IUser, { id: number; data: IUpdateUser }>({
+      query: ({ id, data }) => ({
+        url: `/users/${id}`,
+        method: "PATCH",
         body: data,
         headers: {
           authorization: `Bearer ${localStorage.getItem("accessToken")}`,
@@ -42,5 +61,5 @@ const userApi = api.injectEndpoints({
   }),
 });
 
-export const { useGetUsersQuery, useStoreUserMutation, useDeleteUserMutation } =
+export const { useGetUsersQuery, useGetUserQuery, useUpdateUserMutation, useStoreUserMutation, useDeleteUserMutation } =
   userApi;

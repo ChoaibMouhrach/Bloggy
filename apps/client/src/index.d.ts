@@ -25,6 +25,7 @@ export interface IUpdateUser {
   email?: string;
   password?: string;
   password_confirmation?: string;
+  roleId?: number;
 }
 
 export interface IForgotPassword {
@@ -124,7 +125,7 @@ export interface IStorePost {
 }
 
 export interface IUpdateRole {
-  name: string
+  name: string;
 }
 
 export interface IUpdateTag {

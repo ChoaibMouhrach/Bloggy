@@ -192,8 +192,9 @@ const TipTap = ({ help, error, onChange }: TipTapProps) => {
       <EditorContent editor={editor} />
       {(error || help) && (
         <p
-          className={`p-2 tracking-wide text-sm ${error ? "text-red-600" : "text-gray-500"
-            }`}
+          className={`p-2 tracking-wide text-sm ${
+            error ? "text-red-600" : "text-gray-500"
+          }`}
         >
           {error ?? help}
         </p>

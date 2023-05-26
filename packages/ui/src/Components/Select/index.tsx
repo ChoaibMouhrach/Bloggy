@@ -17,7 +17,7 @@ export const Select = forwardRef(
   ) => {
     return (
       <div>
-        <S.Root {...rest} disabled={isLoading}>
+        <S.Root {...rest} disabled={isLoading} >
           <S.Trigger className="disabled:bg-stone-100 w-full outline-none focus:border-stone-900 border rounded-md flex p-2 items-center justify-between">
             <S.Value placeholder={isLoading ? "Loading..." : placeholder} />
             <S.Icon>
@@ -44,9 +44,8 @@ export const Select = forwardRef(
 
         {(error || help) && (
           <p
-            className={`px-1 tracking-wide text-sm ${
-              error ? "text-red-600" : "text-gray-500"
-            }`}
+            className={`px-1 tracking-wide text-sm ${error ? "text-red-600" : "text-gray-500"
+              }`}
           >
             {error ?? help}
           </p>

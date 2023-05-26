@@ -25,7 +25,7 @@ const tagApi = api.injectEndpoints({
         },
       }),
     }),
-    updateTag: build.mutation<ITag, { id: number, data: IUpdateTag }>({
+    updateTag: build.mutation<ITag, { id: number; data: IUpdateTag }>({
       query: ({ id, data }) => ({
         url: `/tags/${id}`,
         method: "PATCH",
@@ -51,5 +51,5 @@ export const {
   useGetTagsQuery,
   useUpdateTagMutation,
   useStoreTagMutation,
-  useDeleteTagMutation
+  useDeleteTagMutation,
 } = tagApi;

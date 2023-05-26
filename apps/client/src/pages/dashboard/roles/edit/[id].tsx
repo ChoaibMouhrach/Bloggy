@@ -7,7 +7,10 @@ import Form from "@/Components/Form";
 import FormBody from "@/Components/Form/FormBody";
 import FormFooter from "@/Components/Form/FormFooter";
 import PageTitle from "@/Components/PageTitle";
-import { useStoreRoleMutation, useUpdateRoleMutation } from "@/features/apis/roleApi";
+import {
+  useStoreRoleMutation,
+  useUpdateRoleMutation,
+} from "@/features/apis/roleApi";
 import { handleResponseError } from "@/helpers";
 import useToast from "@/hooks/useToast";
 import { IStoreRole } from "@/index";
@@ -19,7 +22,6 @@ const schema = z.object({
 });
 
 const Edit = withAuth(() => {
-
   const router = useRouter();
   const [updateRole, { isLoading }] = useUpdateRoleMutation();
   const { t } = useToast();

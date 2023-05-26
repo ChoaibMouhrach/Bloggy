@@ -25,8 +25,9 @@ export const Input = forwardRef(
 
           {(error || help) && (
             <p
-              className={`px-1 tracking-wide text-sm ${error ? "text-red-600" : "text-gray-500"
-                }`}
+              className={`px-1 tracking-wide text-sm ${
+                error ? "text-red-600" : "text-gray-500"
+              }`}
             >
               {error ?? help}
             </p>

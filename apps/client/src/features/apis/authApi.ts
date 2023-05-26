@@ -50,7 +50,7 @@ const authApi = api.injectEndpoints({
         body: user,
       }),
     }),
-    updateUser: build.mutation<void, IUpdateUser>({
+    updateProfile: build.mutation<void, IUpdateUser>({
       query: (data) => ({
         url: "/me",
         method: "PATCH",
@@ -101,7 +101,7 @@ export const {
   useForgotPasswordMutation,
   useResetPasswordMutation,
   useSignOutMutation,
-  useUpdateUserMutation,
+  useUpdateProfileMutation,
   useGetProfileQuery,
   useSignInMutation,
   useSignUpMutation,
