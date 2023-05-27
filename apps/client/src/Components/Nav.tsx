@@ -2,7 +2,7 @@ import React from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
-import { Button } from "ui";
+import { Button, DropDown, DropDownItem, DropDownItemsWrapper, DropDownTrigger } from "ui";
 import { NAV_ITEMS } from "@/config/constants";
 import { useSignOutMutation } from "@/features/apis/authApi";
 import { getUser, removeUser } from "@/features/slices/userSlice";
@@ -51,18 +51,40 @@ export function Nav() {
           ChoaibMouhrach
         </Link>
         <div className="flex items-center gap-4 font-semibold text-gray-600">
-          {NAV_ITEMS.map(({ href, name }) => (
-            <Link key={href} href={href}>
-              {name}
-            </Link>
-          ))}
-          {user && <Link href="/dashboard">Dashboard</Link>}
-          {user ? (
-            <Button isLoading={isLoading} onClick={handleSignOut}>
-              Logout
-            </Button>
-          ) : (
-            <Button href="/sign-in">Sign In</Button>
+          {
+            !user && (<Button href="/sign-in" >Sign In</Button>)
+          }
+          {user && (
+            <DropDown >
+              <DropDownTrigger>
+                <div className="hover:bg-gray-100 rounded-full border border-stone-300 w-12 h-12 flex items-center justify-center font-semibold" >
+                  {user?.username.slice(0, 2)}
+                </div>
+              </DropDownTrigger>
+              <DropDownItemsWrapper>
+                {NAV_ITEMS.map(({ href, name }) => (
+                  <DropDownItem key={href} >
+                    <Link className="block" href={href}  >
+                      {name}
+                    </Link>
+                  </DropDownItem>
+                ))}
+
+                <DropDownItem>
+                  <Link className="block" href="/dashboard" >
+                    Dashboard
+                  </Link>
+                </DropDownItem>
+
+                <DropDownItem className="!p-0" >
+                  <Button className="w-full" isLoading={isLoading} onClick={handleSignOut} >
+                    Sign Out
+                  </Button>
+                </DropDownItem>
+              </DropDownItemsWrapper>
+            </DropDown>
+
+
           )}
         </div>
       </div>
