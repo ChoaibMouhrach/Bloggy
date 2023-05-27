@@ -3,7 +3,6 @@ import {
   MdOutlineDashboard,
   MdOutlineLibraryBooks,
   MdOutlineLock,
-  MdOutlineModeEditOutline,
   MdOutlinePeopleAlt,
   MdOutlinePerson,
   MdOutlineTag,

@@ -4,10 +4,13 @@ import { withAuth } from "@/middlewares";
 
 const Profile = withAuth(() => {
   return (
-    <PageTitle
-      title="Profile"
-      description="You can manage your profile status from here."
-    />
+    <>
+      <PageTitle
+        title="Profile"
+        description="You can manage your profile status from here."
+      />
+      Soon
+    </>
   );
 });
 
