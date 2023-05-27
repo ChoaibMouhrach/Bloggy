@@ -42,11 +42,13 @@ const Create = withAuth(() => {
     const response = await storePost(data);
 
     if ("data" in response) {
-      t([{
-        state: "success",
-        title: "Post addedd successfully"
-      }])
-      return
+      t([
+        {
+          state: "success",
+          title: "Post addedd successfully",
+        },
+      ]);
+      return;
     }
 
     handleResponseError(setError, response);
@@ -65,14 +67,16 @@ const Create = withAuth(() => {
             error={errors.title?.message}
             placeholder="Title..."
           />
-          <TagInput error={errors.tags?.message} onChange={(tags: number[]) => setValue("tags", tags)} />
+          <TagInput
+            error={errors.tags?.message}
+            onChange={(tags: number[]) => setValue("tags", tags)}
+          />
           <TipTap
             error={errors.content?.message}
             onChange={(v: string) => {
               setValue("content", v);
             }}
           />
-
         </FormBody>
         <FormFooter>
           <Button isLoading={isLoading}>Create Post</Button>

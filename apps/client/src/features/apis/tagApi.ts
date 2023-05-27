@@ -1,4 +1,4 @@
-import { IPaginate, IStoreTag, ITag } from "@/index";
+import { IPaginate, IStoreTag, ITag, IUpdateTag } from "@/index";
 import api from "./api";
 
 const tagApi = api.injectEndpoints({
@@ -25,6 +25,16 @@ const tagApi = api.injectEndpoints({
         },
       }),
     }),
+    updateTag: build.mutation<ITag, { id: number; data: IUpdateTag }>({
+      query: ({ id, data }) => ({
+        url: `/tags/${id}`,
+        method: "PATCH",
+        body: data,
+        headers: {
+          authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+      }),
+    }),
     deleteTag: build.mutation<void, number>({
       query: (id) => ({
         url: `/tags/${id}`,
@@ -37,5 +47,9 @@ const tagApi = api.injectEndpoints({
   }),
 });
 
-export const { useGetTagsQuery, useStoreTagMutation, useDeleteTagMutation } =
-  tagApi;
+export const {
+  useGetTagsQuery,
+  useUpdateTagMutation,
+  useStoreTagMutation,
+  useDeleteTagMutation,
+} = tagApi;

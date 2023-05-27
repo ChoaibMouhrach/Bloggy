@@ -78,6 +78,9 @@ const show = async (request: Request, response: Response) => {
     where: {
       id: Number(id),
     },
+    include: {
+      tags: true,
+    },
   });
 
   if (!post) {

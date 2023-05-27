@@ -1,4 +1,4 @@
-import { IPaginate, IPost, IStorePost } from "@/index";
+import { IPaginate, IPost, IStorePost, IUpdatePost } from "@/index";
 import api from "./api";
 
 const postApi = api.injectEndpoints({
@@ -17,6 +17,25 @@ const postApi = api.injectEndpoints({
         },
       }
     ),
+    getPost: build.query<IPost, number>({
+      query: (id) => ({
+        url: `/posts/${id}`,
+        method: "GET",
+        headers: {
+          authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+      }),
+    }),
+    updatePost: build.mutation<void, { id: number; data: IUpdatePost }>({
+      query: ({ id, data }) => ({
+        url: `/posts/${id}`,
+        method: "PATCH",
+        body: data,
+        headers: {
+          authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+      }),
+    }),
     storePost: build.mutation<void, IStorePost>({
       query: (data: IStorePost) => ({
         url: `/posts`,
@@ -39,5 +58,10 @@ const postApi = api.injectEndpoints({
   }),
 });
 
-export const { useGetPostsQuery, useStorePostMutation, useDeletePostMutation } =
-  postApi;
+export const {
+  useGetPostsQuery,
+  useUpdatePostMutation,
+  useStorePostMutation,
+  useDeletePostMutation,
+  useGetPostQuery,
+} = postApi;

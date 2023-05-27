@@ -1,4 +1,6 @@
 "use client";
+
+import React from "react";
 import Underline from "@tiptap/extension-underline";
 import BulletList from "@tiptap/extension-bullet-list";
 import OrderedList from "@tiptap/extension-ordered-list";
@@ -29,12 +31,15 @@ interface TipTapProps {
   onChange: (value: string) => void | Promise<void>;
   error?: string;
   help?: string;
+  defaultValue?: string;
 }
 
 type Level = 1 | 2 | 3 | 4 | 5 | 6;
 
-const TipTap = ({ help, error, onChange }: TipTapProps) => {
+function TipTap({ help, error, defaultValue, onChange }: TipTapProps) {
   const editor = useEditor({
+    content: defaultValue,
+    // eslint-disable-next-line @typescript-eslint/no-shadow
     onUpdate: ({ editor }) => {
       onChange(editor.getHTML());
     },
@@ -57,13 +62,16 @@ const TipTap = ({ help, error, onChange }: TipTapProps) => {
             6: "text-xs",
           };
 
+          // eslint-disable-next-line react/no-this-in-sfc
           const hasLevel = this.options.levels.includes(node.attrs.level);
           const level: Level = hasLevel
             ? node.attrs.level
-            : this.options.levels[0];
+            : // eslint-disable-next-line react/no-this-in-sfc
+              this.options.levels[0];
 
           return [
             `h${level}`,
+            // eslint-disable-next-line react/no-this-in-sfc
             mergeAttributes(this.options.HTMLAttributes, HTMLAttributes, {
               class: `${classes[level]} font-semibold`,
             }),
@@ -192,14 +200,15 @@ const TipTap = ({ help, error, onChange }: TipTapProps) => {
       <EditorContent editor={editor} />
       {(error || help) && (
         <p
-          className={`p-2 tracking-wide text-sm ${error ? "text-red-600" : "text-gray-500"
-            }`}
+          className={`p-2 tracking-wide text-sm ${
+            error ? "text-red-600" : "text-gray-500"
+          }`}
         >
           {error ?? help}
         </p>
       )}
     </div>
   );
-};
+}
 
 export default TipTap;

@@ -25,6 +25,7 @@ export interface IUpdateUser {
   email?: string;
   password?: string;
   password_confirmation?: string;
+  roleId?: number;
 }
 
 export interface IForgotPassword {
@@ -80,6 +81,7 @@ export interface IPost extends ITimeStamps {
   title: string;
   content: string;
   isDraft: boolean;
+  tags: ITag[];
 }
 
 export interface IPaginate<T> {
@@ -121,4 +123,18 @@ export interface IStorePost {
   title: string;
   tags: number[];
   content: string;
+}
+
+export interface IUpdatePost {
+  title?: string;
+  tags?: number[];
+  content?: string;
+}
+
+export interface IUpdateRole {
+  name: string;
+}
+
+export interface IUpdateTag {
+  name: string;
 }
