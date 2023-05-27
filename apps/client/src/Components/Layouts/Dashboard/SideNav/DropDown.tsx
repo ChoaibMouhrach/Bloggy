@@ -27,21 +27,21 @@ function SideNavDropDown({ element }: { element: IElement }) {
           {element.elements?.map((subElement) => (
             <li key={subElement.href}>
               <Link
-                href={element.href ?? ""}
+                href={subElement.href ?? ""}
                 className={`flex items-center gap-4 p-4 rounded-md hover:bg-stone-700 font-semibold tracking-wide ${
                   open ? "text-white" : ""
                 } ${
-                  element.href === path
+                  subElement.href === path
                     ? "bg-white !text-stone-800 hover:!bg-stone-100"
                     : ""
                 }`}
               >
-                <element.Icon
+                <subElement.Icon
                   className={`text-xl ${open ? "fill-white" : ""} ${
-                    element.href === path ? "!fill-stone-800" : ""
+                    subElement.href === path ? "!fill-stone-800" : ""
                   }`}
                 />{" "}
-                {element.name}
+                {subElement.name}
               </Link>
             </li>
           ))}

@@ -5,4 +5,4 @@ export * from "./Components/Loading";
 export * from "./Components/Toast";
 export * from "./Components/Table/index";
 export * from "./Components/Select/index";
-export * from "./Components/DropDown/index"
+export * from "./Components/DropDown";

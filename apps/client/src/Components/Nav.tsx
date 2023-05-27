@@ -2,12 +2,18 @@ import React from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
-import { Button, DropDown, DropDownItem, DropDownItemsWrapper, DropDownTrigger } from "ui";
+import {
+  Button,
+  DropDown,
+  DropDownItem,
+  DropDownItemsWrapper,
+  DropDownTrigger,
+} from "ui";
+import { MdOutlineMenu } from "react-icons/md";
 import { NAV_ITEMS } from "@/config/constants";
 import { useSignOutMutation } from "@/features/apis/authApi";
 import { getUser, removeUser } from "@/features/slices/userSlice";
 import useToast from "@/hooks/useToast";
-import { MdOutlineMenu } from "react-icons/md";
 
 export interface NavItem {
   name: string;
@@ -15,8 +21,8 @@ export interface NavItem {
 }
 
 interface NavProps {
-  open: boolean;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>
+  open?: boolean;
+  setOpen?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export function Nav({ open, setOpen }: NavProps) {
@@ -54,49 +60,53 @@ export function Nav({ open, setOpen }: NavProps) {
   return (
     <nav className="h-16 px-4 lg:px-0">
       <div className="h-full container mx-auto flex items-center justify-between border-b">
-        <div className="flex items-center gap-2" >
+        <div className="flex items-center gap-2">
           <Link href="/" className="font-bold tracking-wide text-lg">
-            ChoaibMouhrach
+            PACY2
           </Link>
-          <Button onClick={() => setOpen(!open)} variant="text" className="lg:hidden" >
+          <Button
+            onClick={() => setOpen && setOpen(!open)}
+            variant="text"
+            className="lg:hidden"
+          >
             <MdOutlineMenu className="text-lg" />
           </Button>
         </div>
         <div className="flex items-center gap-4 font-semibold text-gray-600">
-          {
-            !user && (<Button href="/sign-in" >Sign In</Button>)
-          }
+          {!user && <Button href="/sign-in">Sign In</Button>}
           {user && (
-            <DropDown >
+            <DropDown>
               <DropDownTrigger>
-                <div className="hover:bg-gray-100 rounded-full border border-stone-300 w-10 h-10 text-xs uppercase flex items-center justify-center font-semibold" >
+                <div className="hover:bg-gray-100 rounded-full border border-stone-300 w-10 h-10 text-xs uppercase flex items-center justify-center font-semibold">
                   {user?.username.slice(0, 2)}
                 </div>
               </DropDownTrigger>
               <DropDownItemsWrapper>
                 {NAV_ITEMS.map(({ href, name }) => (
-                  <DropDownItem key={href} >
-                    <Link className="block" href={href}  >
+                  <DropDownItem key={href}>
+                    <Link className="block" href={href}>
                       {name}
                     </Link>
                   </DropDownItem>
                 ))}
 
                 <DropDownItem>
-                  <Link className="block" href="/dashboard" >
+                  <Link className="block" href="/dashboard">
                     Dashboard
                   </Link>
                 </DropDownItem>
 
-                <DropDownItem className="!p-0" >
-                  <Button className="w-full" isLoading={isLoading} onClick={handleSignOut} >
+                <DropDownItem className="!p-0">
+                  <Button
+                    className="w-full"
+                    isLoading={isLoading}
+                    onClick={handleSignOut}
+                  >
                     Sign Out
                   </Button>
                 </DropDownItem>
               </DropDownItemsWrapper>
             </DropDown>
-
-
           )}
         </div>
       </div>
