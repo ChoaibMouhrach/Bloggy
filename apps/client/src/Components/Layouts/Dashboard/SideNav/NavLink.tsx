@@ -9,6 +9,7 @@ export interface IElement {
   href?: string;
   elements?: IElement[];
 }
+
 function NavLink({ element }: { element: IElement }) {
   const active = useRouter().pathname === element.href;
 

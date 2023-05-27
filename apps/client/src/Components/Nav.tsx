@@ -7,13 +7,19 @@ import { NAV_ITEMS } from "@/config/constants";
 import { useSignOutMutation } from "@/features/apis/authApi";
 import { getUser, removeUser } from "@/features/slices/userSlice";
 import useToast from "@/hooks/useToast";
+import { MdOutlineMenu } from "react-icons/md";
 
 export interface NavItem {
   name: string;
   href: string;
 }
 
-export function Nav() {
+interface NavProps {
+  open: boolean;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+export function Nav({ open, setOpen }: NavProps) {
   const [signOut, { isLoading }] = useSignOutMutation();
   const user = useSelector(getUser);
   const router = useRouter();
@@ -31,6 +37,7 @@ export function Nav() {
           title: "GoodBye",
         },
       ]);
+
       router.push("/");
     }
 
@@ -45,11 +52,16 @@ export function Nav() {
   };
 
   return (
-    <nav className="h-16">
-      <div className="h-full container mx-auto flex items-center justify-between border-b ">
-        <Link href="/" className="font-bold tracking-wide text-lg">
-          ChoaibMouhrach
-        </Link>
+    <nav className="h-16 px-4 lg:px-0">
+      <div className="h-full container mx-auto flex items-center justify-between border-b">
+        <div className="flex items-center gap-2" >
+          <Link href="/" className="font-bold tracking-wide text-lg">
+            ChoaibMouhrach
+          </Link>
+          <Button onClick={() => setOpen(!open)} variant="text" className="lg:hidden" >
+            <MdOutlineMenu className="text-lg" />
+          </Button>
+        </div>
         <div className="flex items-center gap-4 font-semibold text-gray-600">
           {
             !user && (<Button href="/sign-in" >Sign In</Button>)
@@ -57,7 +69,7 @@ export function Nav() {
           {user && (
             <DropDown >
               <DropDownTrigger>
-                <div className="hover:bg-gray-100 rounded-full border border-stone-300 w-12 h-12 flex items-center justify-center font-semibold" >
+                <div className="hover:bg-gray-100 rounded-full border border-stone-300 w-10 h-10 text-xs uppercase flex items-center justify-center font-semibold" >
                   {user?.username.slice(0, 2)}
                 </div>
               </DropDownTrigger>
