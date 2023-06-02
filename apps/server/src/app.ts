@@ -4,6 +4,7 @@ import express from "express";
 import cors from "cors";
 import { errorHandler } from "./Middlewares";
 import router from "./Routes";
+import config from "./lib/config";
 
 /**
  * Creates a new express instance
@@ -12,7 +13,12 @@ const makeApp = () => {
   const app = express();
 
   // middlewares
-  app.use(cors());
+  app.use(
+    cors({
+      credentials: true,
+      origin: [config.CLIENT_URL],
+    })
+  );
   app.use(express.json());
 
   // assets

@@ -14,6 +14,7 @@ import { NAV_ITEMS } from "@/config/constants";
 import { useSignOutMutation } from "@/features/apis/authApi";
 import { getUser, removeUser } from "@/features/slices/userSlice";
 import useToast from "@/hooks/useToast";
+import Logo from "./Logo";
 
 export interface NavItem {
   name: string;
@@ -61,9 +62,7 @@ export function Nav({ open, setOpen }: NavProps) {
     <nav className="h-16 px-4 lg:px-0">
       <div className="h-full container mx-auto flex items-center justify-between border-b">
         <div className="flex items-center gap-2">
-          <Link href="/" className="font-bold tracking-wide text-lg">
-            PACY2
-          </Link>
+          <Logo />
           <Button
             onClick={() => setOpen && setOpen(!open)}
             variant="text"
@@ -84,21 +83,29 @@ export function Nav({ open, setOpen }: NavProps) {
               <DropDownItemsWrapper>
                 {NAV_ITEMS.map(({ href, name }) => (
                   <DropDownItem key={href}>
-                    <Link className="block" href={href}>
+                    <Button
+                      variant="text"
+                      className="!justify-start block"
+                      href={href}
+                    >
                       {name}
-                    </Link>
+                    </Button>
                   </DropDownItem>
                 ))}
 
                 <DropDownItem>
-                  <Link className="block" href="/dashboard">
+                  <Button
+                    variant="text"
+                    className="justify-start block"
+                    href="/dashboard"
+                  >
                     Dashboard
-                  </Link>
+                  </Button>
                 </DropDownItem>
 
                 <DropDownItem className="!p-0">
                   <Button
-                    className="w-full"
+                    className="!justify-start w-full"
                     isLoading={isLoading}
                     onClick={handleSignOut}
                   >
