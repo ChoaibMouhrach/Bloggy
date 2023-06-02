@@ -7,19 +7,21 @@ import Form from "@/Components/Form";
 import FormBody from "@/Components/Form/FormBody";
 import FormFooter from "@/Components/Form/FormFooter";
 import PageTitle from "@/Components/PageTitle";
-import { useStoreTagMutation } from "@/features/apis/tagApi";
 import { handleResponseError } from "@/helpers";
-import useToast from "@/hooks/useToast";
 import { IStoreTag } from "@/index";
 import { withAuth } from "@/middlewares";
+import useStoreTag from "@/features/Tag/useStoreTag";
 
 const schema = z.object({
   name: z.string().min(1).max(60),
 });
 
 const Create = withAuth(() => {
-  const { t } = useToast();
-  const [storeTag, { isLoading }] = useStoreTagMutation();
+  const {
+    storeTag,
+    meta: { isLoading },
+  } = useStoreTag();
+
   const {
     register,
     setError,
@@ -32,16 +34,6 @@ const Create = withAuth(() => {
 
   const onSubmit = async (data: IStoreTag) => {
     const response = await storeTag(data);
-
-    if ("data" in response) {
-      t([
-        {
-          state: "success",
-          title: "Tag created successfully",
-        },
-      ]);
-    }
-
     handleResponseError(setError, response);
   };
 

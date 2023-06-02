@@ -7,19 +7,22 @@ import Form from "@/Components/Form";
 import FormBody from "@/Components/Form/FormBody";
 import FormFooter from "@/Components/Form/FormFooter";
 import PageTitle from "@/Components/PageTitle";
-import { useStoreRoleMutation } from "@/features/apis/roleApi";
 import { handleResponseError } from "@/helpers";
-import useToast from "@/hooks/useToast";
 import { IStoreRole } from "@/index";
 import { withAuth } from "@/middlewares";
+import useStoreRole from "@/features/Role/useStoreRole";
 
 const schema = z.object({
   name: z.string().min(1).max(60),
 });
 
 const Create = withAuth(() => {
-  const { t } = useToast();
-  const [storeRole, { isLoading }] = useStoreRoleMutation();
+  const {
+    storeRole,
+    meta: { isLoading },
+  } = useStoreRole();
+
+  // form
   const {
     register,
     setError,
@@ -32,15 +35,6 @@ const Create = withAuth(() => {
 
   const onSubmit = async (data: IStoreRole) => {
     const response = await storeRole(data);
-
-    if ("data" in response) {
-      t([
-        {
-          state: "success",
-          title: "Role created successfully",
-        },
-      ]);
-    }
 
     handleResponseError(setError, response);
   };

@@ -1,5 +1,5 @@
 import { IPaginate, IStoreUser, IUpdateUser, IUser } from "@/index";
-import api from "./api";
+import api from "@/store/api";
 
 const userApi = api.injectEndpoints({
   endpoints: (build) => ({
@@ -39,7 +39,7 @@ const userApi = api.injectEndpoints({
         },
       }),
     }),
-    updateUser: build.mutation<IUser, { id: number; data: IUpdateUser }>({
+    updateUser: build.mutation<IUser, { id : number, data : IUpdateUser }>({
       query: ({ id, data }) => ({
         url: `/users/${id}`,
         method: "PATCH",

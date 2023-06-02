@@ -1,5 +1,4 @@
-import { getUser } from "@/features/slices/userSlice";
-import { useSelector } from "react-redux";
+import useGetUser from "@/features/User/useGetUser";
 import { Button } from "ui";
 
 interface NavigationContent {
@@ -7,7 +6,7 @@ interface NavigationContent {
 }
 
 export default function NavigationContent({ forceOpen }: NavigationContent) {
-  const user = useSelector(getUser);
+  const user = useGetUser();
 
   return (
     <div

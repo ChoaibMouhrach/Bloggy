@@ -6,7 +6,7 @@ import {
   IUpdateUser,
   IUser,
 } from "@/index";
-import api from "./api";
+import api from "@/store/api";
 
 interface IUserResponse {
   user: IUser;

@@ -2,14 +2,11 @@ import { useRouter } from "next/router";
 import React, { ChangeEvent, useState } from "react";
 import { Column, Table } from "ui";
 import PageTitle from "@/Components/PageTitle";
-import {
-  useDeleteUserMutation,
-  useGetUsersQuery,
-} from "@/features/apis/userApi";
+import { useGetUsersQuery } from "@/features/User/user.api";
 import { debounce } from "@/helpers";
-import useToast from "@/hooks/useToast";
 import { IRole, IUser } from "@/index";
 import { withAuth } from "@/middlewares";
+import useDestroyUser from "@/features/User/useDestroyUser";
 
 const columns: Column<IUser>[] = [
   {
@@ -50,7 +47,7 @@ const columns: Column<IUser>[] = [
 ];
 
 const Index = withAuth(() => {
-  const { t } = useToast();
+  const { destroyUser } = useDestroyUser();
   const router = useRouter();
 
   // state
@@ -60,7 +57,6 @@ const Index = withAuth(() => {
     pageSize: 8,
   });
 
-  const [deleteUser] = useDeleteUserMutation();
   const {
     data: users,
     isLoading,
@@ -80,27 +76,8 @@ const Index = withAuth(() => {
   };
 
   const handleDelete = async (id: number) => {
-    const response = await deleteUser(id);
-
-    if ("data" in response) {
-      refetch();
-      t([
-        {
-          state: "success",
-          title: "User deleted successfully",
-        },
-      ]);
-      return;
-    }
-
-    if ("error" in response) {
-      t([
-        {
-          state: "danger",
-          title: "We clound't delete this user",
-        },
-      ]);
-    }
+    const response = await destroyUser(id);
+    if ("data" in response) refetch();
   };
 
   const handleEdit = (id: number) => {

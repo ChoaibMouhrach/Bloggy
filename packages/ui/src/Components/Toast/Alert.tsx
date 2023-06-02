@@ -19,6 +19,7 @@ const alertCVA = cva(["tracking-wide", "flex", "rounded-md", "py-3", "px-4"], {
 });
 
 export interface IAlert {
+  id: number;
   state: keyof typeof state;
   title: string;
   description?: string;

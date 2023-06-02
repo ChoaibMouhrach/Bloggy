@@ -1,5 +1,5 @@
 /* eslint-disable no-param-reassign */
-import React, { useEffect } from "react";
+import React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
@@ -9,15 +9,14 @@ import Form from "@/Components/Form";
 import FormBody from "@/Components/Form/FormBody";
 import FormFooter from "@/Components/Form/FormFooter";
 import PageTitle from "@/Components/PageTitle";
-import { useGetRolesQuery } from "@/features/apis/roleApi";
+import { useGetRolesQuery } from "@/features/Role/role.api";
 import { handleResponseError } from "@/helpers";
-import useToast from "@/hooks/useToast";
 import { IUpdateUser } from "@/index";
 import { withAuth } from "@/middlewares";
 import {
   useGetUserQuery,
-  useUpdateUserMutation,
-} from "@/features/apis/userApi";
+} from "@/features/User/user.api";
+import useUpdateUser from "@/features/User/useUpdateUser";
 
 const schema = z
   .object({
@@ -58,7 +57,7 @@ const schema = z
   .refine(
     (data) => {
       return Boolean(
-        Object.entries(data).filter(([key, value]) => value !== undefined)
+        Object.entries(data).filter(([, value]) => value !== undefined)
           .length
       );
     },
@@ -75,8 +74,13 @@ const Edit = withAuth(() => {
   const { data: user, isLoading: isUserLoading } = useGetUserQuery(id);
   const { data: roles, isLoading: isRolesLoading } = useGetRolesQuery({});
 
-  const { t } = useToast();
-  const [updateUser, { isLoading }] = useUpdateUserMutation();
+  const {
+    updateUser,
+    meta: {
+      isLoading
+    }
+  } = useUpdateUser();
+
   const {
     register,
     setError,
@@ -97,14 +101,6 @@ const Edit = withAuth(() => {
 
     const response = await updateUser({ id, data });
 
-    if ("data" in response) {
-      t([
-        {
-          state: "success",
-          title: "User updated successfully",
-        },
-      ]);
-    }
     handleResponseError(setError, response);
   };
 

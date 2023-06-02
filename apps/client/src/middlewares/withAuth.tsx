@@ -1,15 +1,16 @@
 import { useRouter } from "next/router";
 import React, { ComponentType, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { Loading } from "ui";
-import { getUser, setUser } from "@/features/slices/userSlice";
-import { useGetProfileQuery } from "@/features/apis/authApi";
+import { setUser } from "@/features/User/user.slice";
+import { useGetProfileQuery } from "@/features/Auth/auth.api";
 import { DashboardLayout } from "@/Components/Layouts/Dashboard";
+import useGetUser from "@/features/User/useGetUser";
 
 export const withAuth = (CB: ComponentType) => {
   function Component() {
     const router = useRouter();
-    const userState = useSelector(getUser);
+    const userState = useGetUser();
     const dispatch = useDispatch();
 
     const { data: user, isError, isSuccess } = useGetProfileQuery();

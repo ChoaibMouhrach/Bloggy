@@ -8,11 +8,10 @@ import Form from "@/Components/Form";
 import FormBody from "@/Components/Form/FormBody";
 import FormFooter from "@/Components/Form/FormFooter";
 import PageTitle from "@/Components/PageTitle";
-import { useUpdateTagMutation } from "@/features/apis/tagApi";
 import { handleResponseError } from "@/helpers";
-import useToast from "@/hooks/useToast";
-import { IStoreTag } from "@/index";
+import { IUpdateTag } from "@/index";
 import { withAuth } from "@/middlewares";
+import useUpdateTag from "@/features/Tag/useUpdateTag";
 
 const schema = z.object({
   name: z.string().min(1).max(60),
@@ -20,8 +19,12 @@ const schema = z.object({
 
 const Edit = withAuth(() => {
   const router = useRouter();
-  const { t } = useToast();
-  const [updateTag, { isLoading }] = useUpdateTagMutation();
+  const {
+    updateTag,
+    meta: {
+      isLoading
+    }
+  } = useUpdateTag();
 
   const id = Number(router.query.id);
 
@@ -30,22 +33,13 @@ const Edit = withAuth(() => {
     setError,
     handleSubmit,
     formState: { errors },
-  } = useForm<IStoreTag>({
+  } = useForm<IUpdateTag>({
     mode: "onChange",
     resolver: zodResolver(schema),
   });
 
-  const onSubmit = async (data: IStoreTag) => {
+  const onSubmit = async (data: IUpdateTag) => {
     const response = await updateTag({ id, data });
-
-    if ("data" in response) {
-      t([
-        {
-          state: "success",
-          title: "Tag updated successfully",
-        },
-      ]);
-    }
 
     handleResponseError(setError, response);
   };

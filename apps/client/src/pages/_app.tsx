@@ -4,8 +4,8 @@ import type { AppProps } from "next/app";
 import { Provider, useSelector } from "react-redux";
 import { Toast } from "ui";
 import localFont from "next/font/local";
-import store from "@/features/store";
-import { getAlerts } from "@/features/slices/toastSlice";
+import store from "@/store/store";
+import { getAlerts } from "@/features/Toast/toast.slice";
 
 const myFont = localFont({ src: "../../public/Inter.ttf" });
 

@@ -1,5 +1,5 @@
 import { IPaginate, IPost, IStorePost, IUpdatePost } from "@/index";
-import api from "./api";
+import api from "@/store/api";
 
 const postApi = api.injectEndpoints({
   endpoints: (build) => ({

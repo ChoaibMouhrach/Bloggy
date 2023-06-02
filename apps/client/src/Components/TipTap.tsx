@@ -4,14 +4,8 @@ import React from "react";
 import Underline from "@tiptap/extension-underline";
 import BulletList from "@tiptap/extension-bullet-list";
 import OrderedList from "@tiptap/extension-ordered-list";
-import {
-  useEditor,
-  EditorContent,
-  generateHTML,
-  generateJSON,
-  generateText,
-  mergeAttributes,
-} from "@tiptap/react";
+import { useEditor, EditorContent, mergeAttributes } from "@tiptap/react";
+// do not remove
 import StarterKit from "@tiptap/starter-kit";
 import {
   MdOutlineFormatBold,

@@ -2,14 +2,11 @@ import { useRouter } from "next/router";
 import React, { ChangeEvent, useState } from "react";
 import { Column, Table } from "ui";
 import PageTitle from "@/Components/PageTitle";
-import {
-  useDeletePostMutation,
-  useGetPostsQuery,
-} from "@/features/apis/postApit";
+import { useGetPostsQuery } from "@/features/Post/post.api";
 import { debounce } from "@/helpers";
-import useToast from "@/hooks/useToast";
 import { IPost } from "@/index";
 import { withAuth } from "@/middlewares";
+import useDestroyPost from "@/features/Post/useDestroyPost";
 
 const columns: Column<IPost>[] = [
   {
@@ -30,8 +27,7 @@ const columns: Column<IPost>[] = [
 const Posts = withAuth(() => {
   // hooks
   const router = useRouter();
-  const [deletePost] = useDeletePostMutation();
-  const { t } = useToast();
+  const { destroyPost } = useDestroyPost();
 
   // state
   const [search, setSearch] = useState("");
@@ -40,7 +36,6 @@ const Posts = withAuth(() => {
     pageSize: 8,
   });
 
-  // RTKQ
   const {
     data: posts,
     isLoading,
@@ -57,27 +52,8 @@ const Posts = withAuth(() => {
   };
 
   const handleDelete = async (id: number) => {
-    const response = await deletePost(id);
-
-    if ("data" in response) {
-      await refetch();
-      t([
-        {
-          state: "success",
-          title: "Post deleted successfully",
-        },
-      ]);
-      return;
-    }
-
-    if ("error" in response) {
-      t([
-        {
-          state: "danger",
-          title: "Deleting post failed",
-        },
-      ]);
-    }
+    const response = await destroyPost(id);
+    if ("data" in response) refetch();
   };
 
   return (

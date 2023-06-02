@@ -1,5 +1,5 @@
 import { IPaginate, IRole, IStoreRole, IUpdateRole } from "@/index";
-import api from "./api";
+import api from "@/store/api";
 
 const roleApi = api.injectEndpoints({
   endpoints: (build) => ({
@@ -27,8 +27,8 @@ const roleApi = api.injectEndpoints({
         },
       }),
     }),
-    updateRole: build.mutation<void, { id: number; data: IUpdateRole }>({
-      query: ({ data, id }) => ({
+    updateRole: build.mutation<void, { id: number, data: IUpdateRole }>({
+      query: ({ id, data }) => ({
         url: `/roles/${id}`,
         method: "PATCH",
         body: data,

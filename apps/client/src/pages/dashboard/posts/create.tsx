@@ -11,9 +11,8 @@ import FormFooter from "@/Components/Form/FormFooter";
 import TipTap from "@/Components/TipTap";
 import { IStorePost } from "@/index";
 import TagInput from "@/Components/TagsInput";
-import { useStorePostMutation } from "@/features/apis/postApit";
 import { handleResponseError } from "@/helpers";
-import useToast from "@/hooks/useToast";
+import useStorePost from "@/features/Post/useStorePost";
 
 const schema = z.object({
   title: z.string().min(1),
@@ -24,8 +23,13 @@ const schema = z.object({
 });
 
 const Create = withAuth(() => {
-  const [storePost, { isLoading }] = useStorePostMutation();
-  const { t } = useToast();
+
+  const {
+    storePost,
+    meta: {
+      isLoading
+    }
+  } = useStorePost();
 
   const {
     register,
@@ -40,17 +44,6 @@ const Create = withAuth(() => {
 
   const onSubmit = async (data: IStorePost) => {
     const response = await storePost(data);
-
-    if ("data" in response) {
-      t([
-        {
-          state: "success",
-          title: "Post addedd successfully",
-        },
-      ]);
-      return;
-    }
-
     handleResponseError(setError, response);
   };
 

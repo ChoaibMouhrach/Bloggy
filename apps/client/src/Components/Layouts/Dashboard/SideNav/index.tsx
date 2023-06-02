@@ -10,9 +10,8 @@ interface SideNavProps {
 function SideNav({ open, sideNavElements }: SideNavProps) {
   return (
     <aside
-      className={`h-[calc(100vh_-_96px)] bg-white px-4 lg:px-0 fixed w-screen lg:static lg:w-auto lg:block left-0 w-84 ${
-        open ? "" : "hidden"
-      }`}
+      className={`h-[calc(100vh_-_96px)] bg-white px-4 lg:px-0 fixed w-screen lg:static lg:w-auto lg:block left-0 w-84 ${open ? "" : "hidden"
+        }`}
     >
       <ul className="flex flex-col gap-4">
         {sideNavElements.map((element) =>

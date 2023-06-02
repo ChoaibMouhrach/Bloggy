@@ -7,8 +7,8 @@ import {
   MdOutlinePerson,
   MdOutlineTag,
 } from "react-icons/md";
-import { IElement } from "@/Components/Layouts/Dashboard/SideNav";
 import { NavItem } from "@/Components/Nav";
+import { IElement } from "@/Components/Layouts/Dashboard/SideNav/NavLink";
 
 export const SIDE_NAV_ELEMENTS: IElement[] = [
   {

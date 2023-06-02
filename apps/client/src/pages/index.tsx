@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
-import { useGetPostsQuery } from "@/features/apis/postApit";
-import { useGetTagsQuery } from "@/features/apis/tagApi";
+import { useGetPostsQuery } from "@/features/Post/post.api";
+import { useGetTagsQuery } from "@/features/Tag/tag.api";
 import PublicLayout from "@/Components/Layouts/PublicLayout";
 
 function Tag({ name }: { name: string }) {

@@ -6,11 +6,11 @@ import { z } from "zod";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useForgotPasswordMutation } from "@/features/apis/authApi";
+import { useForgotPasswordMutation } from "@/features/Auth/auth.api";
 import { IForgotPassword } from "..";
 import { handleResponseError } from "@/helpers";
 import { withGuest } from "@/middlewares";
-import useToast from "@/hooks/useToast";
+import useToast from "@/features/Toast/useToast";
 import { AuthLayout } from "@/Components/Layouts/AuthLayout";
 
 const schema = z.object({

@@ -1,7 +1,6 @@
 import React from "react";
-import Link from "next/link";
 import { useRouter } from "next/router";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import {
   Button,
   DropDown,
@@ -11,10 +10,11 @@ import {
 } from "ui";
 import { MdOutlineMenu } from "react-icons/md";
 import { NAV_ITEMS } from "@/config/constants";
-import { useSignOutMutation } from "@/features/apis/authApi";
-import { getUser, removeUser } from "@/features/slices/userSlice";
-import useToast from "@/hooks/useToast";
+import { useSignOutMutation } from "@/features/Auth/auth.api";
+import { removeUser } from "@/features/User/user.slice";
+import useToast from "@/features/Toast/useToast";
 import Logo from "./Logo";
+import useGetUser from "@/features/User/useGetUser";
 
 export interface NavItem {
   name: string;
@@ -28,7 +28,7 @@ interface NavProps {
 
 export function Nav({ open, setOpen }: NavProps) {
   const [signOut, { isLoading }] = useSignOutMutation();
-  const user = useSelector(getUser);
+  const user = useGetUser();
   const router = useRouter();
   const { t } = useToast();
   const dispatch = useDispatch();

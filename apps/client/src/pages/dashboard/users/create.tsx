@@ -1,6 +1,5 @@
 import React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import { Button, Input, Select, TextArea } from "ui";
 import { z } from "zod";
@@ -8,12 +7,11 @@ import Form from "@/Components/Form";
 import FormBody from "@/Components/Form/FormBody";
 import FormFooter from "@/Components/Form/FormFooter";
 import PageTitle from "@/Components/PageTitle";
-import { useGetRolesQuery } from "@/features/apis/roleApi";
-import { useStoreUserMutation } from "@/features/apis/userApi";
+import { useGetRolesQuery } from "@/features/Role/role.api";
 import { handleResponseError } from "@/helpers";
-import useToast from "@/hooks/useToast";
 import { IStoreUser } from "@/index";
 import { withAuth } from "@/middlewares";
+import useStoreUser from "@/features/User/useStoreUser";
 
 const schema = z.object({
   username: z.string().min(1).max(60),
@@ -39,11 +37,15 @@ const schema = z.object({
 });
 
 const Create = withAuth(() => {
-  const router = useRouter();
   const { data: roles, isLoading: isRolesLoading } = useGetRolesQuery({});
 
-  const { t } = useToast();
-  const [storeUser, { isLoading }] = useStoreUserMutation();
+  const {
+    storeUser,
+    meta: {
+      isLoading
+    }
+  } = useStoreUser();
+
   const {
     register,
     setError,
@@ -57,15 +59,7 @@ const Create = withAuth(() => {
 
   const onSubmit = async (data: IStoreUser) => {
     const response = await storeUser(data);
-    if ("data" in response) {
-      t([
-        {
-          state: "success",
-          title: "User created successfully",
-        },
-      ]);
-      router.push("/dashboard/users");
-    }
+
     handleResponseError(setError, response);
   };
 

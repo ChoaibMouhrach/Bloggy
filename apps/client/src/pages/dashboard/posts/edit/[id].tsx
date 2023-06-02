@@ -15,10 +15,9 @@ import { IUpdatePost } from "@/index";
 import TagInput from "@/Components/TagsInput";
 import {
   useGetPostQuery,
-  useUpdatePostMutation,
-} from "@/features/apis/postApit";
+} from "@/features/Post/post.api";
 import { handleResponseError } from "@/helpers";
-import useToast from "@/hooks/useToast";
+import useUpdatePost from "@/features/Post/useUpdatePost";
 
 const schema = z
   .object({
@@ -36,11 +35,9 @@ const schema = z
   });
 
 const Edit = withAuth(() => {
-  const [updatePost, { isLoading }] = useUpdatePostMutation();
-  const { t } = useToast();
+  const { updatePost, meta: { isLoading } } = useUpdatePost();
 
   const router = useRouter();
-
   const id = Number(router.query.id);
 
   const {
@@ -74,16 +71,6 @@ const Edit = withAuth(() => {
     }
 
     const response = await updatePost({ id, data });
-
-    if ("data" in response) {
-      t([
-        {
-          state: "success",
-          title: "Post addedd successfully",
-        },
-      ]);
-      return;
-    }
 
     handleResponseError(setError, response);
   };

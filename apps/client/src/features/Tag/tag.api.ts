@@ -1,5 +1,5 @@
 import { IPaginate, IStoreTag, ITag, IUpdateTag } from "@/index";
-import api from "./api";
+import api from "@/store/api";
 
 const tagApi = api.injectEndpoints({
   endpoints: (build) => ({
@@ -25,7 +25,7 @@ const tagApi = api.injectEndpoints({
         },
       }),
     }),
-    updateTag: build.mutation<ITag, { id: number; data: IUpdateTag }>({
+    updateTag: build.mutation<ITag, { id : number, data : IUpdateTag }>({
       query: ({ id, data }) => ({
         url: `/tags/${id}`,
         method: "PATCH",

@@ -8,9 +8,9 @@ import { Button, Input } from "ui";
 import { z } from "zod";
 import { withGuest } from "@/middlewares";
 import { IResetPassword } from "@/index";
-import useToast from "@/hooks/useToast";
+import useToast from "@/features/Toast/useToast";
 import { handleResponseError } from "@/helpers";
-import { useResetPasswordMutation } from "@/features/apis/authApi";
+import { useResetPasswordMutation } from "@/features/Auth/auth.api";
 import { AuthLayout } from "@/Components/Layouts/AuthLayout";
 
 const schema = z

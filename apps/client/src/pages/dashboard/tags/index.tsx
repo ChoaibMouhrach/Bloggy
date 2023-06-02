@@ -2,11 +2,11 @@ import { useRouter } from "next/router";
 import React, { ChangeEvent, useState } from "react";
 import { Column, Table } from "ui";
 import PageTitle from "@/Components/PageTitle";
-import { useDeleteTagMutation, useGetTagsQuery } from "@/features/apis/tagApi";
+import { useGetTagsQuery } from "@/features/Tag/tag.api";
 import { debounce } from "@/helpers";
-import useToast from "@/hooks/useToast";
 import { ITag } from "@/index";
 import { withAuth } from "@/middlewares";
+import useDestroyTag from "@/features/Tag/useDestroyTag";
 
 const columns: Column<ITag>[] = [
   {
@@ -24,7 +24,6 @@ const columns: Column<ITag>[] = [
 ];
 
 const Index = withAuth(() => {
-  const { t } = useToast();
   const router = useRouter();
 
   // state
@@ -34,7 +33,7 @@ const Index = withAuth(() => {
     pageSize: 8,
   });
 
-  const [deleteTag] = useDeleteTagMutation();
+  const { destroyTag } = useDestroyTag();
   const {
     data: tags,
     refetch,
@@ -54,26 +53,10 @@ const Index = withAuth(() => {
   };
 
   const handleDelete = async (id: number) => {
-    const response = await deleteTag(id);
+    const response = await destroyTag(id);
 
     if ("data" in response) {
       await refetch();
-      t([
-        {
-          state: "success",
-          title: "Tag deleted successfully",
-        },
-      ]);
-      return;
-    }
-
-    if ("error" in response) {
-      t([
-        {
-          state: "danger",
-          title: "We clound't delete your tag",
-        },
-      ]);
     }
   };
 

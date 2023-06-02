@@ -2,14 +2,11 @@ import { useRouter } from "next/router";
 import React, { ChangeEvent, useState } from "react";
 import { Column, Table } from "ui";
 import PageTitle from "@/Components/PageTitle";
-import {
-  useDeleteRoleMutation,
-  useGetRolesQuery,
-} from "@/features/apis/roleApi";
+import { useGetRolesQuery } from "@/features/Role/role.api";
 import { debounce } from "@/helpers";
-import useToast from "@/hooks/useToast";
 import { IRole } from "@/index";
 import { withAuth } from "@/middlewares";
+import useDestroyRole from "@/features/Role/useDestroyRole";
 
 const columns: Column<IRole>[] = [
   {
@@ -27,7 +24,6 @@ const columns: Column<IRole>[] = [
 ];
 
 const Index = withAuth(() => {
-  const { t } = useToast();
   const router = useRouter();
 
   // state
@@ -37,7 +33,8 @@ const Index = withAuth(() => {
     pageSize: 8,
   });
 
-  const [deleteRole] = useDeleteRoleMutation();
+  const { destroyRole } = useDestroyRole();
+
   const {
     data: roles,
     refetch,
@@ -57,26 +54,9 @@ const Index = withAuth(() => {
   };
 
   const handleDelete = async (id: number) => {
-    const response = await deleteRole(id);
-
+    const response = await destroyRole(id);
     if ("data" in response) {
       refetch();
-      t([
-        {
-          state: "success",
-          title: "Role deleted successfully",
-        },
-      ]);
-      return;
-    }
-
-    if ("error" in response) {
-      t([
-        {
-          state: "danger",
-          title: "We clound't delete this role",
-        },
-      ]);
     }
   };
 
