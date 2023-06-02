@@ -9,7 +9,7 @@ function Tag({ name }: { name: string }) {
 }
 
 export default function Home() {
-  const { data: posts, isLoading } = useGetPostsQuery({});
+  const { data: posts } = useGetPostsQuery({});
   const { data: tags, isSuccess: istagsSuccess } = useGetTagsQuery({});
 
   return (
@@ -19,7 +19,7 @@ export default function Home() {
           <div>
             <h3 className="font-semibold">Popular Tags</h3>
             <div className="flex flex-wrap gap-2">
-              {istagsSuccess && tags.data.map((tag) => <Tag name={tag.name} />)}
+              {istagsSuccess && tags.data.map((tag) => <Tag key={tag.id} name={tag.name} />)}
             </div>
           </div>
         </div>
@@ -28,13 +28,14 @@ export default function Home() {
           <div className="lg:grid grid-cols-2 gap-4">
             {posts?.data.map((post) => (
               <Link
+                key={post.id}
                 href={`/posts/${post.id}`}
                 className="border border-stone-300 rounded-md p-3 flex flex-col gap-4"
               >
                 <div className="text-xl">{post.title}</div>
                 <div className="flex flex-wrap gap-4">
                   {post?.tags.map((tag) => (
-                    <Tag name={tag.name} />
+                    <Tag key={tag.id} name={tag.name} />
                   ))}
                 </div>
               </Link>

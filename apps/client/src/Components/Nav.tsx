@@ -59,8 +59,8 @@ export function Nav({ open, setOpen }: NavProps) {
   };
 
   return (
-    <nav className="h-16 px-4 lg:px-0">
-      <div className="h-full container mx-auto flex items-center justify-between border-b">
+    <nav className="h-16 ">
+      <div className="h-full px-4 lg:px-0 container mx-auto flex items-center justify-between border-b">
         <div className="flex items-center gap-2">
           <Logo />
           <Button

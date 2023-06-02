@@ -106,7 +106,7 @@ export function Table<T extends {}>({
     <div className="flex flex-col gap-4">
       <Input placeholder="Search..." onChange={handleSearch} />
       <div className="w-full overflow-x-scroll">
-        <div className="border rounded-md w-fit lg:w-full">
+        <div className={`border rounded-md ${data.length ? "w-fit" : ""} lg:w-full`}>
           <table className="w-full table-auto">
             <thead>
               {table.getHeaderGroups().map((headerGroup) => (

@@ -25,7 +25,7 @@ function SideNavDropDown({ element }: { element: IElement }) {
       {open && (
         <ul className="flex flex-col gap-4 p-4">
           {element.elements?.map((subElement) => (
-            <li key={subElement.href}>
+            <li key={subElement.href ?? Math.random()}>
               <Link
                 href={subElement.href ?? ""}
                 className={`flex items-center gap-4 p-4 rounded-md hover:bg-stone-700 font-semibold tracking-wide ${

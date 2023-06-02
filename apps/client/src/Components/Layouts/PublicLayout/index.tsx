@@ -12,7 +12,7 @@ function PublicLayout({ children }: PublicProps) {
     <main className="h-screen flex flex-col gap-4">
       <Nav open={open} setOpen={setOpen} />
       <section className="container px-4 lg:px-0 mx-auto h-[calc(100vh_-_80px)] overflow-y-scroll">
-        {open ? <NavigationContent forceOpen={true} /> : children}
+        {open ? <NavigationContent forceOpen /> : children}
       </section>
     </main>
   );

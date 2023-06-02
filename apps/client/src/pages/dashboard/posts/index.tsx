@@ -43,6 +43,8 @@ const Posts = withAuth(() => {
   } = useGetPostsQuery({
     page: pagination.pageIndex + 1,
     search,
+  }, {
+    refetchOnMountOrArgChange: true
   });
 
   // handlers
