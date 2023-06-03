@@ -21,13 +21,11 @@ export default function Home() {
   return (
     <PublicLayout>
       <section className="h-[calc(100vh_-_80px)] grid grid-cols-4">
-        <div className="col-start-1 col-end-2 hidden lg:block">
-          <div>
-            <h3 className="font-semibold">Popular Tags</h3>
-            <div className="flex flex-wrap gap-2">
-              {istagsSuccess &&
-                tags.data.map((tag) => <Tag key={tag.id} name={tag.name} />)}
-            </div>
+        <div className="col-start-1 col-end-2 hidden lg:flex flex-col gap-4">
+          <h3 className="font-semibold">Useful Tags</h3>
+          <div className="flex flex-wrap gap-2">
+            {istagsSuccess &&
+              tags.data.map((tag) => <Tag key={tag.id} name={tag.name} />)}
           </div>
         </div>
         <div className="col-start-1 lg:col-start-2 col-end-5 flex flex-col gap-4">

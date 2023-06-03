@@ -12,9 +12,20 @@ const index = async (request: Request, response: Response) => {
   const take = 8;
   const skip = 8 * (page - 1);
 
+  // trash query
+  const trash =
+    typeof request.query.trash === "string"
+      ? request.query.trash === "true"
+      : undefined;
+
   const roles = await database.role.findMany({
     where: {
       name: { contains: search },
+      deletedAt: trash
+        ? {
+            not: null,
+          }
+        : null,
     },
     skip,
     take,

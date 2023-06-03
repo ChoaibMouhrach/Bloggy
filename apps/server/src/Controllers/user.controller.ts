@@ -13,6 +13,12 @@ const index = async (request: Request, response: Response) => {
   // page query
   const page = Number(request.query.page) ? Number(request.query.page) : 1;
 
+  // trash query
+  const trash =
+    typeof request.query.trash === "string"
+      ? request.query.trash === "true"
+      : undefined;
+
   // pagination related
   const take = 8;
   const skip = 8 * (page - 1);
@@ -32,6 +38,11 @@ const index = async (request: Request, response: Response) => {
           },
         },
       ],
+      deletedAt: trash
+        ? {
+            not: null,
+          }
+        : null,
     },
     include: {
       Role: true,
