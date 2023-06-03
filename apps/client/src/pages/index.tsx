@@ -9,12 +9,18 @@ function Tag({ name }: { name: string }) {
 }
 
 export default function Home() {
-  const { data: posts } = useGetPostsQuery({});
-  const { data: tags, isSuccess: istagsSuccess } = useGetTagsQuery({});
+  const { data: posts } = useGetPostsQuery(
+    {},
+    { refetchOnMountOrArgChange: true }
+  );
+  const { data: tags, isSuccess: istagsSuccess } = useGetTagsQuery(
+    {},
+    { refetchOnMountOrArgChange: true }
+  );
 
   return (
     <PublicLayout>
-      <section className="h-[calc(100vh_-_80px)] grid grid-cols-4 px-4 lg:px-0">
+      <section className="h-[calc(100vh_-_80px)] grid grid-cols-4">
         <div className="col-start-1 col-end-2 hidden lg:block">
           <div>
             <h3 className="font-semibold">Popular Tags</h3>
