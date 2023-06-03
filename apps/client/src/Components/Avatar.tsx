@@ -20,20 +20,22 @@ export default function Avatar({ user }: AvatarProps) {
         </div>
       </DropDownTrigger>
       <DropDownItemsWrapper>
+        {user && user.Role?.id === 1 ? (
+          <DropDownItem>
+            <Button
+              className="!justify-start w-full"
+              variant="text"
+              href="/dashboard"
+            >
+              Dashboard
+            </Button>
+          </DropDownItem>
+        ) : null}
         <DropDownItem>
           <Button
             className="!justify-start w-full"
             variant="text"
-            href="/dashboard"
-          >
-            Dashboard
-          </Button>
-        </DropDownItem>
-        <DropDownItem>
-          <Button
-            className="!justify-start w-full"
-            variant="text"
-            href="/profile"
+            href="/dashboard/profile"
           >
             Profile
           </Button>

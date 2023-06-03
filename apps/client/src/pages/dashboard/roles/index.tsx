@@ -7,6 +7,7 @@ import { debounce } from "@/helpers";
 import { IRole } from "@/index";
 import { withAuth } from "@/middlewares";
 import useDestroyRole from "@/features/Role/useDestroyRole";
+import { ROLES } from "@/config/constants";
 
 const columns: Column<IRole>[] = [
   {
@@ -83,6 +84,6 @@ const Index = withAuth(() => {
       />
     </>
   );
-});
+}, [ROLES.ADMIN]);
 
 export default Index;

@@ -7,6 +7,7 @@ import { debounce } from "@/helpers";
 import { ITag } from "@/index";
 import { withAuth } from "@/middlewares";
 import useDestroyTag from "@/features/Tag/useDestroyTag";
+import { ROLES } from "@/config/constants";
 
 const columns: Column<ITag>[] = [
   {
@@ -83,6 +84,6 @@ const Index = withAuth(() => {
       />
     </>
   );
-});
+}, [ROLES.ADMIN]);
 
 export default Index;

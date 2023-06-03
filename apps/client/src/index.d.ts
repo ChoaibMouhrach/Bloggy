@@ -9,9 +9,9 @@ export type ErrorTypes =
 type ResponseErrorMessage<TPath> =
   | string
   | {
-    path: [Path<T>];
-    message: string;
-  }[];
+      path: [Path<T>];
+      message: string;
+    }[];
 export interface IResponseError<TPath> {
   statusCode: number;
   message: ResponseErrorMessage<TPath>;
@@ -55,7 +55,7 @@ export interface IUpdateRole {
 }
 
 export interface IRole extends ITimeStamps {
-  id: string;
+  id: number;
   name: string;
 }
 
@@ -67,7 +67,7 @@ export interface IUser extends ITimeStamps {
   email: string;
   roleId: number;
   verfiedAt: string | null;
-  Role?: Role;
+  Role?: IRole;
 }
 
 export interface IStoreUser {
@@ -110,11 +110,6 @@ export interface IStoreTag {
   name: string;
 }
 
-export interface IRole extends ITimeStamps {
-  id: number;
-  name: string;
-}
-
 export interface IStoreRole {
   name: string;
 }
@@ -136,5 +131,5 @@ export interface IUpdatePost {
 export interface IStorePost {
   title: string;
   content: string;
-  tags: number[]
+  tags: number[];
 }

@@ -19,7 +19,8 @@ export default function Home() {
           <div>
             <h3 className="font-semibold">Popular Tags</h3>
             <div className="flex flex-wrap gap-2">
-              {istagsSuccess && tags.data.map((tag) => <Tag key={tag.id} name={tag.name} />)}
+              {istagsSuccess &&
+                tags.data.map((tag) => <Tag key={tag.id} name={tag.name} />)}
             </div>
           </div>
         </div>

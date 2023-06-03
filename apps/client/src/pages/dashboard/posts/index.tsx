@@ -7,6 +7,7 @@ import { debounce } from "@/helpers";
 import { IPost } from "@/index";
 import { withAuth } from "@/middlewares";
 import useDestroyPost from "@/features/Post/useDestroyPost";
+import { ROLES } from "@/config/constants";
 
 const columns: Column<IPost>[] = [
   {
@@ -40,12 +41,15 @@ const Posts = withAuth(() => {
     data: posts,
     isLoading,
     refetch,
-  } = useGetPostsQuery({
-    page: pagination.pageIndex + 1,
-    search,
-  }, {
-    refetchOnMountOrArgChange: true
-  });
+  } = useGetPostsQuery(
+    {
+      page: pagination.pageIndex + 1,
+      search,
+    },
+    {
+      refetchOnMountOrArgChange: true,
+    }
+  );
 
   // handlers
   const setSearchWrapper = debounce((v: string) => setSearch(v));
@@ -77,6 +81,6 @@ const Posts = withAuth(() => {
       />
     </>
   );
-});
+}, [ROLES.ADMIN]);
 
 export default Posts;

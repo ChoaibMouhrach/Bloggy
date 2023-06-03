@@ -1,6 +1,7 @@
 import React from "react";
 import PageTitle from "@/Components/PageTitle";
 import { withAuth } from "@/middlewares";
+import { ROLES } from "@/config/constants";
 
 const Dashboard = withAuth(() => {
   return (
@@ -9,6 +10,6 @@ const Dashboard = withAuth(() => {
       description="You can manage your dashboard just from here."
     />
   );
-});
+}, [ROLES.ADMIN]);
 
 export default Dashboard;

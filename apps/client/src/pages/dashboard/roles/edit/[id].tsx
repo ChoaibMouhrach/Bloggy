@@ -12,6 +12,7 @@ import { handleResponseError } from "@/helpers";
 import { IStoreRole, IUpdateRole } from "@/index";
 import { withAuth } from "@/middlewares";
 import useUpdateRole from "@/features/Role/useUpdateRole";
+import { ROLES } from "@/config/constants";
 
 const schema = z.object({
   name: z.string().min(1).max(60),
@@ -21,9 +22,7 @@ const Edit = withAuth(() => {
   const router = useRouter();
   const {
     updateRole,
-    meta: {
-      isLoading
-    }
+    meta: { isLoading },
   } = useUpdateRole();
 
   const id = Number(router.query.id);
@@ -63,6 +62,6 @@ const Edit = withAuth(() => {
       </Form>
     </>
   );
-});
+}, [ROLES.ADMIN]);
 
 export default Edit;

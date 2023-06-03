@@ -39,7 +39,7 @@ const userApi = api.injectEndpoints({
         },
       }),
     }),
-    updateUser: build.mutation<IUser, { id : number, data : IUpdateUser }>({
+    updateUser: build.mutation<IUser, { id: number; data: IUpdateUser }>({
       query: ({ id, data }) => ({
         url: `/users/${id}`,
         method: "PATCH",

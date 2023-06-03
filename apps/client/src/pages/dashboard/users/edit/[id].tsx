@@ -13,10 +13,9 @@ import { useGetRolesQuery } from "@/features/Role/role.api";
 import { handleResponseError } from "@/helpers";
 import { IUpdateUser } from "@/index";
 import { withAuth } from "@/middlewares";
-import {
-  useGetUserQuery,
-} from "@/features/User/user.api";
+import { useGetUserQuery } from "@/features/User/user.api";
 import useUpdateUser from "@/features/User/useUpdateUser";
+import { ROLES } from "@/config/constants";
 
 const schema = z
   .object({
@@ -57,8 +56,7 @@ const schema = z
   .refine(
     (data) => {
       return Boolean(
-        Object.entries(data).filter(([, value]) => value !== undefined)
-          .length
+        Object.entries(data).filter(([, value]) => value !== undefined).length
       );
     },
     {
@@ -76,9 +74,7 @@ const Edit = withAuth(() => {
 
   const {
     updateUser,
-    meta: {
-      isLoading
-    }
+    meta: { isLoading },
   } = useUpdateUser();
 
   const {
@@ -168,6 +164,6 @@ const Edit = withAuth(() => {
       </Form>
     </>
   );
-});
+}, [ROLES.ADMIN]);
 
 export default Edit;

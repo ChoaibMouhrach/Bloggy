@@ -27,7 +27,7 @@ const roleApi = api.injectEndpoints({
         },
       }),
     }),
-    updateRole: build.mutation<void, { id: number, data: IUpdateRole }>({
+    updateRole: build.mutation<void, { id: number; data: IUpdateRole }>({
       query: ({ id, data }) => ({
         url: `/roles/${id}`,
         method: "PATCH",

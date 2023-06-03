@@ -93,15 +93,17 @@ export function Nav({ open, setOpen }: NavProps) {
                   </DropDownItem>
                 ))}
 
-                <DropDownItem>
-                  <Button
-                    variant="text"
-                    className="justify-start block"
-                    href="/dashboard"
-                  >
-                    Dashboard
-                  </Button>
-                </DropDownItem>
+                {user && user.Role?.id === 1 ? (
+                  <DropDownItem>
+                    <Button
+                      variant="text"
+                      className="justify-start block"
+                      href="/dashboard"
+                    >
+                      Dashboard
+                    </Button>
+                  </DropDownItem>
+                ) : null}
 
                 <DropDownItem className="!p-0">
                   <Button

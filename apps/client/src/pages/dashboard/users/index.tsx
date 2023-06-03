@@ -7,6 +7,7 @@ import { debounce } from "@/helpers";
 import { IRole, IUser } from "@/index";
 import { withAuth } from "@/middlewares";
 import useDestroyUser from "@/features/User/useDestroyUser";
+import { ROLES } from "@/config/constants";
 
 const columns: Column<IUser>[] = [
   {
@@ -30,9 +31,8 @@ const columns: Column<IUser>[] = [
       return (
         <div>
           <div
-            className={`bg-${
-              role === "admin" ? "red" : "green"
-            }-700 p-2 text-white tracking-wide rounded-md w-fit text-center font-medium capitalize`}
+            className={`bg-${role === "admin" ? "red" : "green"
+              }-700 p-2 text-white tracking-wide rounded-md w-fit text-center font-medium capitalize`}
           >
             {getValue<IRole>().name}
           </div>
@@ -103,6 +103,6 @@ const Index = withAuth(() => {
       />
     </>
   );
-});
+}, [ROLES.ADMIN]);
 
 export default Index;

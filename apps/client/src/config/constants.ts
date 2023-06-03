@@ -4,7 +4,6 @@ import {
   MdOutlineLibraryBooks,
   MdOutlineLock,
   MdOutlinePeopleAlt,
-  MdOutlinePerson,
   MdOutlineTag,
 } from "react-icons/md";
 import { NavItem } from "@/Components/Nav";
@@ -80,11 +79,6 @@ export const SIDE_NAV_ELEMENTS: IElement[] = [
       },
     ],
   },
-  {
-    name: "Profile",
-    Icon: MdOutlinePerson,
-    href: "/dashboard/profile",
-  },
 ];
 
 export const NAV_ITEMS: NavItem[] = [
@@ -97,3 +91,8 @@ export const NAV_ITEMS: NavItem[] = [
     href: "/posts",
   },
 ];
+
+export const ROLES = {
+  ADMIN: 1,
+  MEMBER: 2,
+};

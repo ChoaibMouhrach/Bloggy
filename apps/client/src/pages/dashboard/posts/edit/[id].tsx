@@ -13,11 +13,10 @@ import FormFooter from "@/Components/Form/FormFooter";
 import TipTap from "@/Components/TipTap";
 import { IUpdatePost } from "@/index";
 import TagInput from "@/Components/TagsInput";
-import {
-  useGetPostQuery,
-} from "@/features/Post/post.api";
+import { useGetPostQuery } from "@/features/Post/post.api";
 import { handleResponseError } from "@/helpers";
 import useUpdatePost from "@/features/Post/useUpdatePost";
+import { ROLES } from "@/config/constants";
 
 const schema = z
   .object({
@@ -35,7 +34,10 @@ const schema = z
   });
 
 const Edit = withAuth(() => {
-  const { updatePost, meta: { isLoading } } = useUpdatePost();
+  const {
+    updatePost,
+    meta: { isLoading },
+  } = useUpdatePost();
 
   const router = useRouter();
   const id = Number(router.query.id);
@@ -113,6 +115,6 @@ const Edit = withAuth(() => {
       )}
     </>
   );
-});
+}, [ROLES.ADMIN]);
 
 export default Edit;

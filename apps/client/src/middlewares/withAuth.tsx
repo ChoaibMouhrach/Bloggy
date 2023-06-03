@@ -6,8 +6,9 @@ import { setUser } from "@/features/User/user.slice";
 import { useGetProfileQuery } from "@/features/Auth/auth.api";
 import { DashboardLayout } from "@/Components/Layouts/Dashboard";
 import useGetUser from "@/features/User/useGetUser";
+import PermissionRequired from "@/Components/PermissionRequired";
 
-export const withAuth = (CB: ComponentType) => {
+export const withAuth = (CB: ComponentType, ids?: number[]) => {
   function Component() {
     const router = useRouter();
     const userState = useGetUser();
@@ -25,10 +26,15 @@ export const withAuth = (CB: ComponentType) => {
           })
         );
       }
-    }, [isSuccess]);
+
+    }, [isSuccess, isError, userState]);
 
     if (isError) {
       router.push("/sign-in");
+    }
+
+    if (isSuccess && userState && ids && !ids.includes(userState.roleId)) {
+      return <PermissionRequired />
     }
 
     if (isSuccess && userState) {

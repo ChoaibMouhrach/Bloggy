@@ -12,6 +12,7 @@ import { handleResponseError } from "@/helpers";
 import { IStoreUser } from "@/index";
 import { withAuth } from "@/middlewares";
 import useStoreUser from "@/features/User/useStoreUser";
+import { ROLES } from "@/config/constants";
 
 const schema = z.object({
   username: z.string().min(1).max(60),
@@ -41,9 +42,7 @@ const Create = withAuth(() => {
 
   const {
     storeUser,
-    meta: {
-      isLoading
-    }
+    meta: { isLoading },
   } = useStoreUser();
 
   const {
@@ -120,6 +119,6 @@ const Create = withAuth(() => {
       </Form>
     </>
   );
-});
+}, [ROLES.ADMIN]);
 
 export default Create;

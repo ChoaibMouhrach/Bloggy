@@ -13,6 +13,7 @@ import { IStorePost } from "@/index";
 import TagInput from "@/Components/TagsInput";
 import { handleResponseError } from "@/helpers";
 import useStorePost from "@/features/Post/useStorePost";
+import { ROLES } from "@/config/constants";
 
 const schema = z.object({
   title: z.string().min(1),
@@ -23,12 +24,9 @@ const schema = z.object({
 });
 
 const Create = withAuth(() => {
-
   const {
     storePost,
-    meta: {
-      isLoading
-    }
+    meta: { isLoading },
   } = useStorePost();
 
   const {
@@ -77,6 +75,6 @@ const Create = withAuth(() => {
       </Form>
     </>
   );
-});
+}, [ROLES.ADMIN]);
 
 export default Create;
