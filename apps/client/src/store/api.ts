@@ -71,6 +71,12 @@ const baseQueryWithAuth = async (
       localStorage.removeItem("accessToken");
       localStorage.removeItem("refreshToken");
     }
+
+    if (error.message === "jwt malformed") {
+      // remove tokens
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken");
+    }
   }
 
   return response;

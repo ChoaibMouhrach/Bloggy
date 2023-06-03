@@ -8,9 +8,7 @@ interface IToastProps {
   alerts: IAlert[];
 }
 
-export function Toast({
-  alerts = [{ state: "success", title: "title", description: "description" }],
-}: IToastProps) {
+export function Toast({ alerts = [] }: IToastProps) {
   return (
     <T.Provider>
       {alerts.map((alert) => (

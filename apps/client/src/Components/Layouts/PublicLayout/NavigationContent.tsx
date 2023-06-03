@@ -1,11 +1,14 @@
-import useGetUser from "@/features/User/useGetUser";
+import React from "react";
 import { Button } from "ui";
+import useGetUser from "@/features/User/useGetUser";
 
-interface NavigationContent {
+interface NavigationContentProps {
   forceOpen?: boolean;
 }
 
-export default function NavigationContent({ forceOpen }: NavigationContent) {
+export default function NavigationContent({
+  forceOpen,
+}: NavigationContentProps) {
   const user = useGetUser();
 
   return (

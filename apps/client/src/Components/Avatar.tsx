@@ -1,3 +1,4 @@
+import React from "react";
 import {
   Button,
   DropDown,
@@ -6,12 +7,20 @@ import {
   DropDownTrigger,
 } from "ui";
 import { IUser } from "..";
+import useSignOut from "@/features/Auth/useSignOut";
 
 interface AvatarProps {
   user: IUser;
 }
 
 export default function Avatar({ user }: AvatarProps) {
+  const {
+    signOut,
+    meta: { isLoading },
+  } = useSignOut();
+
+  const handleSignOut = () => signOut();
+
   return (
     <DropDown>
       <DropDownTrigger>
@@ -41,7 +50,13 @@ export default function Avatar({ user }: AvatarProps) {
           </Button>
         </DropDownItem>
         <DropDownItem>
-          <Button className="!justify-start w-full">Sign Out</Button>
+          <Button
+            onClick={handleSignOut}
+            isLoading={isLoading}
+            className="!justify-start w-full"
+          >
+            Sign Out
+          </Button>
         </DropDownItem>
       </DropDownItemsWrapper>
     </DropDown>

@@ -31,8 +31,9 @@ const columns: Column<IUser>[] = [
       return (
         <div>
           <div
-            className={`bg-${role === "admin" ? "red" : "green"
-              }-700 p-2 text-white tracking-wide rounded-md w-fit text-center font-medium capitalize`}
+            className={`bg-${
+              role === "admin" ? "red" : "green"
+            }-700 p-2 text-white tracking-wide rounded-md w-fit text-center font-medium capitalize`}
           >
             {getValue<IRole>().name}
           </div>

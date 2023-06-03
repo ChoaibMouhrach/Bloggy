@@ -1,7 +1,7 @@
 import React from "react";
+import { MdOutlinePerson } from "react-icons/md";
 import SideNavDropDown from "./DropDown";
 import NavLink, { IElement } from "./NavLink";
-import { MdOutlinePerson } from "react-icons/md";
 import useGetUser from "@/features/User/useGetUser";
 
 interface SideNavProps {

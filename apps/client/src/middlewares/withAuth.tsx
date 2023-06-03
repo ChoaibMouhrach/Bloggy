@@ -26,7 +26,6 @@ export const withAuth = (CB: ComponentType, ids?: number[]) => {
           })
         );
       }
-
     }, [isSuccess, isError, userState]);
 
     if (isError) {
@@ -34,7 +33,7 @@ export const withAuth = (CB: ComponentType, ids?: number[]) => {
     }
 
     if (isSuccess && userState && ids && !ids.includes(userState.roleId)) {
-      return <PermissionRequired />
+      return <PermissionRequired />;
     }
 
     if (isSuccess && userState) {

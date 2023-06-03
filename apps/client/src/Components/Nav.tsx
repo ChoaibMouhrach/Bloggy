@@ -1,6 +1,4 @@
 import React from "react";
-import { useRouter } from "next/router";
-import { useDispatch } from "react-redux";
 import {
   Button,
   DropDown,
@@ -10,11 +8,9 @@ import {
 } from "ui";
 import { MdOutlineMenu } from "react-icons/md";
 import { NAV_ITEMS } from "@/config/constants";
-import { useSignOutMutation } from "@/features/Auth/auth.api";
-import { removeUser } from "@/features/User/user.slice";
-import useToast from "@/features/Toast/useToast";
 import Logo from "./Logo";
 import useGetUser from "@/features/User/useGetUser";
+import useSignOut from "@/features/Auth/useSignOut";
 
 export interface NavItem {
   name: string;
@@ -27,36 +23,13 @@ interface NavProps {
 }
 
 export function Nav({ open, setOpen }: NavProps) {
-  const [signOut, { isLoading }] = useSignOutMutation();
+  const {
+    signOut,
+    meta: { isLoading },
+  } = useSignOut();
   const user = useGetUser();
-  const router = useRouter();
-  const { t } = useToast();
-  const dispatch = useDispatch();
 
-  const handleSignOut = async () => {
-    const response = await signOut();
-
-    if ("data" in response) {
-      dispatch(removeUser());
-      t([
-        {
-          state: "success",
-          title: "GoodBye",
-        },
-      ]);
-
-      router.push("/");
-    }
-
-    if ("error" in response) {
-      t([
-        {
-          state: "danger",
-          title: "Sorry! we couldn't sign you out",
-        },
-      ]);
-    }
-  };
+  const handleSignOut = () => signOut();
 
   return (
     <nav className="h-16 ">
