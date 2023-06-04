@@ -72,7 +72,10 @@ const baseQueryWithAuth = async (
       localStorage.removeItem("refreshToken");
     }
 
-    if (error.message === "jwt malformed") {
+    if (
+      error.message === "jwt malformed" ||
+      error.message === "invalid signature"
+    ) {
       // remove tokens
       localStorage.removeItem("accessToken");
       localStorage.removeItem("refreshToken");
