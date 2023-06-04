@@ -1,0 +1,43 @@
+{
+  "name": "client",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint \"**/*.{ts,tsx}\"",
+    "lint:fix": "eslint --fix \"**/*.{ts,tsx}\""
+  },
+  "dependencies": {
+    "@hookform/resolvers": "^3.1.0",
+    "@reduxjs/toolkit": "^1.9.5",
+    "@tiptap/extension-bullet-list": "^2.0.3",
+    "@tiptap/extension-document": "^2.0.3",
+    "@tiptap/extension-heading": "^2.0.3",
+    "@tiptap/extension-list-item": "^2.0.3",
+    "@tiptap/extension-ordered-list": "^2.0.3",
+    "@tiptap/extension-paragraph": "^2.0.3",
+    "@tiptap/extension-text": "^2.0.3",
+    "@tiptap/extension-underline": "^2.0.3",
+    "@tiptap/pm": "^2.0.3",
+    "@tiptap/react": "^2.0.3",
+    "@tiptap/starter-kit": "^2.0.3",
+    "@types/node": "20.2.5",
+    "@types/react": "18.2.8",
+    "@types/react-dom": "18.2.4",
+    "class-variance-authority": "^0.6.0",
+    "next": "13.4.4",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-hook-form": "^7.44.3",
+    "react-icons": "^4.9.0",
+    "react-redux": "^8.0.7",
+    "typescript": "5.1.0",
+    "ui": "^1.0.0",
+    "zod": "^3.21.4"
+  },
+  "devDependencies": {
+    "tailwind-config": "^1.0.0"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "extends": "tsconfig/server.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "dist",
+    "baseUrl": ".",
+    "paths": {
+      "@src/*": ["./src/*"]
+    }
+  },
+  "ts-node": {
+    "swc": true
+  },
+  "exclude": ["./node_modules", "./dist"]
+}
