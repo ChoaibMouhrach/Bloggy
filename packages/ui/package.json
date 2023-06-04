@@ -1,20 +1,25 @@
 {
   "name": "ui",
-  "version": "0.0.0",
-  "main": "./index.tsx",
-  "types": "./index.tsx",
-  "license": "MIT",
+  "version": "1.0.0",
+  "main": "src/index.tsx",
   "scripts": {
-    "lint": "eslint \"**/*.ts*\"",
-    "generate:component": "turbo gen react-component"
+    "lint": "eslint \"**/*.{ts,tsx}\"",
+    "lint:fix": "eslint --fix \"**/*.{ts,tsx}\""
+  },
+  "dependencies": {
+    "@radix-ui/react-dropdown-menu": "^2.0.5",
+    "@radix-ui/react-select": "^1.2.2",
+    "@radix-ui/react-toast": "^1.1.4",
+    "@tanstack/react-table": "^8.9.1",
+    "@types/react": "^18.2.8",
+    "@types/react-dom": "^18.2.4",
+    "class-variance-authority": "^0.6.0",
+    "next": "^13.4.4",
+    "react": "^18.2.0",
+    "react-icons": "^4.9.0",
+    "typescript": "^5.1.0"
   },
   "devDependencies": {
-    "@types/react": "^18.2.0",
-    "@types/react-dom": "^18.2.0",
-    "eslint": "^7.32.0",
-    "eslint-config-custom": "workspace:*",
-    "react": "^17.0.2",
-    "tsconfig": "workspace:*",
-    "typescript": "^4.5.2"
+    "tailwind-config": "^1.0.0"
   }
 }
