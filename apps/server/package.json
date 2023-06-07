@@ -9,7 +9,8 @@
     "start": "node dist/server.js",
     "test": "jest",
     "lint": "eslint \"**/*.{ts,tsx}\"",
-    "lint:fix": "eslint --fix \"**/*.{ts,tsx}\""
+    "lint:fix": "eslint --fix \"**/*.{ts,tsx}\"",
+    "migrate": "prisma migrate dev"
   },
   "dependencies": {
     "@prisma/client": "4.14.0",

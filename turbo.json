@@ -3,7 +3,7 @@
   "globalDependencies": ["**/.env.*local"],
   "pipeline": {
     "start": {
-      "dependsOn": ["^build"]
+      "dependsOn": ["migrate", "build"]
     },
     "build": {
       "dependsOn": ["^build"],
@@ -16,6 +16,9 @@
     "lint": {
       "cache": false,
       "persistent": true
+    },
+    "migrate": {
+      "cache": false
     },
     "test": {
       "cache": false,

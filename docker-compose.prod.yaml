@@ -1,0 +1,29 @@
+version: "0"
+
+services:
+  mysql:
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 6003
+      MYSQL_DATABASE: bloggy
+    volumes:
+      - my-data:/var/lib/mysql
+    healthcheck:
+      test: mysql -uroot -p6003
+      interval: 1s
+      retries: 20
+
+  main:
+    image: bloggy:0.0
+    command: "pnpm run start"
+    ports:
+      - 3001:3001
+      - 3000:3000
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+volumes:
+  my-data:
