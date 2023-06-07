@@ -3,4 +3,4 @@
 
 pnpm run format
 pnpm run lint:fix
-pnpm run test
+docker-compose -f docker-compose.test.yaml up --abort-on-container-exit
